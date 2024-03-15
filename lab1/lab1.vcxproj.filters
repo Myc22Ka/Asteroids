@@ -30,10 +30,10 @@
     <ClCompile Include="BasicPlane.Figures.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="Tablica.xd.ixx">
+    <ClCompile Include="BasicArray.ixx">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="Tablica.xd.cpp">
+    <ClCompile Include="BasicArray.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>

@@ -2,7 +2,7 @@
 #include <vector>;
 
 import BasicPlane.Figures;
-import Tablica.xd;
+import BasicArray;
 
 int main() {
 	Circle circle{ {1,8}, {11,3} };
@@ -10,9 +10,11 @@ int main() {
 	std::cout << "area: " << area(circle) << std::endl;
 	std::cout << "radius: " << radius(circle) << std::endl;
 
-	std::vector<int> tablica = { 1,20,13,6,5,16 };
+	std::vector<int> array = { 1,2,3,13, 57, 12, 6, 2, 11, 90 };
 
-	displayTab(tablica);
+	display(array);
+	sortVector(array);
+	display(array);
 
 	return 0;
 }

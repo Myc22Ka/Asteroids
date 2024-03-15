@@ -128,13 +128,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BasicArray.cpp" />
+    <ClCompile Include="BasicArray.ixx" />
     <ClCompile Include="BasicPlane.Figures-Point.ixx" />
     <ClCompile Include="BasicPlane.Figures.cpp" />
     <ClCompile Include="BasicPlane.Figures.ixx" />
     <ClCompile Include="BasicPlane.Figures-Circle.ixx" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Tablica.xd.cpp" />
-    <ClCompile Include="Tablica.xd.ixx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

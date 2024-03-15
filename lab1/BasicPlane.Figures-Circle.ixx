@@ -6,5 +6,5 @@ export struct Circle {
 	Point point, center;
 };
 
-export float radius(const Circle& circle);
-export float area(const Circle& circle);
+export double radius(const Circle&);
+export double area(const Circle&);
