@@ -1,8 +1,9 @@
 #include <SFML/Graphics.hpp>
+#include "FileMenager.h"
 
 export module WindowBox;
 
-export class WindowBox
+export class WindowBox : public FileMenager
 {
 public:
 	WindowBox();

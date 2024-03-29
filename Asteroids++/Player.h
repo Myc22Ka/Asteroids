@@ -4,17 +4,19 @@
 
 #include <SFML/Graphics.hpp>
 
-class Player {
+import WindowBox;
+
+class Player: public WindowBox {
 public:
 	Player();
 
 	void draw(sf::RenderWindow& window);
+	void update(float deltaTime);
 
 	sf::Vector2f position;
 	float angle;
 private:
 	sf::VertexArray shape;
-	int size = 20;
 };
 
 #endif

@@ -5,26 +5,33 @@ module;
 
 module WindowBox;
 
-WindowBox::WindowBox() : window(sf::VideoMode(1200, 900), "Asteroids++", sf::Style::Close | sf::Style::Titlebar) {}
+WindowBox::WindowBox() {
+    setFileName("config.txt");
+    setDataFromFile();
+}
 
 void WindowBox::displayWindow()
 {
+    window.create(sf::VideoMode(getPropertyValue("screen_size_height"), getPropertyValue("screen_size_width")), "Asteroids++", sf::Style::Close | sf::Style::Titlebar);
+
     Player player;
     sf::Clock clock;
-    
+
     while (window.isOpen()) {
-        float deltaTime = clock.restart().asSeconds();
         sf::Event e{};
         while (window.pollEvent(e)) {
-            if (e.type == sf::Event::Closed) {
-                window.close();
-            }
+            if (e.type == sf::Event::Closed) window.close();
         }
-        // update game ...
-        window.clear();
-        
-        player.draw(window);
 
-        window.display();
+            float deltaTime = clock.restart().asSeconds();
+
+            player.update(deltaTime);
+
+            window.clear();
+
+            player.draw(window);
+
+            window.display();
+        
     }
 }
