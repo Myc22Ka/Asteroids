@@ -5,7 +5,7 @@ Bullet::Bullet(sf::Vector2f position, sf::Vector2f direction) : shape(1.0f), dir
 
 void Bullet::update(float deltaTime)
 {
-	auto bulletSpeed = getValueFromProperty("player_bullet_speed");
+	auto bulletSpeed = FileMenager::playerData.bullet_speed;
 	position += sf::Vector2f(direction.x * bulletSpeed * deltaTime, direction.y * bulletSpeed * deltaTime);
 }
 

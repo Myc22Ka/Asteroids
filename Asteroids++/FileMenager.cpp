@@ -1,19 +1,14 @@
 #include "FileMenager.h"
+#include <map>
 
-FileMenager* FileMenager::instance = nullptr;
+PlayerData FileMenager::playerData;
+ScreenData FileMenager::screenData;
 
 FileMenager::FileMenager() {}
 
 FileMenager::~FileMenager()
 {
 	delete[] fileName;
-}
-
-FileMenager* FileMenager::getInstance() {
-	if (instance == nullptr) {
-		instance = new FileMenager();
-	}
-	return instance;
 }
 
 void FileMenager::setFileName(const char* name)
@@ -32,7 +27,7 @@ const char* FileMenager::getFileName() const
 
 void FileMenager::setDataFromFile() {
 	std::ifstream file(fileName);
-	std::vector<std::pair<std::string, double>> data;
+	std::map<std::string, int> dataMap;
 	std::string line;
 
 	if (!file.is_open()) {
@@ -46,33 +41,24 @@ void FileMenager::setDataFromFile() {
 		std::smatch matches;
 
 		if (std::regex_search(line, matches, reg)) {
-			std::string variable = matches[1].str();
-			double value = std::stod(matches[2].str());
-			data.emplace_back(variable, value);
+			std::string key = matches[1].str();
+			double value = std::stoi(matches[2].str());
+			dataMap[key] = value;
 		}
 	}
 
-	FileMenager::dataFromFile = data;
+	file.close();
+
+	FileMenager::screenData.size_height = dataMap["screen_size_height"];
+	FileMenager::screenData.size_width = dataMap["screen_size_width"];
+
+	FileMenager::playerData.size = dataMap["player_size"];
+	FileMenager::playerData.start_position_x = dataMap["player_start_position_x"];
+	FileMenager::playerData.start_position_y = dataMap["player_start_position_y"];
+	FileMenager::playerData.start_position_angle = dataMap["player_start_position_angle"];
+	FileMenager::playerData.speed = dataMap["player_speed"];
+	FileMenager::playerData.turn_speed = dataMap["player_turn_speed"];
+	FileMenager::playerData.bullet_speed = dataMap["player_bullet_speed"];
 
 	return;
-}
-
-const std::vector<std::pair<std::string, double>>& FileMenager::getDataFromFile() const {
-	return dataFromFile;
-}
-
-const double& getValueFromProperty(const std::string& prop){
-	FileMenager* fileManager = FileMenager::getInstance();
-
-	fileManager->setFileName("config.txt");
-
-	fileManager->setDataFromFile();
-
-	const std::vector<std::pair<std::string, double>>& data = fileManager->getDataFromFile();
-
-	for (const auto& pair : data) {
-		if (pair.first == prop) return pair.second;
-	}
-	std::cout << "Error: Could not find property: " << prop << std::endl;
-	return NAN;
 }

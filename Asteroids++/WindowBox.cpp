@@ -11,7 +11,7 @@ WindowBox::WindowBox() {}
 
 void WindowBox::displayWindow()
 {
-    window.create(sf::VideoMode(getValueFromProperty("screen_size_height"), getValueFromProperty("screen_size_width")), "Asteroids++", sf::Style::Close | sf::Style::Titlebar);
+    window.create(sf::VideoMode(FileMenager::screenData.size_height, FileMenager::screenData.size_width), "Asteroids++", sf::Style::Close | sf::Style::Titlebar);
 
     sf::Clock clock;
 
@@ -33,8 +33,6 @@ void WindowBox::displayWindow()
             EntitiesList::entities[i]->update(deltaTime);
             EntitiesList::entities[i]->render(window);
         }
-
-        std::cout << EntitiesList::entities.size() << std::endl;
 
         window.display();
         

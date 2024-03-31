@@ -6,10 +6,11 @@
 constexpr double M_PI = 3.14159265358979323846;
 
 Player::Player() : 
-	Entity(sf::Vector2f(getValueFromProperty("player_start_position_x"), getValueFromProperty("player_start_position_y")), getValueFromProperty("player_start_position_angle")),
+	Entity(sf::Vector2f(FileMenager::playerData.start_position_x, FileMenager::playerData.start_position_y), FileMenager::playerData.start_position_angle),
 	shape(sf::Quads, 4) 
 {
-	auto size = getValueFromProperty("player_size");
+	auto size = FileMenager::playerData.size;
+
 
 	
 	shape[0].position = sf::Vector2f(size, 0);
@@ -30,8 +31,8 @@ void Player::render(sf::RenderWindow& window)
 }
 
 void Player::update(float deltaTime) {
-	const auto turnSpeed = getValueFromProperty("player_turn_speed");
-	const auto speed = getValueFromProperty("player_speed");
+	const auto turnSpeed = FileMenager::playerData.turn_speed;
+	const auto speed = FileMenager::playerData.speed;
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
 		angle -= turnSpeed * deltaTime;
