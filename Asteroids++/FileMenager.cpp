@@ -1,10 +1,19 @@
 #include "FileMenager.h"
 
-FileMenager::FileMenager() : fileName(nullptr) {}
+FileMenager* FileMenager::instance = nullptr;
+
+FileMenager::FileMenager() {}
 
 FileMenager::~FileMenager()
 {
 	delete[] fileName;
+}
+
+FileMenager* FileMenager::getInstance() {
+	if (instance == nullptr) {
+		instance = new FileMenager();
+	}
+	return instance;
 }
 
 void FileMenager::setFileName(const char* name)
@@ -52,9 +61,18 @@ const std::vector<std::pair<std::string, double>>& FileMenager::getDataFromFile(
 	return dataFromFile;
 }
 
-const double& FileMenager::getPropertyValue(const std::string& prop) const {
-	for (const auto& pair : dataFromFile) 
+const double& getValueFromProperty(const std::string& prop){
+	FileMenager* fileManager = FileMenager::getInstance();
+
+	fileManager->setFileName("config.txt");
+
+	fileManager->setDataFromFile();
+
+	const std::vector<std::pair<std::string, double>>& data = fileManager->getDataFromFile();
+
+	for (const auto& pair : data) {
 		if (pair.first == prop) return pair.second;
+	}
 	std::cout << "Error: Could not find property: " << prop << std::endl;
 	return NAN;
 }

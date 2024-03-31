@@ -3,18 +3,18 @@
 #define PLAYER_H
 
 #include <SFML/Graphics.hpp>
+#include "Entity.h"
+#include "EntitiesList.h"
+#include "FileMenager.h"
 
 import WindowBox;
 
-class Player: public WindowBox {
+class Player: public Entity, public WindowBox {
 public:
 	Player();
 
-	void draw(sf::RenderWindow& window);
-	void update(float deltaTime);
-
-	sf::Vector2f position;
-	float angle;
+	void render(sf::RenderWindow&) override;
+	void update(float) override;
 private:
 	sf::VertexArray shape;
 };

@@ -10,20 +10,27 @@
 #include <sstream>
 
 class FileMenager {
-	char* fileName;
-	std::vector<std::pair<std::string, double>> dataFromFile {};
+private:
+    static FileMenager* instance;
+    char* fileName;
+    std::vector<std::pair<std::string, double>> dataFromFile{};
 
-public: 
-	FileMenager();
-	~FileMenager();
+    FileMenager();
+    FileMenager(const FileMenager&) = delete;
+    FileMenager& operator=(const FileMenager&) = delete;
 
-	void setFileName(const char*);
-	const char* getFileName() const;
+public:
+    ~FileMenager();
+    static FileMenager* getInstance();
 
-	void setDataFromFile();
-	const std::vector<std::pair<std::string, double>>& getDataFromFile() const;
+    void setFileName(const char*);
 
-	const double& getPropertyValue(const std::string&) const;
+    const char* getFileName() const;
+    void setDataFromFile();
+
+    const std::vector<std::pair<std::string, double>>& getDataFromFile() const;
 };
+
+const double& getValueFromProperty(const std::string&);
 
 #endif

@@ -2,20 +2,20 @@ module;
 
 #include <SFML/Graphics.hpp>
 #include "Player.h"
+#include "EntitiesList.h"
+#include <iostream>
 
 module WindowBox;
 
-WindowBox::WindowBox() {
-    setFileName("config.txt");
-    setDataFromFile();
-}
+WindowBox::WindowBox() {}
 
 void WindowBox::displayWindow()
 {
-    window.create(sf::VideoMode(getPropertyValue("screen_size_height"), getPropertyValue("screen_size_width")), "Asteroids++", sf::Style::Close | sf::Style::Titlebar);
+    window.create(sf::VideoMode(getValueFromProperty("screen_size_height"), getValueFromProperty("screen_size_width")), "Asteroids++", sf::Style::Close | sf::Style::Titlebar);
 
-    Player player;
     sf::Clock clock;
+
+    EntitiesList::entities.push_back(new Player());
 
     while (window.isOpen()) {
         sf::Event e{};
@@ -23,15 +23,20 @@ void WindowBox::displayWindow()
             if (e.type == sf::Event::Closed) window.close();
         }
 
-            float deltaTime = clock.restart().asSeconds();
+        float deltaTime = clock.restart().asSeconds();
 
-            player.update(deltaTime);
+        window.clear();
 
-            window.clear();
 
-            player.draw(window);
+        for (size_t i = 0; i < EntitiesList::entities.size(); i++)
+        {
+            EntitiesList::entities[i]->update(deltaTime);
+            EntitiesList::entities[i]->render(window);
+        }
 
-            window.display();
+        std::cout << EntitiesList::entities.size() << std::endl;
+
+        window.display();
         
     }
 }

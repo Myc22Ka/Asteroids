@@ -1,10 +1,16 @@
 #include "Player.h"
+#include "Bullet.h"
+#include "EntitiesList.h"
 #include <iostream>
 
 constexpr double M_PI = 3.14159265358979323846;
 
-Player::Player() : position(getPropertyValue("player_start_position_x"), getPropertyValue("player_start_position_y")), angle(getPropertyValue("player_start_position_angle")), shape(sf::Quads, 4) {
-	auto size = getPropertyValue("player_size");
+Player::Player() : 
+	Entity(sf::Vector2f(getValueFromProperty("player_start_position_x"), getValueFromProperty("player_start_position_y")), getValueFromProperty("player_start_position_angle")),
+	shape(sf::Quads, 4) 
+{
+	auto size = getValueFromProperty("player_size");
+
 	
 	shape[0].position = sf::Vector2f(size, 0);
 	shape[1].position = sf::Vector2f(-size, -size);
@@ -17,16 +23,15 @@ Player::Player() : position(getPropertyValue("player_start_position_x"), getProp
 	}
 }
 
-void Player::draw(sf::RenderWindow& window)
+void Player::render(sf::RenderWindow& window)
 {
 	sf::Transform transform;
-	transform.translate(position).rotate(angle);
-	window.draw(shape, transform);
+	window.draw(shape, transform.translate(position).rotate(angle));
 }
 
 void Player::update(float deltaTime) {
-	const auto turnSpeed = getPropertyValue("player_turn_speed");
-	const auto speed = getPropertyValue("player_speed");
+	const auto turnSpeed = getValueFromProperty("player_turn_speed");
+	const auto speed = getValueFromProperty("player_speed");
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
 		angle -= turnSpeed * deltaTime;
@@ -39,5 +44,9 @@ void Player::update(float deltaTime) {
 
 		position.x += cos(radians) * speed * deltaTime;
 		position.y += sin(radians) * speed * deltaTime;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+		float radians = angle * (M_PI / 180.0f);
+		EntitiesList::entities.push_back(new Bullet(position, sf::Vector2f(cos(radians), sin(radians))));
 	}
 }
