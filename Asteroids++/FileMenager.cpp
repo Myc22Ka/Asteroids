@@ -27,7 +27,7 @@ const char* FileMenager::getFileName() const
 
 void FileMenager::setDataFromFile() {
 	std::ifstream file(fileName);
-	std::map<std::string, int> dataMap;
+	std::map<std::string, float> dataMap;
 	std::string line;
 
 	if (!file.is_open()) {
@@ -42,7 +42,7 @@ void FileMenager::setDataFromFile() {
 
 		if (std::regex_search(line, matches, reg)) {
 			std::string key = matches[1].str();
-			double value = std::stoi(matches[2].str());
+			double value = std::stof(matches[2].str());
 			dataMap[key] = value;
 		}
 	}
@@ -59,6 +59,8 @@ void FileMenager::setDataFromFile() {
 	FileMenager::playerData.speed = dataMap["player_speed"];
 	FileMenager::playerData.turn_speed = dataMap["player_turn_speed"];
 	FileMenager::playerData.bullet_speed = dataMap["player_bullet_speed"];
+	FileMenager::playerData.bullet_shoot_delay = dataMap["player_bullet_shoot_delay"];
+	FileMenager::playerData.bullet_lifetime = dataMap["player_bullet_lifetime"];
 
 	return;
 }

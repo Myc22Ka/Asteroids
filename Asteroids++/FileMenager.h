@@ -10,18 +10,20 @@
 #include <sstream>
 
 struct ScreenData {
-    int size_height;
-    int size_width;
+    float size_height;
+    float size_width;
 };
 
 struct PlayerData {
-    int size;
-    int start_position_x;
-    int start_position_y;
-    int start_position_angle;
-    int speed;
-    int turn_speed;
-    int bullet_speed;
+    float size;
+    float start_position_x;
+    float start_position_y;
+    float start_position_angle;
+    float speed;
+    float turn_speed;
+    float bullet_speed;
+    float bullet_shoot_delay;
+    float bullet_lifetime;
 };
 
 class FileMenager {

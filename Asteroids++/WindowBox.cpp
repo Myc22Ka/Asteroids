@@ -1,8 +1,6 @@
 module;
 
-#include <SFML/Graphics.hpp>
 #include "Player.h"
-#include "EntitiesList.h"
 #include <iostream>
 
 module WindowBox;
@@ -21,17 +19,28 @@ void WindowBox::displayWindow()
         sf::Event e{};
         while (window.pollEvent(e)) {
             if (e.type == sf::Event::Closed) window.close();
+            else if (e.type == sf::Event::KeyPressed) {
+                if (e.key.code == sf::Keyboard::Q) {
+                    std::cout << EntitiesList::entities.size() << std::endl;
+                }
+            }
         }
 
         float deltaTime = clock.restart().asSeconds();
 
+        EntitiesList::toRemoveList.clear();
         window.clear();
-
 
         for (size_t i = 0; i < EntitiesList::entities.size(); i++)
         {
             EntitiesList::entities[i]->update(deltaTime);
             EntitiesList::entities[i]->render(window);
+        }
+
+        for (const auto& it : EntitiesList::toRemoveList)
+        {
+            delete* it;
+            EntitiesList::entities.erase(it);
         }
 
         window.display();

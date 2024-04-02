@@ -17,6 +17,7 @@ public:
 	void update(float) override;
 private:
 	sf::VertexArray shape;
+	float shootTimer;
 };
 
 #endif

@@ -12,3 +12,5 @@ player_start_position_angle: 0
 player_speed: 200
 player_turn_speed: 200
 player_bullet_speed: 200
+player_bullet_shoot_delay: 0.2
+player_bullet_lifetime: 3
