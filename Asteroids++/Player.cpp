@@ -51,16 +51,13 @@ void Player::update(float deltaTime) {
 		float radians = angle * (M_PI / 180.0f);
 		EntitiesList::toAddList.push_back(new Bullet(position, sf::Vector2f(cos(radians), sin(radians))));
 	}
-	position.x = std::min(std::max(position.x, getPlayerWidth() / 2), FileMenager::screenData.size_width - getPlayerWidth() / 2);
-	position.y = std::min(std::max(position.y, getPlayerHeight() / 2), FileMenager::screenData.size_height - getPlayerHeight() / 2);
+	position.x = std::min(std::max(position.x, getEntitySize().width / 2), FileMenager::screenData.size_width - getEntitySize().width / 2);
+	position.y = std::min(std::max(position.y, getEntitySize().height / 2), FileMenager::screenData.size_height - getEntitySize().height / 2);
 }
 
-const float Player::getPlayerHeight() const
+const Size Player::getEntitySize()
 {
-	return FileMenager::playerData.size * 2;
-}
-
-const float Player::getPlayerWidth() const
-{
-	return FileMenager::playerData.size * 2;
+	auto width = FileMenager::playerData.size * 2;
+	auto height = FileMenager::playerData.size * 2;
+	return Size(width, height);
 }

@@ -15,6 +15,7 @@ public:
 
 	void render(sf::RenderWindow&) override;
 	void update(float) override;
+	const Size getEntitySize() override;
 private:
 	sf::VertexArray shape;
 	sf::Vector2f direction;

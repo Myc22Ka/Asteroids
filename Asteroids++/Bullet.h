@@ -15,6 +15,7 @@ public:
 	Bullet(sf::Vector2f, sf::Vector2f);
 	void update(float) override;
 	void render(sf::RenderWindow&) override;
+	const Size getEntitySize() override;
 };
 
 #endif

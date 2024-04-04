@@ -13,7 +13,7 @@ player_speed: 200
 player_turn_speed: 200
 player_bullet_speed: 200
 player_bullet_shoot_delay: 0.2
-player_bullet_lifetime: 3
+player_bullet_lifetime: 5
 
 # enemies data
 

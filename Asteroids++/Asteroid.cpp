@@ -55,3 +55,8 @@ void Asteroid::update(float deltaTime) {
 	angle += FileMenager::enemiesData.asteroid_spin * deltaTime;
 	position += sf::Vector2f(direction.x * speed * deltaTime, direction.y * speed * deltaTime);
 }
+
+const Size Asteroid::getEntitySize()
+{
+	return Size(60, 40);
+}

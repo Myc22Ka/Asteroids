@@ -2,6 +2,11 @@
 
 Bullet::Bullet(sf::Vector2f position, sf::Vector2f direction) : shape(1.0f), direction(direction), Entity(position, 0.0f), lifeTime(FileMenager::playerData.bullet_lifetime) {}
 
+const Size Bullet::getEntitySize()
+{
+	return Size();
+}
+
 
 void Bullet::update(float deltaTime)
 {

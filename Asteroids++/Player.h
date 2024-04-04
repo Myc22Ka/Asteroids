@@ -15,9 +15,8 @@ public:
 
 	void render(sf::RenderWindow&) override;
 	void update(float) override;
+	const Size getEntitySize() override;
 private:
-	const float getPlayerHeight() const;
-	const float getPlayerWidth() const;
 	sf::VertexArray shape;
 	float shootTimer;
 };
