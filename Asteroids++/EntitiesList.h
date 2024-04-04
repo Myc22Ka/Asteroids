@@ -13,6 +13,7 @@ class EntitiesList {
 public: 
 	static std::vector<Entity*> entities;
 	static std::list<std::vector<Entity*>::const_iterator> toRemoveList;
+	static std::list<Entity*> toAddList;
 	EntitiesList();
 
 	void setEntities(Entity*);

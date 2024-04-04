@@ -48,6 +48,6 @@ void Player::update(float deltaTime) {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && shootTimer <= 0) {
 		shootTimer = FileMenager::playerData.bullet_shoot_delay;
 		float radians = angle * (M_PI / 180.0f);
-		EntitiesList::entities.push_back(new Bullet(position, sf::Vector2f(cos(radians), sin(radians))));
+		EntitiesList::toAddList.push_back(new Bullet(position, sf::Vector2f(cos(radians), sin(radians))));
 	}
 }

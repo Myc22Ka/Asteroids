@@ -2,6 +2,7 @@
 
 std::vector<Entity*> EntitiesList::entities;
 std::list<std::vector<Entity*>::const_iterator> EntitiesList::toRemoveList;
+std::list<Entity*> EntitiesList::toAddList;
 
 EntitiesList::EntitiesList() {}
 

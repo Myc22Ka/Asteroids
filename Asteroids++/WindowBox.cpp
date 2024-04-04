@@ -1,6 +1,7 @@
 module;
 
 #include "Player.h"
+#include "Asteroid.h"
 #include <iostream>
 
 module WindowBox;
@@ -14,6 +15,7 @@ void WindowBox::displayWindow()
     sf::Clock clock;
 
     EntitiesList::entities.push_back(new Player());
+    EntitiesList::entities.push_back(new Asteroid());
 
     while (window.isOpen()) {
         sf::Event e{};
@@ -28,6 +30,7 @@ void WindowBox::displayWindow()
 
         float deltaTime = clock.restart().asSeconds();
 
+        EntitiesList::toAddList.clear();
         EntitiesList::toRemoveList.clear();
         window.clear();
 
@@ -41,6 +44,11 @@ void WindowBox::displayWindow()
         {
             delete* it;
             EntitiesList::entities.erase(it);
+        }
+
+        for (auto& ptr : EntitiesList::toAddList)
+        {
+            EntitiesList::entities.push_back(ptr);
         }
 
         window.display();
