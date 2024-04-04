@@ -15,7 +15,7 @@ void WindowBox::displayWindow()
     sf::Clock clock;
 
     EntitiesList::entities.push_back(new Player());
-    EntitiesList::entities.push_back(new Asteroid(sf::Vector2f(1, 0)));
+    EntitiesList::entities.push_back(new Asteroid(Asteroid::getRandomDirection(), Asteroid::getRandomVelocity(FileMenager::enemiesData.asteroid_speed)));
 
     while (window.isOpen()) {
         sf::Event e{};

@@ -3,12 +3,14 @@
 #include "Bullet.h"
 #include "EntitiesList.h"
 #include <iostream>
+#include <random>
 
 constexpr double M_PI = 3.14159265358979323846;
 
-Asteroid::Asteroid(sf::Vector2f direction) :
+Asteroid::Asteroid(const sf::Vector2f& direction, const float& randomSpeed) :
 	Entity(sf::Vector2f(600, 300), 0),
 	direction(direction),
+	speed(randomSpeed),
 	shape(sf::LinesStrip, 9)
 {
 	auto size = FileMenager::playerData.size;
@@ -50,13 +52,44 @@ void Asteroid::render(sf::RenderWindow& window)
 }
 
 void Asteroid::update(float deltaTime) {
-	const auto speed = FileMenager::enemiesData.asteroid_speed;
-
 	angle += FileMenager::enemiesData.asteroid_spin * deltaTime;
 	position += sf::Vector2f(direction.x * speed * deltaTime, direction.y * speed * deltaTime);
+
+	if (position.x < getEntitySize().width / 2) {
+		direction.x = abs(direction.x);
+	}
+	else if (position.x > FileMenager::screenData.size_width - getEntitySize().width / 2) {
+		direction.x = -abs(direction.x);
+	}
+
+	if (position.y < getEntitySize().height / 2) {
+		direction.y = abs(direction.y);
+	}
+	else if (position.y > FileMenager::screenData.size_height - getEntitySize().height / 2) {
+		direction.y = -abs(direction.y);
+	}
 }
 
 const Size Asteroid::getEntitySize()
 {
 	return Size(60, 40);
+}
+
+const float Asteroid::getRandomVelocity(const float& base)
+{
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_real_distribution<float> dist(0.75 * base, 1.25 * base);
+
+	return dist(gen);
+}
+
+sf::Vector2f Asteroid::getRandomDirection()
+{
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_real_distribution<float> dist(0.0, 2.0f * M_PI);
+
+	float angle = dist(gen);
+	return sf::Vector2f(cos(angle), sin(angle));
 }
