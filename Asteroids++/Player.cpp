@@ -44,10 +44,23 @@ void Player::update(float deltaTime) {
 
 		position.x += cos(radians) * speed * deltaTime;
 		position.y += sin(radians) * speed * deltaTime;
+
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && shootTimer <= 0) {
 		shootTimer = FileMenager::playerData.bullet_shoot_delay;
 		float radians = angle * (M_PI / 180.0f);
 		EntitiesList::toAddList.push_back(new Bullet(position, sf::Vector2f(cos(radians), sin(radians))));
 	}
+	position.x = std::min(std::max(position.x, getPlayerWidth() / 2), FileMenager::screenData.size_width - getPlayerWidth() / 2);
+	position.y = std::min(std::max(position.y, getPlayerHeight() / 2), FileMenager::screenData.size_height - getPlayerHeight() / 2);
+}
+
+const float Player::getPlayerHeight() const
+{
+	return FileMenager::playerData.size * 2;
+}
+
+const float Player::getPlayerWidth() const
+{
+	return FileMenager::playerData.size * 2;
 }

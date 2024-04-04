@@ -6,8 +6,9 @@
 
 constexpr double M_PI = 3.14159265358979323846;
 
-Asteroid::Asteroid() :
+Asteroid::Asteroid(sf::Vector2f direction) :
 	Entity(sf::Vector2f(600, 300), 0),
+	direction(direction),
 	shape(sf::LinesStrip, 9)
 {
 	auto size = FileMenager::playerData.size;
@@ -22,6 +23,20 @@ Asteroid::Asteroid() :
 	shape[7].position = sf::Vector2f(0, 20);
 	shape[8].position = shape[0].position;
 
+	// Calculate the center of the shape
+	sf::Vector2f center(0.f, 0.f);
+	for (size_t i = 0; i < shape.getVertexCount(); i++)
+	{
+		center += shape[i].position;
+	}
+	center /= static_cast<float>(shape.getVertexCount());
+
+	// Set the origin of the shape to its center
+	for (size_t i = 0; i < shape.getVertexCount(); i++)
+	{
+		shape[i].position -= center;
+	}
+
 	for (size_t i = 0; i < shape.getVertexCount(); i++)
 	{
 		shape[i].color = sf::Color::White;
@@ -35,5 +50,8 @@ void Asteroid::render(sf::RenderWindow& window)
 }
 
 void Asteroid::update(float deltaTime) {
-	
+	const auto speed = FileMenager::enemiesData.asteroid_speed;
+
+	angle += FileMenager::enemiesData.asteroid_spin * deltaTime;
+	position += sf::Vector2f(direction.x * speed * deltaTime, direction.y * speed * deltaTime);
 }

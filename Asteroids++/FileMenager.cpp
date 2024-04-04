@@ -3,6 +3,7 @@
 
 PlayerData FileMenager::playerData;
 ScreenData FileMenager::screenData;
+EnemiesData FileMenager::enemiesData;
 
 FileMenager::FileMenager() {}
 
@@ -61,6 +62,9 @@ void FileMenager::setDataFromFile() {
 	FileMenager::playerData.bullet_speed = dataMap["player_bullet_speed"];
 	FileMenager::playerData.bullet_shoot_delay = dataMap["player_bullet_shoot_delay"];
 	FileMenager::playerData.bullet_lifetime = dataMap["player_bullet_lifetime"];
+
+	FileMenager::enemiesData.asteroid_spin = dataMap["enemy_asteroid_spin"];
+	FileMenager::enemiesData.asteroid_speed = dataMap["enemy_asteroid_speed"];
 
 	return;
 }

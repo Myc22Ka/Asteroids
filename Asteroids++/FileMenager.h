@@ -26,12 +26,18 @@ struct PlayerData {
     float bullet_lifetime;
 };
 
+struct EnemiesData {
+    float asteroid_spin;
+    float asteroid_speed;
+};
+
 class FileMenager {
 private:
     char* fileName;
 public:
     static PlayerData playerData;
     static ScreenData screenData;
+    static EnemiesData enemiesData;
     FileMenager();
     ~FileMenager();
 

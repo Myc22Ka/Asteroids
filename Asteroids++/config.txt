@@ -1,7 +1,7 @@
 # screen data
 
-screen_size_height: 1200
-screen_size_width: 900
+screen_size_height: 900
+screen_size_width: 1200
 
 # player data
 
@@ -14,3 +14,8 @@ player_turn_speed: 200
 player_bullet_speed: 200
 player_bullet_shoot_delay: 0.2
 player_bullet_lifetime: 3
+
+# enemies data
+
+enemy_asteroid_spin: 25
+enemy_asteroid_speed: 80

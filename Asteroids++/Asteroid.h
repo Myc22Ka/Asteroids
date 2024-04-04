@@ -11,12 +11,13 @@ import WindowBox;
 
 class Asteroid : public Entity, public WindowBox {
 public:
-	Asteroid();
+	Asteroid(sf::Vector2f);
 
 	void render(sf::RenderWindow&) override;
 	void update(float) override;
 private:
 	sf::VertexArray shape;
+	sf::Vector2f direction;
 };
 
 #endif

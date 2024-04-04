@@ -10,12 +10,12 @@ WindowBox::WindowBox() {}
 
 void WindowBox::displayWindow()
 {
-    window.create(sf::VideoMode(FileMenager::screenData.size_height, FileMenager::screenData.size_width), "Asteroids++", sf::Style::Close | sf::Style::Titlebar);
+    window.create(sf::VideoMode(FileMenager::screenData.size_width, FileMenager::screenData.size_height), "Asteroids++", sf::Style::Close | sf::Style::Titlebar);
 
     sf::Clock clock;
 
     EntitiesList::entities.push_back(new Player());
-    EntitiesList::entities.push_back(new Asteroid());
+    EntitiesList::entities.push_back(new Asteroid(sf::Vector2f(1, 0)));
 
     while (window.isOpen()) {
         sf::Event e{};
