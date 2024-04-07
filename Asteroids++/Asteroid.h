@@ -11,15 +11,18 @@ import WindowBox;
 
 class Asteroid : public Entity, public WindowBox {
 public:
-	Asteroid(const sf::Vector2f&, const float&);
+	Asteroid();
 
 	void render(sf::RenderWindow&) override;
 	void update(float) override;
 	const Size getEntitySize() override;
 
-	static sf::Vector2f getRandomDirection();
-	static const float getRandomVelocity(const float& base);
+	const sf::Vector2f getRandomDirection();
+	const float getRandomVelocity(const float& base);
+	const sf::Vector2f getRandomPosition();
+	const sf::VertexArray& getVertexShape() const;
 
+	sf::Vector2f position;
 private:
 	sf::VertexArray shape;
 	sf::Vector2f direction;

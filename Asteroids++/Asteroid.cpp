@@ -7,11 +7,12 @@
 
 constexpr double M_PI = 3.14159265358979323846;
 
-Asteroid::Asteroid(const sf::Vector2f& direction, const float& randomSpeed) :
-	Entity(sf::Vector2f(600, 300), 0),
-	direction(direction),
-	speed(randomSpeed),
-	shape(sf::LinesStrip, 9)
+Asteroid::Asteroid() :
+		Entity(sf::Vector2f(600, 300), 0),
+		direction(Asteroid::getRandomDirection()),
+		position(Asteroid::getRandomPosition()),
+		speed(Asteroid::getRandomVelocity(FileMenager::enemiesData.asteroid_speed)),
+		shape(sf::LinesStrip, 9)
 {
 	auto size = FileMenager::playerData.size;
 
@@ -84,7 +85,22 @@ const float Asteroid::getRandomVelocity(const float& base)
 	return dist(gen);
 }
 
-sf::Vector2f Asteroid::getRandomDirection()
+const sf::Vector2f Asteroid::getRandomPosition()
+{
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_real_distribution<float> xAxis(getEntitySize().width / 2, FileMenager::screenData.size_width - getEntitySize().width / 2);
+	std::uniform_real_distribution<float> yAxis(getEntitySize().height / 2, FileMenager::screenData.size_height - getEntitySize().height / 2);
+
+	return sf::Vector2f(xAxis(gen), yAxis(gen));
+}
+
+const sf::VertexArray& Asteroid::getVertexShape() const
+{
+	return shape;
+}
+
+const sf::Vector2f Asteroid::getRandomDirection()
 {
 	std::random_device rd;
 	std::mt19937 gen(rd());

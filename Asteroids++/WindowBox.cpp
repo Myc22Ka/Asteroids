@@ -14,8 +14,10 @@ void WindowBox::displayWindow()
 
     sf::Clock clock;
 
+
     EntitiesList::entities.push_back(new Player());
-    EntitiesList::entities.push_back(new Asteroid(Asteroid::getRandomDirection(), Asteroid::getRandomVelocity(FileMenager::enemiesData.asteroid_speed)));
+
+    float asteroidSpawnTime = FileMenager::enemiesData.asteroid_spawn_time;
 
     while (window.isOpen()) {
         sf::Event e{};
@@ -34,6 +36,8 @@ void WindowBox::displayWindow()
         EntitiesList::toRemoveList.clear();
         window.clear();
 
+        asteroidSpawnTime -= deltaTime;
+
         for (size_t i = 0; i < EntitiesList::entities.size(); i++)
         {
             EntitiesList::entities[i]->update(deltaTime);
@@ -49,6 +53,11 @@ void WindowBox::displayWindow()
         for (auto& ptr : EntitiesList::toAddList)
         {
             EntitiesList::entities.push_back(ptr);
+        }
+
+        if (asteroidSpawnTime <= 0) {
+            EntitiesList::entities.push_back(new Asteroid());
+            asteroidSpawnTime = FileMenager::enemiesData.asteroid_spawn_time;
         }
 
         window.display();

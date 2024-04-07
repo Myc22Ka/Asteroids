@@ -18,4 +18,5 @@ player_bullet_lifetime: 5
 # enemies data
 
 enemy_asteroid_spin: 25
-enemy_asteroid_speed: 80
+enemy_asteroid_speed: 120
+enemy_asteroid_spawn_time: 3
