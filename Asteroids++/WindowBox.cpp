@@ -3,6 +3,7 @@ module;
 #include "Player.h"
 #include "Asteroid.h"
 #include <iostream>
+#include "Score.h"
 
 module WindowBox;
 
@@ -11,9 +12,9 @@ WindowBox::WindowBox() {}
 void WindowBox::displayWindow()
 {
     window.create(sf::VideoMode(FileMenager::screenData.size_width, FileMenager::screenData.size_height), "Asteroids++", sf::Style::Close | sf::Style::Titlebar);
+    Score::init();
 
     sf::Clock clock;
-
 
     EntitiesList::entities.push_back(new Player());
 
@@ -59,6 +60,9 @@ void WindowBox::displayWindow()
             EntitiesList::entities.push_back(new Asteroid());
             asteroidSpawnTime = FileMenager::enemiesData.asteroid_spawn_time;
         }
+        
+        Score::scoreText.setString(std::to_string(Score::score));
+        window.draw(Score::scoreText);
 
         window.display();
         

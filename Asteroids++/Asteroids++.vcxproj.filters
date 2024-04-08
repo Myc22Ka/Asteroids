@@ -45,6 +45,12 @@
     <ClCompile Include="Asteroid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Physics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Score.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h">
@@ -65,6 +71,12 @@
     <ClInclude Include="Asteroid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Physics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Score.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="config.txt">
@@ -75,5 +87,10 @@
     <Image Include="assets\ship.png">
       <Filter>Resource Files\assets</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="assets\font.ttf">
+      <Filter>Resource Files\assets</Filter>
+    </Font>
   </ItemGroup>
 </Project>

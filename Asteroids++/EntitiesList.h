@@ -11,10 +11,11 @@ class Entity;
 
 class EntitiesList {
 public: 
+	EntitiesList();
+
 	static std::vector<Entity*> entities;
 	static std::list<std::vector<Entity*>::const_iterator> toRemoveList;
 	static std::list<Entity*> toAddList;
-	EntitiesList();
 
 	void setEntities(Entity*);
 };
