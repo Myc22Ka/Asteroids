@@ -11,6 +11,11 @@ const Size Bullet::getEntitySize()
 	return Size();
 }
 
+const EntityType Bullet::getEntityType()
+{
+	return EntityType::TYPE_BULLET;
+}
+
 
 void Bullet::update(float deltaTime)
 {

@@ -13,7 +13,12 @@ public:
 	WindowBox();
 
 	void displayWindow();
+	static void gameOver();
+	static void init();
+	void begin();
 
 private:
 	sf::RenderWindow window;
+	static bool isGameOver;
+	static float asteroidSpawnTime;
 };

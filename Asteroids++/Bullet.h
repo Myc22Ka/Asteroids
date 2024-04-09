@@ -16,6 +16,7 @@ public:
 	void update(float) override;
 	void render(sf::RenderWindow&) override;
 	const Size getEntitySize() override;
+	const EntityType getEntityType() override;
 };
 
 #endif

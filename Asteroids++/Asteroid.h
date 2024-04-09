@@ -21,7 +21,9 @@ public:
 	const float getRandomVelocity(const float& base);
 	const sf::Vector2f getRandomPosition();
 	const sf::VertexArray& getVertexShape() const;
+	const EntityType getEntityType() override;
 
+	Size size;
 	sf::Vector2f position;
 private:
 	sf::VertexArray shape;

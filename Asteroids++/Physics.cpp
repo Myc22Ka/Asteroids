@@ -24,9 +24,59 @@ bool physics::intersects(const sf::Vector2f& point, const sf::VertexArray& polyg
 	return intersectionCount % 2 == 1;
 }
 
-bool physics::intersects(const sf::VertexArray& poly1, const sf::VertexArray& poly2)
+bool physics::intersects(const Asteroid& asteroid1, const Asteroid& asteroid2)
 {
-	return false;
+	double dx = asteroid2.position.x - asteroid1.position.x;
+	double dy = asteroid2.position.y - asteroid1.position.y;
+
+	// Calculate the distance between the centers of the two asteroids
+	double distance = std::sqrt(dx * dx + dy * dy);
+
+	// Calculate the sum of the radii of the two asteroids
+	double sumOfRadii = (asteroid1.size.width + asteroid1.size.height) / 3.0 +
+		(asteroid2.size.width + asteroid2.size.height) / 3.0;
+
+	// If the distance between the centers is less than or equal to the sum of the radii, they are colliding
+	return distance <= sumOfRadii;
+}
+
+bool physics::intersects(const sf::VertexArray& poly1, const sf::VertexArray& poly2) {
+	size_t n1 = poly1.getVertexCount() - 1;
+	size_t n2 = poly2.getVertexCount() - 1;
+
+	for (size_t i = 0; i < n1; i++) {
+		sf::Vector2f edge = poly1[i].position - poly1[(i + 1) % n1].position;
+		sf::Vector2f normal(-edge.y, edge.x);
+
+		// normalize the vector
+		float length = sqrt(normal.x * normal.x + normal.y * normal.y);
+		normal /= length;
+
+		float min1 = std::numeric_limits<float>::max();
+		float max1 = std::numeric_limits<float>::min();
+		float min2 = std::numeric_limits<float>::max();
+		float max2 = std::numeric_limits<float>::min();
+
+		for (size_t j = 0; j < n1; j++) {
+			float projection =
+				poly1[j].position.x * normal.x + poly1[j].position.y * normal.y;
+			min1 = std::min(min1, projection);
+			max1 = std::max(max1, projection);
+		}
+
+		for (size_t j = 0; j < n2; j++) {
+			float projection =
+				poly2[j].position.x * normal.x + poly2[j].position.y * normal.y;
+			min2 = std::min(min2, projection);
+			max2 = std::max(max2, projection);
+		}
+
+		if (max1 < min2 || max2 < min1) {
+			return false;
+		}
+	}
+
+	return true;
 }
 
 sf::VertexArray physics::getTransformed(const sf::VertexArray& polygon, const sf::Transform& transform)

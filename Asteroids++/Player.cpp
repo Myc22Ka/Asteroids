@@ -1,5 +1,7 @@
 #include "Player.h"
 #include "Bullet.h"
+#include "Asteroid.h"
+#include "Physics.h"
 #include "EntitiesList.h"
 #include "Sound.h"
 #include <iostream>
@@ -54,6 +56,21 @@ void Player::update(float deltaTime) {
 
 	position.x = std::min(std::max(position.x, getEntitySize().width / 2), FileMenager::screenData.size_width - getEntitySize().width / 2);
 	position.y = std::min(std::max(position.y, getEntitySize().height / 2), FileMenager::screenData.size_height - getEntitySize().height / 2);
+
+	sf::Transform playerTransform = sf::Transform().translate(position).rotate(angle);
+
+	for (size_t i = 0; i < EntitiesList::entities.size(); i++)
+	{
+		if (typeid(*EntitiesList::entities[i]) == typeid(Asteroid)) {
+			Asteroid* asteroid = dynamic_cast<Asteroid*>(EntitiesList::entities[i]);
+			sf::Transform asteroidTransform = sf::Transform().translate(asteroid->position).rotate(asteroid->angle);
+
+			//if (physics::intersects(physics::getTransformed(shape, playerTransform),
+			//	physics::getTransformed(asteroid->getVertexShape(), asteroidTransform))) {
+			//	gameOver();
+			//}
+		}
+	}
 }
 
 const Size Player::getEntitySize()
@@ -61,4 +78,9 @@ const Size Player::getEntitySize()
 	auto width = FileMenager::playerData.size * 2;
 	auto height = FileMenager::playerData.size * 2;
 	return Size(width, height);
+}
+
+const EntityType Player::getEntityType()
+{
+	return EntityType::TYPE_PLAYER;
 }

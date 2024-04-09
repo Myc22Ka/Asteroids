@@ -4,6 +4,7 @@
 #include "EntitiesList.h"
 #include <iostream>
 #include <random>
+#include "Physics.h"
 
 constexpr double M_PI = 3.14159265358979323846;
 
@@ -69,10 +70,24 @@ void Asteroid::update(float deltaTime) {
 	else if (position.y > FileMenager::screenData.size_height - getEntitySize().height / 2) {
 		direction.y = -abs(direction.y);
 	}
+
+	for (const auto& entity : EntitiesList::entities) {
+		if (entity->getEntityType() == EntityType::TYPE_ASTEROID && entity != this) {
+			const Asteroid* otherAsteroid = dynamic_cast<const Asteroid*>(entity);
+			if (otherAsteroid) {
+				// Check if this asteroid is colliding with the other asteroid
+				if (physics::intersects(*this, *otherAsteroid)) {
+					// Change direction upon collision with another asteroid
+					direction = -direction; // Invert direction vector
+				}
+			}
+		}
+	}
 }
 
 const Size Asteroid::getEntitySize()
 {
+	size = Size(40, 40);
 	return Size(60, 40);
 }
 
@@ -98,6 +113,11 @@ const sf::Vector2f Asteroid::getRandomPosition()
 const sf::VertexArray& Asteroid::getVertexShape() const
 {
 	return shape;
+}
+
+const EntityType Asteroid::getEntityType()
+{
+	return EntityType::TYPE_ASTEROID;
 }
 
 const sf::Vector2f Asteroid::getRandomDirection()
