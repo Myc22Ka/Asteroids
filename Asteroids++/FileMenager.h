@@ -44,7 +44,7 @@ public:
     ~FileMenager();
 
     void setFileName(const char*);
-
+ 
     const char* getFileName() const;
     void setDataFromFile();
 };

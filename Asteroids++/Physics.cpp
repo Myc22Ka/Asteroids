@@ -24,6 +24,11 @@ bool physics::intersects(const sf::Vector2f& point, const sf::VertexArray& polyg
 	return intersectionCount % 2 == 1;
 }
 
+bool physics::intersects(const sf::VertexArray& poly1, const sf::VertexArray& poly2)
+{
+	return false;
+}
+
 sf::VertexArray physics::getTransformed(const sf::VertexArray& polygon, const sf::Transform& transform)
 {
 	sf::VertexArray transformed = polygon;

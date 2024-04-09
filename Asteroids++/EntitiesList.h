@@ -14,7 +14,7 @@ public:
 	EntitiesList();
 
 	static std::vector<Entity*> entities;
-	static std::list<std::vector<Entity*>::const_iterator> toRemoveList;
+	static std::list<std::vector<Entity*>::iterator> toRemoveList;
 	static std::list<Entity*> toAddList;
 
 	void setEntities(Entity*);

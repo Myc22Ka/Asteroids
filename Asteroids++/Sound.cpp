@@ -1,4 +1,5 @@
 #include "Sound.h"
+#include "FileMenager.h"
 
 Sound::Sound() : threadRunning(false) {}
 
@@ -15,30 +16,30 @@ void Sound::setFileName(Names str)
 
     switch (str) {
     case Names::LASER_SHOOT:
-        filename += "laserShoot";
+        name = "laserShoot";
         break;
     case Names::EXPLOSION:
-        filename += "explosion";
+        name = "explosion";
         break;
     default:
         std::cerr << "Error: Invalid Sound Name\n";
         return;
     }
 
-    filename += extension;
-}
+    filename += name + extension;
 
-void Sound::loadAndPlay() {
-    sf::SoundBuffer buffer;
-    if (!buffer.loadFromFile(filename)) {
+    if (!soundBuffers[name].loadFromFile(filename)) {
         std::cout << "Error: Could not find sound file: " << filename << std::endl;
         return;
     }
+}
 
+void Sound::loadAndPlay() {
+    auto& buffer = soundBuffers[name];
     // Create a new thread to play the sound
     std::thread soundThread([this, buffer]() {
-        // Create a sound instance and set its buffer
         sf::Sound sound;
+        // Create a sound instance and set its buffer
         sound.setBuffer(buffer);
 
         // Play the sound
@@ -46,7 +47,7 @@ void Sound::loadAndPlay() {
 
         // Wait until the sound finishes playing
         while (sound.getStatus() == sf::Sound::Playing) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+            std::this_thread::sleep_for(std::chrono::milliseconds(sound.getBuffer()->getDuration().asMilliseconds()));
         }
     });
 
