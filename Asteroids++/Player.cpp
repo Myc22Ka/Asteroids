@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "Bullet.h"
 #include "EntitiesList.h"
+#include "Sound.h"
 #include <iostream>
 
 constexpr double M_PI = 3.14159265358979323846;
@@ -47,6 +48,8 @@ void Player::update(float deltaTime) {
 		shootTimer = FileMenager::playerData.bullet_shoot_delay;
 		float radians = angle * (M_PI / 180.0f);
 		EntitiesList::toAddList.push_back(new Bullet(position, sf::Vector2f(cos(radians), sin(radians))));
+
+		playSound(Names::LASER_SHOOT);
 	}
 
 	position.x = std::min(std::max(position.x, getEntitySize().width / 2), FileMenager::screenData.size_width - getEntitySize().width / 2);

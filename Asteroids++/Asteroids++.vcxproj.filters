@@ -16,6 +16,15 @@
     <Filter Include="Resource Files\assets">
       <UniqueIdentifier>{117668ff-72e6-46dc-ae55-b9af9998e051}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\assets\sounds">
+      <UniqueIdentifier>{473e1a0a-852b-4ec3-b0c2-85bf2f14ae46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Objects">
+      <UniqueIdentifier>{7c43d9fa-ee1c-4a46-9649-1dea104cb64f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Objects\Entities">
+      <UniqueIdentifier>{6bef883e-23fe-4cac-88fa-ffee17240340}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -51,24 +60,12 @@
     <ClCompile Include="Score.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="FileMenager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Entity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Bullet.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EntitiesList.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Asteroid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Physics.h">
@@ -76,6 +73,24 @@
     </ClInclude>
     <ClInclude Include="Score.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Asteroid.h">
+      <Filter>Header Files\Objects\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Header Files\Objects\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files\Objects\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Header Files\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="EntitiesList.h">
+      <Filter>Header Files\Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -92,5 +107,13 @@
     <Font Include="assets\font.ttf">
       <Filter>Resource Files\assets</Filter>
     </Font>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="assets\explosion.wav">
+      <Filter>Resource Files\assets\sounds</Filter>
+    </Media>
+    <Media Include="assets\sounds\laserShoot.wav">
+      <Filter>Resource Files\assets\sounds</Filter>
+    </Media>
   </ItemGroup>
 </Project>

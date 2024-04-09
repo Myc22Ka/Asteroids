@@ -2,6 +2,7 @@
 #include "Asteroid.h"
 #include "Physics.h"
 #include "Score.h"
+#include "Sound.h"
 
 Bullet::Bullet(sf::Vector2f position, sf::Vector2f direction) : shape(1.0f), direction(direction), Entity(position, 0.0f), lifeTime(FileMenager::playerData.bullet_lifetime) {}
 
@@ -33,6 +34,8 @@ void Bullet::update(float deltaTime)
 				EntitiesList::toRemoveList.push_back(
 					std::find(EntitiesList::entities.begin(), EntitiesList::entities.end(), asteroid));
 				Score::score += 10;
+
+				playSound(Names::EXPLOSION);
 			}
 		}
 	}

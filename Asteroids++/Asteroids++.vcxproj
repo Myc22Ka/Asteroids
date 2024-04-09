@@ -28,6 +28,7 @@
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Score.cpp" />
+    <ClCompile Include="Sound.cpp" />
     <ClCompile Include="WindowBox.cpp" />
     <ClCompile Include="WindowBox.ixx" />
   </ItemGroup>
@@ -40,6 +41,7 @@
     <ClInclude Include="Physics.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Score.h" />
+    <ClInclude Include="Sound.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="config.txt" />
@@ -49,6 +51,10 @@
   </ItemGroup>
   <ItemGroup>
     <Font Include="assets\font.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="assets\explosion.wav" />
+    <Media Include="assets\sounds\laserShoot.wav" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

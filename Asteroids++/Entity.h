@@ -3,6 +3,7 @@
 #define ENTITY_H
 
 #include <SFML/Graphics.hpp>
+#include "Sound.h"
 
 struct Size {
 	float width;
@@ -15,6 +16,7 @@ class Entity {
 		virtual void update(float) = 0;
 		virtual void render(sf::RenderWindow&) = 0;
 		virtual const Size getEntitySize() = 0;
+		void playSound(Names name);
 
 		sf::Vector2f position;
 		float angle;
