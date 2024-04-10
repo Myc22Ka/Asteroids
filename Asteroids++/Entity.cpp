@@ -1,4 +1,5 @@
 #include "Entity.h"
+#include "EntitiesList.h"
 
 Entity::Entity(sf::Vector2f position, float angle) : position(position), angle(angle) {}
 

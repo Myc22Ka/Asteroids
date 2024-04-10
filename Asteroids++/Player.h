@@ -15,12 +15,16 @@ public:
 
 	void render(sf::RenderWindow&) override;
 	void update(float) override;
-	const Size getEntitySize() override;
 	const EntityType getEntityType() override;
 
 private:
-	sf::VertexArray shape;
+	sf::Sprite sprite;
+	sf::Texture texture;
+	int spriteState;
+	sf::IntRect spriteRects[8];
+	sf::CircleShape shape;
 	float shootTimer;
+	int size;
 };
 
 #endif

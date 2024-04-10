@@ -1,5 +1,4 @@
 #include "Asteroid.h"
-
 #include "Bullet.h"
 #include "EntitiesList.h"
 #include <iostream>
@@ -9,86 +8,74 @@
 constexpr double M_PI = 3.14159265358979323846;
 
 Asteroid::Asteroid() :
-		Entity(sf::Vector2f(600, 300), 0),
-		direction(Asteroid::getRandomDirection()),
-		position(Asteroid::getRandomPosition()),
-		speed(Asteroid::getRandomVelocity(FileMenager::enemiesData.asteroid_speed)),
-		shape(sf::LinesStrip, 9)
+		size((int)FileMenager::enemiesData.asteroid_size >> 1),
+		Entity(sf::Vector2f(0, 0), 0),
+		shape(FileMenager::enemiesData.asteroid_size)
 {
-	auto size = FileMenager::playerData.size;
+	direction = Asteroid::getRandomDirection();
+	position = Asteroid::getRandomPosition();
+	speed = Asteroid::getRandomVelocity(FileMenager::enemiesData.asteroid_speed);
 
-	shape[0].position = sf::Vector2f(0, 0);
-	shape[1].position = sf::Vector2f(20, -20);
-	shape[2].position = sf::Vector2f(40, -20);
-	shape[3].position = sf::Vector2f(60, 0);
-	shape[4].position = sf::Vector2f(60, 20);
-	shape[5].position = sf::Vector2f(40, 40);
-	shape[6].position = sf::Vector2f(20, 40);
-	shape[7].position = sf::Vector2f(0, 20);
-	shape[8].position = shape[0].position;
+	sf::Vector2f center(size, size);
 
-	// Calculate the center of the shape
-	sf::Vector2f center(0.f, 0.f);
-	for (size_t i = 0; i < shape.getVertexCount(); i++)
-	{
-		center += shape[i].position;
-	}
-	center /= static_cast<float>(shape.getVertexCount());
+	shape.setRadius(size);
 
-	// Set the origin of the shape to its center
-	for (size_t i = 0; i < shape.getVertexCount(); i++)
-	{
-		shape[i].position -= center;
+	shape.setOrigin(center);
+
+	shape.setFillColor(sf::Color::Transparent);
+	shape.setOutlineColor(sf::Color::Red);
+	shape.setOutlineThickness(1.0f);
+
+	if (!texture.loadFromFile("./assets/asteroid.png")) {
+		std::cout << "Error: Could not load sprite : ";
+		return;
 	}
 
-	for (size_t i = 0; i < shape.getVertexCount(); i++)
-	{
-		shape[i].color = sf::Color::White;
-	}
+	const auto spriteSize = size << 1;
+
+	spriteRects[0] = sf::IntRect(0, 0, spriteSize, spriteSize);
+
+	sprite.setTexture(texture);
+	sprite.setTextureRect(spriteRects[0]);
+	sprite.setOrigin(sprite.getLocalBounds().width / 2.0f, sprite.getLocalBounds().height / 2.0f);
 }
 
 void Asteroid::render(sf::RenderWindow& window)
 {
 	sf::Transform transform;
-	window.draw(shape, transform.translate(position).rotate(angle));
+	window.draw(sprite, transform.translate(position).rotate(angle));
+	//window.draw(shape, transform);
 }
 
 void Asteroid::update(float deltaTime) {
 	angle += FileMenager::enemiesData.asteroid_spin * deltaTime;
 	position += sf::Vector2f(direction.x * speed * deltaTime, direction.y * speed * deltaTime);
 
-	if (position.x < getEntitySize().width / 2) {
+	if (position.x < size) {
 		direction.x = abs(direction.x);
 	}
-	else if (position.x > FileMenager::screenData.size_width - getEntitySize().width / 2) {
+	else if (position.x > FileMenager::screenData.size_width - size) {
 		direction.x = -abs(direction.x);
 	}
 
-	if (position.y < getEntitySize().height / 2) {
+	if (position.y < size) {
 		direction.y = abs(direction.y);
 	}
-	else if (position.y > FileMenager::screenData.size_height - getEntitySize().height / 2) {
+	else if (position.y > FileMenager::screenData.size_height - size) {
 		direction.y = -abs(direction.y);
 	}
 
 	for (const auto& entity : EntitiesList::entities) {
 		if (entity->getEntityType() == EntityType::TYPE_ASTEROID && entity != this) {
-			const Asteroid* otherAsteroid = dynamic_cast<const Asteroid*>(entity);
+			Asteroid* otherAsteroid = dynamic_cast<Asteroid*>(entity);
 			if (otherAsteroid) {
-				// Check if this asteroid is colliding with the other asteroid
-				if (physics::intersects(*this, *otherAsteroid)) {
-					// Change direction upon collision with another asteroid
-					direction = -direction; // Invert direction vector
+				if (physics::intersects(this->position, size, otherAsteroid->position, otherAsteroid->size)) {
+					direction = -direction;
+					otherAsteroid->direction = -otherAsteroid->direction;
 				}
 			}
 		}
 	}
-}
-
-const Size Asteroid::getEntitySize()
-{
-	size = Size(40, 40);
-	return Size(60, 40);
 }
 
 const float Asteroid::getRandomVelocity(const float& base)
@@ -104,13 +91,13 @@ const sf::Vector2f Asteroid::getRandomPosition()
 {
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_real_distribution<float> xAxis(getEntitySize().width / 2, FileMenager::screenData.size_width - getEntitySize().width / 2);
-	std::uniform_real_distribution<float> yAxis(getEntitySize().height / 2, FileMenager::screenData.size_height - getEntitySize().height / 2);
+	std::uniform_real_distribution<float> xAxis(size / 2, FileMenager::screenData.size_width - size / 2);
+	std::uniform_real_distribution<float> yAxis(size / 2, FileMenager::screenData.size_height - size / 2);
 
 	return sf::Vector2f(xAxis(gen), yAxis(gen));
 }
 
-const sf::VertexArray& Asteroid::getVertexShape() const
+const sf::CircleShape& Asteroid::getVertexShape() const
 {
 	return shape;
 }

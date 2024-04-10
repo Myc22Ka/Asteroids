@@ -108,6 +108,9 @@
     <Image Include="assets\ship.png">
       <Filter>Resource Files\assets</Filter>
     </Image>
+    <Image Include="assets\asteroid.png">
+      <Filter>Resource Files\assets</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Font Include="assets\font.ttf">

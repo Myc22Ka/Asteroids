@@ -24,6 +24,7 @@ struct PlayerData {
     float bullet_speed;
     float bullet_shoot_delay;
     float bullet_lifetime;
+    float bullet_size;
     float sprite_cycle_time;
 };
 
@@ -31,6 +32,7 @@ struct EnemiesData {
     float asteroid_spin;
     float asteroid_speed;
     float asteroid_spawn_time;
+    float asteroid_size;
 };
 
 class FileMenager {

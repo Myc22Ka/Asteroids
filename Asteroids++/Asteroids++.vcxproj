@@ -47,6 +47,7 @@
     <Text Include="config.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="assets\asteroid.png" />
     <Image Include="assets\ship.png" />
   </ItemGroup>
   <ItemGroup>

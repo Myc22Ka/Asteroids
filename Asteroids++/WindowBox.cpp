@@ -29,6 +29,9 @@ void WindowBox::displayWindow()
                 if (e.key.code == sf::Keyboard::Q) {
                     std::cout << EntitiesList::entities.size() << std::endl;
                 }
+                if (e.key.code == sf::Keyboard::H) {
+                    //EntitiesList::showHitboxes = !EntitiesList::showHitboxes;
+                }
             }
         }
 

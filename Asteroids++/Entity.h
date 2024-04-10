@@ -22,7 +22,6 @@ public:
     Entity(sf::Vector2f, float);
     virtual void update(float) = 0;
     virtual void render(sf::RenderWindow&) = 0;
-    virtual const Size getEntitySize() = 0;
     virtual const EntityType getEntityType() = 0;
     void playSound(Names name);
 

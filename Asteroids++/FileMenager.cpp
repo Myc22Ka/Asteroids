@@ -62,11 +62,13 @@ void FileMenager::setDataFromFile() {
 	FileMenager::playerData.bullet_speed = dataMap["player_bullet_speed"];
 	FileMenager::playerData.bullet_shoot_delay = dataMap["player_bullet_shoot_delay"];
 	FileMenager::playerData.bullet_lifetime = dataMap["player_bullet_lifetime"];
+	FileMenager::playerData.bullet_size = dataMap["player_bullet_size"];
 	FileMenager::playerData.sprite_cycle_time = dataMap["player_sprite_cycle_time"];
 
 	FileMenager::enemiesData.asteroid_spin = dataMap["enemy_asteroid_spin"];
 	FileMenager::enemiesData.asteroid_speed = dataMap["enemy_asteroid_speed"];
 	FileMenager::enemiesData.asteroid_spawn_time = dataMap["enemy_asteroid_spawn_time"];
+	FileMenager::enemiesData.asteroid_size = dataMap["enemy_asteroid_size"];
 
 	return;
 }

@@ -15,20 +15,23 @@ public:
 
 	void render(sf::RenderWindow&) override;
 	void update(float) override;
-	const Size getEntitySize() override;
 
 	const sf::Vector2f getRandomDirection();
 	const float getRandomVelocity(const float& base);
 	const sf::Vector2f getRandomPosition();
-	const sf::VertexArray& getVertexShape() const;
+	const sf::CircleShape& getVertexShape() const;
 	const EntityType getEntityType() override;
 
-	Size size;
 	sf::Vector2f position;
-private:
-	sf::VertexArray shape;
+	sf::CircleShape shape;
 	sf::Vector2f direction;
-	const float speed;
+	float speed;
+	int size;
+private:
+	sf::Sprite sprite;
+	sf::Texture texture;
+	int spriteState;
+	sf::IntRect spriteRects[2];
 };
 
 #endif

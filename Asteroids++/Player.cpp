@@ -10,22 +10,37 @@ constexpr double M_PI = 3.14159265358979323846;
 
 Player::Player() : 
 	Entity(sf::Vector2f(FileMenager::playerData.start_position_x, FileMenager::playerData.start_position_y), FileMenager::playerData.start_position_angle),
-	shape(sf::LinesStrip, 5), shootTimer()
+	shape(FileMenager::playerData.size), shootTimer(), size((int)FileMenager::playerData.size >> 1)
 {
-	auto size = FileMenager::playerData.size;
-	
-	shape[0].position = sf::Vector2f(size, 0);
-	shape[1].position = sf::Vector2f(-size, -size);
-	shape[2].position = sf::Vector2f(-size /2, 0);
-	shape[3].position = sf::Vector2f(-size, size);
-	shape[4].position = shape[0].position;
+	shape.setRadius(size);
+	sf::Vector2f center(size, size);
+
+	shape.setOrigin(center);
+
+	shape.setFillColor(sf::Color::Transparent);
+	shape.setOutlineColor(sf::Color::Blue);
+	shape.setOutlineThickness(1.0f);
+
+	if (!texture.loadFromFile("./assets/ship.png")) {
+		std::cout << "Error: Could not load sprite : ";
+		return;
+	}
+
+	const auto spriteSize = size << 1;
+
+	spriteRects[0] = sf::IntRect(0, 0, spriteSize, spriteSize);
+
+	sprite.setTexture(texture);
+	sprite.setTextureRect(spriteRects[0]);
+	sprite.rotate(45);
+	sprite.setOrigin(sprite.getLocalBounds().width / 2.0f, sprite.getLocalBounds().height / 2.0f);
 }
 
 void Player::render(sf::RenderWindow& window)
 {
 	sf::Transform transform;
-	window.draw(shape, transform.translate(position).rotate(angle));
-	//window.draw(sprite, transform.translate(position).rotate(angle));
+	window.draw(sprite, transform.translate(position).rotate(angle));
+	//window.draw(shape, transform);
 }
 
 void Player::update(float deltaTime) {
@@ -44,7 +59,6 @@ void Player::update(float deltaTime) {
 
 		position.x += cos(radians) * speed * deltaTime;
 		position.y += sin(radians) * speed * deltaTime;
-
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && shootTimer <= 0) {
 		shootTimer = FileMenager::playerData.bullet_shoot_delay;
@@ -54,30 +68,22 @@ void Player::update(float deltaTime) {
 		playSound(Names::LASER_SHOOT);
 	}
 
-	position.x = std::min(std::max(position.x, getEntitySize().width / 2), FileMenager::screenData.size_width - getEntitySize().width / 2);
-	position.y = std::min(std::max(position.y, getEntitySize().height / 2), FileMenager::screenData.size_height - getEntitySize().height / 2);
+	const float size = (float)(this->size >> 1);
 
-	sf::Transform playerTransform = sf::Transform().translate(position).rotate(angle);
+	position.x = std::min(std::max(position.x, size), FileMenager::screenData.size_width - size);
+	position.y = std::min(std::max(position.y, size), FileMenager::screenData.size_height - size);
 
 	for (size_t i = 0; i < EntitiesList::entities.size(); i++)
 	{
 		if (typeid(*EntitiesList::entities[i]) == typeid(Asteroid)) {
 			Asteroid* asteroid = dynamic_cast<Asteroid*>(EntitiesList::entities[i]);
-			sf::Transform asteroidTransform = sf::Transform().translate(asteroid->position).rotate(asteroid->angle);
 
-			//if (physics::intersects(physics::getTransformed(shape, playerTransform),
-			//	physics::getTransformed(asteroid->getVertexShape(), asteroidTransform))) {
-			//	gameOver();
-			//}
+			if (physics::intersects(position, this->size, asteroid->position, asteroid->size)) {
+				playSound(Names::EXPLOSION);
+				gameOver();
+			}
 		}
 	}
-}
-
-const Size Player::getEntitySize()
-{
-	auto width = FileMenager::playerData.size * 2;
-	auto height = FileMenager::playerData.size * 2;
-	return Size(width, height);
 }
 
 const EntityType Player::getEntityType()
