@@ -7,7 +7,7 @@
 #include <thread>
 #include <iostream>
 
-enum class Names {
+enum class Sounds {
     LASER_SHOOT,
     EXPLOSION
 };
@@ -18,7 +18,7 @@ public:
     Sound();
     ~Sound();
 
-    void setFileName(Names str);
+    void setFileName(Sounds);
     void loadAndPlay();
     void stopSoundThread();
 

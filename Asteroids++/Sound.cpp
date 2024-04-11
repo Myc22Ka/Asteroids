@@ -7,7 +7,7 @@ Sound::~Sound() {
     stopSoundThread();
 }
 
-void Sound::setFileName(Names str)
+void Sound::setFileName(Sounds str)
 {
     const std::string soundDefaultDir = "./assets/sounds/";
     const std::string extension = ".wav";
@@ -15,10 +15,10 @@ void Sound::setFileName(Names str)
     filename = soundDefaultDir;
 
     switch (str) {
-    case Names::LASER_SHOOT:
+    case Sounds::LASER_SHOOT:
         name = "laserShoot";
         break;
-    case Names::EXPLOSION:
+    case Sounds::EXPLOSION:
         name = "explosion";
         break;
     default:

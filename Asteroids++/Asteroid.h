@@ -15,23 +15,22 @@ public:
 
 	void render(sf::RenderWindow&) override;
 	void update(float) override;
+	const EntityType getEntityType() override;
+	void collisionDetection() override;
+
+	const sf::CircleShape& getVertexShape() const;
 
 	const sf::Vector2f getRandomDirection();
-	const float getRandomVelocity(const float& base);
 	const sf::Vector2f getRandomPosition();
-	const sf::CircleShape& getVertexShape() const;
-	const EntityType getEntityType() override;
+	const float getRandomAngle();
 
-	sf::Vector2f position;
-	sf::CircleShape shape;
+	template<typename T>
+	const T getRandomValue(const T&);
+
 	sf::Vector2f direction;
 	float speed;
-	int size;
 private:
-	sf::Sprite sprite;
-	sf::Texture texture;
 	int spriteState;
-	sf::IntRect spriteRects[2];
 };
 
 #endif

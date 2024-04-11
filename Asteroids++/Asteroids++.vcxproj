@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\asteroid.png" />
+    <Image Include="assets\bullet.png" />
     <Image Include="assets\ship.png" />
   </ItemGroup>
   <ItemGroup>

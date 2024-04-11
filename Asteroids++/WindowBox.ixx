@@ -16,6 +16,7 @@ public:
 	static void gameOver();
 	static void init();
 	void begin();
+	static bool hitboxesVisibility;
 
 private:
 	sf::RenderWindow window;

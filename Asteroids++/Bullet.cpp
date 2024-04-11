@@ -4,24 +4,15 @@
 #include "Score.h"
 #include "Sound.h"
 
-Bullet::Bullet(sf::Vector2f position, sf::Vector2f direction) : 
-    shape(FileMenager::playerData.bullet_size), 
+Bullet::Bullet(sf::Vector2f position, sf::Vector2f direction, const float& angle) :
     direction(direction), 
-    Entity(position, 0.0f), 
-    lifeTime(FileMenager::playerData.bullet_lifetime),
-    size((int)FileMenager::playerData.bullet_size >> 1){
+    Entity(position, angle - 225, 0, FileMenager::playerData.bullet_size, sf::Color::Green),
+    lifeTime(FileMenager::playerData.bullet_lifetime){
 
-    shape.setRadius(size);
-    sf::Vector2f center(size, size);
+    drawHitboxes();
 
-    shape.setOrigin(center);
+    drawSprite(Sprites::BULLET, angle + 45);
 }
-
-const EntityType Bullet::getEntityType()
-{
-	return EntityType::TYPE_BULLET;
-}
-
 
 void Bullet::update(float deltaTime)
 {
@@ -33,23 +24,35 @@ void Bullet::update(float deltaTime)
             std::find(EntitiesList::entities.begin(), EntitiesList::entities.end(), this));
     }
 
+    collisionDetection();
+}
+
+void Bullet::render(sf::RenderWindow& window)
+{
+    sf::Transform transform;
+	window.draw(sprite, transform.translate(position));
+    if (WindowBox::hitboxesVisibility) window.draw(shape, transform);
+}
+
+const EntityType Bullet::getEntityType()
+{
+    return EntityType::TYPE_BULLET;
+}
+
+void Bullet::collisionDetection()
+{
     for (size_t i = 0; i < EntitiesList::entities.size(); i++)
     {
         if (typeid(*EntitiesList::entities[i]) == typeid(Asteroid)) {
             Asteroid* asteroid = dynamic_cast<Asteroid*>(EntitiesList::entities[i]);
 
-            if (physics::intersects(position, size, asteroid->position, asteroid->size)) {
+            if (physics::intersects(position, size >> 1, asteroid->position, asteroid->size >> 1)) {
                 lifeTime = 0;
                 EntitiesList::toRemoveList.push_back(
                     std::find(EntitiesList::entities.begin(), EntitiesList::entities.end(), asteroid));
                 Score::score += 10;
-                playSound(Names::EXPLOSION);
+                playSound(Sounds::EXPLOSION);
             }
         }
     }
-}
-
-void Bullet::render(sf::RenderWindow& window)
-{
-	window.draw(shape, sf::Transform().translate(position));
 }

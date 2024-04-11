@@ -6,17 +6,21 @@
 #include "Entity.h"
 #include "FileMenager.h"
 #include "EntitiesList.h"
+#include "Player.h"
 
 class Bullet: public Entity {
-	sf::CircleShape shape;
-	sf::Vector2f direction;
-	float lifeTime;
-	const float size;
 public:
-	Bullet(sf::Vector2f, sf::Vector2f);
+	Bullet(sf::Vector2f, sf::Vector2f, const float&);
+
 	void update(float) override;
 	void render(sf::RenderWindow&) override;
 	const EntityType getEntityType() override;
+	void collisionDetection() override;
+private:
+	sf::Vector2f direction;
+	float lifeTime;
+
+	friend Player;
 };
 
 #endif

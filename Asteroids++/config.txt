@@ -11,11 +11,11 @@ player_start_position_y: 500 # some text that should be ignored
 player_start_position_angle: 0
 player_speed: 200
 player_turn_speed: 200
-player_bullet_size: 10
+player_bullet_size: 16
 player_bullet_speed: 300
 player_bullet_shoot_delay: 0.2
 player_bullet_lifetime: 3
-player_sprite_cycle_time: 0.15
+player_sprite_cycle_time: 0.3
 
 # enemies data
 

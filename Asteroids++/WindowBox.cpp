@@ -10,6 +10,7 @@ module WindowBox;
 
 bool WindowBox::isGameOver{};
 float WindowBox::asteroidSpawnTime = FileMenager::enemiesData.asteroid_spawn_time;
+bool WindowBox::hitboxesVisibility{ false };
 
 WindowBox::WindowBox() {}
 
@@ -30,7 +31,7 @@ void WindowBox::displayWindow()
                     std::cout << EntitiesList::entities.size() << std::endl;
                 }
                 if (e.key.code == sf::Keyboard::H) {
-                    //EntitiesList::showHitboxes = !EntitiesList::showHitboxes;
+                    WindowBox::hitboxesVisibility = !WindowBox::hitboxesVisibility;
                 }
             }
         }
@@ -49,15 +50,29 @@ void WindowBox::displayWindow()
             EntitiesList::entities[i]->render(window);
         }
 
-        for (const auto& it : EntitiesList::toRemoveList)
-        {
-            delete* it;
-            EntitiesList::entities.erase(it);
+        std::vector<Entity*> entitiesToAdd;
+        std::vector<Entity*> entitiesToRemove;
+
+        for (auto& ptr : EntitiesList::toAddList) {
+            entitiesToAdd.push_back(ptr);
+        }
+        EntitiesList::toAddList.clear();
+
+        for (auto& ptr : EntitiesList::toRemoveList) {
+            entitiesToRemove.push_back(*ptr);
+        }
+        EntitiesList::toRemoveList.clear();
+
+        for (auto ptr : entitiesToAdd) {
+            EntitiesList::entities.push_back(ptr);
         }
 
-        for (auto& ptr : EntitiesList::toAddList)
-        {
-            EntitiesList::entities.push_back(ptr);
+        for (auto ptr : entitiesToRemove) {
+            auto it = std::find(EntitiesList::entities.begin(), EntitiesList::entities.end(), ptr);
+            if (it != EntitiesList::entities.end()) {
+                delete* it;
+                EntitiesList::entities.erase(it);
+            }
         }
 
         if (asteroidSpawnTime <= 0) {
