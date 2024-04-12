@@ -69,11 +69,36 @@ void Asteroid::collisionDetection()
 	for (const auto& entity : EntitiesList::entities) {
 		if (entity->getEntityType() == EntityType::TYPE_ASTEROID && entity != this) {
 			Asteroid* otherAsteroid = dynamic_cast<Asteroid*>(entity);
-			if (otherAsteroid) {
+
+			if(otherAsteroid)
 				if (physics::intersects(this->position, size >> 1, otherAsteroid->position, otherAsteroid->size >> 1)) {
-					direction = -direction;
-					otherAsteroid->direction = -otherAsteroid->direction;
-				}
+					const sf::Vector2f normal = physics::normalize(this->position - otherAsteroid->position);
+
+					// Calculate overlap distance
+					const float overlap = (this->size + otherAsteroid->size) - physics::distance(this->position, otherAsteroid->position);
+
+					// Separate the asteroids along the collision normal to resolve overlap
+					const sf::Vector2f separationVector = normal * overlap * 0.001f;
+					this->position += separationVector;
+					otherAsteroid->position -= separationVector;
+
+					// Calculate relative velocity along the normal direction
+					const sf::Vector2f relativeVelocity = this->speed * physics::normalize(this->direction) - otherAsteroid->speed * physics::normalize(otherAsteroid->direction);
+					const float velAlongNormal = physics::dotProduct(relativeVelocity, normal);
+
+					// Calculate total mass
+					const float totalMass = this->size + otherAsteroid->size;
+
+					// Calculate the maximum change in direction allowed
+					const float maxChangeFactor = 0.7f;
+					const float maxChangeMagnitude = maxChangeFactor * velAlongNormal / totalMass;
+
+					// Calculate the change in direction based on momentum conservation, limited by the maximum change
+					const sf::Vector2f changeInDirection = std::min(maxChangeMagnitude, std::abs(velAlongNormal)) * normal;
+
+					// Apply change in direction to each asteroid
+					this->direction -= changeInDirection;
+					otherAsteroid->direction += changeInDirection;
 			}
 		}
 	}
