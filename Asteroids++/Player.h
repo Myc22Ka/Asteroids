@@ -19,7 +19,11 @@ public:
 	void collisionDetection() override;
 
 private:
+	void dashAbility(const float&);
 	float shootTimer;
+	bool isDashing = false;
+	float dashTimer;
+	float speed;
 };
 
 #endif

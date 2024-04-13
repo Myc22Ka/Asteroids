@@ -3,6 +3,7 @@
 #include "EntitiesList.h"
 #include <iostream>
 #include <random>
+#include <ranges>
 #include "Physics.h"
 
 constexpr double M_PI = 3.14159265358979323846;
@@ -113,7 +114,19 @@ const sf::Vector2f Asteroid::getRandomPosition()
 	std::uniform_real_distribution<float> xAxis(radius, FileMenager::screenData.size_width - radius);
 	std::uniform_real_distribution<float> yAxis(radius, FileMenager::screenData.size_height - radius);
 
-	return sf::Vector2f(xAxis(gen), yAxis(gen));
+	auto player = std::ranges::find_if(EntitiesList::entities, [](Entity* entity) {
+		return entity->getEntityType() == EntityType::TYPE_PLAYER;
+		});
+
+	if (player != EntitiesList::entities.end()) {
+		sf::Vector2f randomPosition;
+
+		do {
+			randomPosition = sf::Vector2f(xAxis(gen), yAxis(gen));
+		} while (physics::intersects(randomPosition, radius, (*player)->position, (*player)->size << 1));
+
+		return randomPosition;
+	}
 }
 
 const float Asteroid::getRandomAngle()
