@@ -7,8 +7,6 @@ sf::Font Score::font{};
 
 void Score::init()
 {
-	font.loadFromFile("./assets/font.ttf");
-
 	if (!font.loadFromFile("./assets/font.ttf")) {
 		std::cout << "Error: Could not open file: font.ttf\n";
 		return;

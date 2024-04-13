@@ -16,6 +16,8 @@ public:
 	void render(sf::RenderWindow&) override;
 	const EntityType getEntityType() override;
 	void collisionDetection() override;
+
+	int damage;
 private:
 	sf::Vector2f direction;
 	float lifeTime;

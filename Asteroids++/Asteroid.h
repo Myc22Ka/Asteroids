@@ -29,8 +29,11 @@ public:
 
 	sf::Vector2f direction;
 	float speed;
+	int health;
 private:
 	int spriteState;
+	sf::Font font;
+	sf::Text text;
 };
 
 #endif

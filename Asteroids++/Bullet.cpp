@@ -9,6 +9,7 @@ Bullet::Bullet(sf::Vector2f position, sf::Vector2f direction, const float& angle
     Entity(position, angle - 225, 0, FileMenager::playerData.bullet_size, sf::Color::Green),
     lifeTime(FileMenager::playerData.bullet_lifetime){
 
+    damage = 50;
     drawHitboxes();
 
     drawSprite(Sprites::BULLET, angle + 45);
@@ -46,12 +47,16 @@ void Bullet::collisionDetection()
         if (typeid(*EntitiesList::entities[i]) == typeid(Asteroid)) {
             Asteroid* asteroid = dynamic_cast<Asteroid*>(EntitiesList::entities[i]);
 
-            if (physics::intersects(position, size >> 1, asteroid->position, asteroid->size >> 1)) {
+            if (physics::intersects(position, size >> 1, asteroid->position, asteroid->size >> 1) && lifeTime > 0) {
                 lifeTime = 0;
-                EntitiesList::toRemoveList.push_back(
-                    std::find(EntitiesList::entities.begin(), EntitiesList::entities.end(), asteroid));
-                Score::score += 10;
-                playSound(Sounds::EXPLOSION);
+                asteroid->health -= damage >> 1;
+
+                if (asteroid->health <= 0) {
+                    EntitiesList::toRemoveList.push_back(
+                        std::find(EntitiesList::entities.begin(), EntitiesList::entities.end(), asteroid));
+                    Score::score += 10;
+                    playSound(Sounds::EXPLOSION);
+                }
             }
         }
     }
