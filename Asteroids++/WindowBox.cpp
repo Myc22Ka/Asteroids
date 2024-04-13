@@ -5,6 +5,7 @@ module;
 #include <iostream>
 #include "Score.h"
 #include "Physics.h"
+#include "ProgressCircle.h"
 
 module WindowBox;
 
@@ -17,6 +18,7 @@ WindowBox::WindowBox() {}
 void WindowBox::displayWindow()
 {
     window.create(sf::VideoMode(FileMenager::screenData.size_width, FileMenager::screenData.size_height), "Asteroids++", sf::Style::Close | sf::Style::Titlebar);
+    window.setFramerateLimit(60);
 
     sf::Clock clock;
     init();
@@ -82,6 +84,10 @@ void WindowBox::displayWindow()
 
         Score::scoreText.setString(std::to_string(Score::score));
         window.draw(Score::scoreText);
+
+        ProgressCircle dashTimer(50.0f);
+        dashTimer.setValue(1 - Player::dashTimer / FileMenager::playerData.dash_time_delay);
+        window.draw(dashTimer);
 
         if (isGameOver) {
             EntitiesList::entities.clear();

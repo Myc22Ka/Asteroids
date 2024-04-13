@@ -7,11 +7,11 @@
 #include <iostream>
 
 constexpr double M_PI = 3.14159265358979323846;
+float Player::dashTimer = 0;
 
 Player::Player() : 
 	Entity(sf::Vector2f(FileMenager::playerData.start_position_x, FileMenager::playerData.start_position_y), FileMenager::playerData.start_position_angle, 0, FileMenager::playerData.size, sf::Color::Blue), 
     shootTimer(), 
-    dashTimer(),
     speed(FileMenager::playerData.speed)
 {
 	spriteLifeTime = FileMenager::playerData.sprite_cycle_time;
@@ -94,34 +94,36 @@ void Player::collisionDetection()
 
 void Player::dashAbility(const float& deltaTime)
 {
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::R) && !isDashing && dashTimer <= 0) {
+    const auto animationDuration = FileMenager::playerData.dash_duration;
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::R) && !isDashing && dashTimer <= 0 && !sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
         isDashing = true;
-        dashTimer = 1; // Set dash duration
+        dashTimer = FileMenager::playerData.dash_time_delay;
 
         float radians = angle * (M_PI / 180.0f);
 
-        sf::Vector2f endPoint(position.x + cos(radians) * size * 2, position.y + sin(radians) * size * 2);
-
-        float animationDuration = 0.2f; 
+        sf::Vector2f endPoint(position.x + cos(radians) * size * FileMenager::playerData.dash_length, position.y + sin(radians) * size * 2);
 
         std::thread animationThread([this, endPoint, animationDuration]() {
             sf::Clock clock;
-        while (true) {
-            float elapsedTime = clock.getElapsedTime().asSeconds();
-            float t = elapsedTime / animationDuration;
-            if (t > 1.0f) t = 1.0f;
 
-            sf::Vector2f interpolatedPosition = position + t * (endPoint - position);
-            position = interpolatedPosition;
+            while (true) {
+                float elapsedTime = clock.getElapsedTime().asSeconds();
+                float t = elapsedTime / animationDuration;
+                if (t > 1.0f) t = animationDuration;
 
-            if (t >= 1.0f) {
-                isDashing = false;
-                break;
+                sf::Vector2f interpolatedPosition = position + (endPoint - position) * t;
+                position = interpolatedPosition;
+
+
+                if (t >= animationDuration) {
+                    isDashing = false;
+                    break;
+                }
+
+                std::this_thread::sleep_for(std::chrono::milliseconds(10));
             }
-
-            std::this_thread::sleep_for(std::chrono::milliseconds(10));
-        }
-            });
+        });
 
         animationThread.detach();
     }

@@ -64,6 +64,9 @@ void FileMenager::setDataFromFile() {
 	FileMenager::playerData.bullet_lifetime = dataMap["player_bullet_lifetime"];
 	FileMenager::playerData.bullet_size = dataMap["player_bullet_size"];
 	FileMenager::playerData.sprite_cycle_time = dataMap["player_sprite_cycle_time"];
+	FileMenager::playerData.dash_duration = dataMap["player_dash_duration"];
+	FileMenager::playerData.dash_length = static_cast<int>(dataMap["player_dash_length"]);
+	FileMenager::playerData.dash_time_delay = dataMap["player_dash_time_delay"];
 
 	FileMenager::enemiesData.asteroid_spin = dataMap["enemy_asteroid_spin"];
 	FileMenager::enemiesData.asteroid_speed = dataMap["enemy_asteroid_speed"];

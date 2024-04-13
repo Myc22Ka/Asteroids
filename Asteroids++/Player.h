@@ -18,11 +18,11 @@ public:
 	const EntityType getEntityType() override;
 	void collisionDetection() override;
 
+	static float dashTimer;
 private:
 	void dashAbility(const float&);
 	float shootTimer;
 	bool isDashing = false;
-	float dashTimer;
 	float speed;
 };
 

@@ -31,6 +31,12 @@
     <Filter Include="Source Files\Objects\Entities">
       <UniqueIdentifier>{c9f15c2f-f05b-467d-9495-1346337c3a27}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Draws">
+      <UniqueIdentifier>{2d619541-961d-404d-9ea7-67f71a07e8d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Draws">
+      <UniqueIdentifier>{94cb9061-6ccd-42d9-8dae-9713b6159f9e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -69,6 +75,9 @@
     <ClCompile Include="Player.cpp">
       <Filter>Source Files\Objects\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="ProgressCircle.cpp">
+      <Filter>Source Files\Draws</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Physics.h">
@@ -97,6 +106,9 @@
     </ClInclude>
     <ClInclude Include="Entity.h">
       <Filter>Header Files\Objects\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="ProgressCircle.h">
+      <Filter>Header Files\Draws</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

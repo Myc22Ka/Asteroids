@@ -26,6 +26,10 @@ struct PlayerData {
     float bullet_lifetime;
     float bullet_size;
     float sprite_cycle_time;
+
+    float dash_time_delay;
+    float dash_duration;
+    int dash_length;
 };
 
 struct EnemiesData {
