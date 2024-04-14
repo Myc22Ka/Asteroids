@@ -78,6 +78,9 @@
     <ClCompile Include="ProgressCircle.cpp">
       <Filter>Source Files\Draws</Filter>
     </ClCompile>
+    <ClCompile Include="HealthBar.cpp">
+      <Filter>Source Files\Draws</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Physics.h">
@@ -108,6 +111,9 @@
       <Filter>Header Files\Objects\Entities</Filter>
     </ClInclude>
     <ClInclude Include="ProgressCircle.h">
+      <Filter>Header Files\Draws</Filter>
+    </ClInclude>
+    <ClInclude Include="HealthBar.h">
       <Filter>Header Files\Draws</Filter>
     </ClInclude>
   </ItemGroup>

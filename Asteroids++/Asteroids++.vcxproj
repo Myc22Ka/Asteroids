@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Asteroid.cpp" />
+    <ClCompile Include="HealthBar.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="EntitiesList.cpp" />
@@ -39,6 +40,7 @@
     <ClInclude Include="EntitiesList.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="FileMenager.h" />
+    <ClInclude Include="HealthBar.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="ProgressCircle.h" />

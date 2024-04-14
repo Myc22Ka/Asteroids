@@ -6,6 +6,7 @@
 #include "Entity.h"
 #include "EntitiesList.h"
 #include "FileMenager.h"
+#include "HealthBar.h"
 
 import WindowBox;
 
@@ -32,8 +33,7 @@ public:
 	int health;
 private:
 	int spriteState;
-	sf::Font font;
-	sf::Text text;
+	HealthBar healthBar;
 };
 
 #endif

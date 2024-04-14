@@ -8,32 +8,23 @@
 
 constexpr double M_PI = 3.14159265358979323846;
 
-Asteroid::Asteroid() : Entity(getRandomPosition(), getRandomAngle(), 0, getRandomValue<int>(FileMenager::enemiesData.asteroid_size), sf::Color::Red)
+Asteroid::Asteroid() : Entity(getRandomPosition(), getRandomAngle(), 0, getRandomValue<int>(FileMenager::enemiesData.asteroid_size), sf::Color::Red), 
+health(100),
+healthBar(size, 5, sf::Color::Red, sf::Color::Black, 100)
 {
-	health = 100;
 	direction = getRandomDirection();
 	speed = getRandomValue<float>(FileMenager::enemiesData.asteroid_speed);
 
 	drawHitboxes();
 
 	drawSprite(Sprites::ASTEROID, 0);
-
-	if (!font.loadFromFile("./assets/font.ttf")) {
-		std::cout << "Error: Could not open file: font.ttf\n";
-		return;
-	}
-
-	text.setFont(font);
-	text.setPosition(position);
-	text.setCharacterSize(24);
-	text.setString(std::to_string(health));
 }
 
 void Asteroid::render(sf::RenderWindow& window)
 {
 	sf::Transform transform;
 	window.draw(sprite, transform.translate(position).rotate(angle));
-	window.draw(text);
+	healthBar.draw(window);
 	if(WindowBox::hitboxesVisibility) window.draw(shape, transform);
 }
 
@@ -58,8 +49,8 @@ void Asteroid::update(float deltaTime) {
 		direction.y = -abs(direction.y);
 	}
 
-	text.setPosition(position);
-	text.setString(std::to_string(health));
+	healthBar.updateBar(sf::Vector2f{ position.x - radius, position.y + radius });
+	healthBar.setCurrentValue(health);
 
 	if (spriteLifeTime <= 0) {
 		spriteLifeTime = FileMenager::playerData.sprite_cycle_time;
