@@ -10,13 +10,6 @@ Entity::~Entity()
 	delete[] spriteRects;
 }
 
-void Entity::playSound(Sounds name)
-{
-	Sound sound;
-	sound.setFileName(name);
-	sound.loadAndPlay();
-}
-
 void Entity::drawSprite(Sprites name, const int& rotation)
 {
 	const auto defaultDir = "./assets/";
@@ -40,6 +33,8 @@ void Entity::drawSprite(Sprites name, const int& rotation)
 	}
 
 	if (!texture.loadFromFile(defaultDir + filename + extension)) return;
+
+	texture.setSmooth(true);
 
 	const int n = texture.getSize().x / defaultSize;
 

@@ -1,25 +1,21 @@
 #include "Sound.h"
 #include "FileMenager.h"
 
-Sound::Sound() : threadRunning(false) {}
+std::unordered_map <std::string, sf::Sound> Sound::sounds;
 
-Sound::~Sound() {
-    stopSoundThread();
-}
+const std::string LASER_SHOOT = "laserShoot";
+const std::string EXPLOSION = "explosion";
 
-void Sound::setFileName(Sounds str)
+void Sound::loadFile(Sounds str)
 {
-    const std::string soundDefaultDir = "./assets/sounds/";
-    const std::string extension = ".wav";
-
     filename = soundDefaultDir;
 
     switch (str) {
     case Sounds::LASER_SHOOT:
-        name = "laserShoot";
+        name = LASER_SHOOT;
         break;
     case Sounds::EXPLOSION:
-        name = "explosion";
+        name = EXPLOSION;
         break;
     default:
         std::cerr << "Error: Invalid Sound Name\n";
@@ -32,34 +28,28 @@ void Sound::setFileName(Sounds str)
         std::cout << "Error: Could not find sound file: " << filename << std::endl;
         return;
     }
+
+    sounds[name].setBuffer(soundBuffers[name]);
 }
 
-void Sound::loadAndPlay() {
-    auto& buffer = soundBuffers[name];
-    // Create a new thread to play the sound
-    std::thread soundThread([this, buffer]() {
-        sf::Sound sound;
-        // Create a sound instance and set its buffer
-        sound.setBuffer(buffer);
+void Sound::initSounds()
+{
+    loadFile(Sounds::LASER_SHOOT);
+    loadFile(Sounds::EXPLOSION);
 
-        // Play the sound
-        sound.play();
-
-        // Wait until the sound finishes playing
-        while (sound.getStatus() == sf::Sound::Playing) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(sound.getBuffer()->getDuration().asMilliseconds()));
-        }
-    });
-
-    // Detach the thread so it can run independently
-    soundThread.detach();
 }
 
-void Sound::stopSoundThread() {
-    if (threadRunning) {
-        threadRunning = false;
-        if (soundThread.joinable()) {
-            soundThread.join();
-        }
+void Sound::play(Sounds name)
+{
+    switch (name) {
+    case Sounds::LASER_SHOOT:
+        sounds[LASER_SHOOT].play();
+        break;
+    case Sounds::EXPLOSION:
+        sounds[EXPLOSION].play();
+        break;
+    default:
+        std::cerr << "Error: Cannot play Sound\n";
+        return;
     }
 }

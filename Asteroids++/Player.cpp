@@ -18,7 +18,9 @@ Player::Player() :
 
 	drawHitboxes();
 
-	drawSprite(Sprites::SHIP, 45);
+	drawSprite(Sprites::SHIP, 90);
+
+    //setSprite(1);
 }
 
 void Player::render(sf::RenderWindow& window)
@@ -53,15 +55,14 @@ void Player::update(float deltaTime) {
         shootTimer = FileMenager::playerData.bullet_shoot_delay;
         float radians = angle * (M_PI / 180.0f);
         EntitiesList::toAddList.push_back(new Bullet(position, sf::Vector2f(cos(radians), sin(radians)), angle));
-
-        playSound(Sounds::LASER_SHOOT);
+        Sound::play(Sounds::LASER_SHOOT);
     }
 
-    if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && spriteLifeTime <= 0) {
-        spriteLifeTime = FileMenager::playerData.sprite_cycle_time;
-        spriteState = (spriteState + 1) % 3;
-        setSprite(spriteState);
-    }
+    //if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && spriteLifeTime <= 0) {
+    //   spriteLifeTime = FileMenager::playerData.sprite_cycle_time;
+    //    spriteState = (spriteState + 1) % 3;
+    //    setSprite(spriteState);
+    //}
 
     collisionDetection();
 }
@@ -85,7 +86,7 @@ void Player::collisionDetection()
 			Asteroid* asteroid = dynamic_cast<Asteroid*>(EntitiesList::entities[i]);
 
 			if (physics::intersects(position, radius, asteroid->position, asteroid->size >> 1)) {
-				playSound(Sounds::EXPLOSION);
+				Sound::play(Sounds::EXPLOSION);
 				gameOver();
 			}
 		}

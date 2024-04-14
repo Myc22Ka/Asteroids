@@ -14,23 +14,22 @@ enum class Sounds {
 
 class Sound {
 public:
+    static void play(Sounds);
+    void initSounds();
+    void loadFile(Sounds);
 
-    Sound();
-    ~Sound();
 
-    void setFileName(Sounds);
-    void loadAndPlay();
-    void stopSoundThread();
+    static std::unordered_map <std::string, sf::Sound> sounds;
 
 private:
-    static const std::string soundDefaultDir;
-    static const std::string extension;
+    const std::string soundDefaultDir = "./assets/sounds/";
+    const std::string extension = ".wav";
+
+    std::unordered_map<std::string, sf::SoundBuffer> soundBuffers;
 
     std::string name;
     std::string filename;
-    std::unordered_map<std::string, sf::SoundBuffer> soundBuffers;
-    std::thread soundThread;
-    bool threadRunning;
+
 };
 
 #endif

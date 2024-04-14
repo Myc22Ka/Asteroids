@@ -55,7 +55,7 @@ void Bullet::collisionDetection()
                     EntitiesList::toRemoveList.push_back(
                         std::find(EntitiesList::entities.begin(), EntitiesList::entities.end(), asteroid));
                     Score::score += 10;
-                    playSound(Sounds::EXPLOSION);
+                    Sound::play(Sounds::EXPLOSION);
                 }
             }
         }

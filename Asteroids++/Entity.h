@@ -30,8 +30,6 @@ public:
     virtual const EntityType getEntityType() = 0;
     virtual void collisionDetection() = 0;
 
-    void playSound(Sounds);
-
     void drawSprite(Sprites, const int&);
     void setSprite(const int&);
     void drawHitboxes();
