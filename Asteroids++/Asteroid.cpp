@@ -8,22 +8,22 @@
 
 constexpr double M_PI = 3.14159265358979323846;
 
-Asteroid::Asteroid() : Entity(getRandomPosition(), getRandomAngle(), 0, getRandomValue<int>(FileMenager::enemiesData.asteroid_size), sf::Color::Red), 
+Asteroid::Asteroid() : Entity(sf::Vector2f(), getRandomAngle(), 0, getRandomValue<int>(FileMenager::enemiesData.asteroid_size), sf::Color::Red),
 health(100),
 healthBar(size, 5, sf::Color::Red, sf::Color::Black, 100)
 {
+	spriteInfo = getSprite(Sprites::ASTEROID);
 	direction = getRandomDirection();
 	speed = getRandomValue<float>(FileMenager::enemiesData.asteroid_speed);
+	position = getRandomPosition();
 
 	drawHitboxes();
-
-	drawSprite(Sprites::ASTEROID, 0);
 }
 
 void Asteroid::render(sf::RenderWindow& window)
 {
 	sf::Transform transform;
-	window.draw(sprite, transform.translate(position).rotate(angle));
+	window.draw(spriteInfo.sprite, transform.translate(position).rotate(angle));
 	healthBar.draw(window);
 	if(WindowBox::hitboxesVisibility) window.draw(shape, transform);
 }
@@ -31,7 +31,7 @@ void Asteroid::render(sf::RenderWindow& window)
 void Asteroid::update(float deltaTime) {
 	angle += FileMenager::enemiesData.asteroid_spin * deltaTime;
 	position += sf::Vector2f(direction.x * speed * deltaTime, direction.y * speed * deltaTime);
-	spriteLifeTime -= deltaTime;
+	spriteInfo.spriteLifeTime -= deltaTime;
 
 	const int radius = size >> 1;
 
@@ -52,10 +52,10 @@ void Asteroid::update(float deltaTime) {
 	healthBar.updateBar(sf::Vector2f{ position.x - radius, position.y + radius });
 	healthBar.setCurrentValue(health);
 
-	if (spriteLifeTime <= 0) {
-		spriteLifeTime = FileMenager::playerData.sprite_cycle_time;
+	if (spriteInfo.spriteLifeTime <= 0) {
+		spriteInfo.spriteLifeTime = FileMenager::playerData.sprite_cycle_time;
 		spriteState = (spriteState + 1) % 2;
-		setSprite(spriteState);
+		updateSprite(spriteInfo.sprite, spriteInfo.frames, spriteState);
 	}
 
 	collisionDetection();

@@ -1,12 +1,12 @@
-#include "Sound.h"
+#include "SoundData.h"
 #include "FileMenager.h"
 
-std::unordered_map <std::string, sf::Sound> Sound::sounds;
+std::unordered_map <std::string, sf::Sound> SoundData::sounds;
 
 const std::string LASER_SHOOT = "laserShoot";
 const std::string EXPLOSION = "explosion";
 
-void Sound::loadFile(Sounds str)
+void SoundData::loadFile(Sounds str)
 {
     filename = soundDefaultDir;
 
@@ -32,14 +32,14 @@ void Sound::loadFile(Sounds str)
     sounds[name].setBuffer(soundBuffers[name]);
 }
 
-void Sound::initSounds()
+void SoundData::initSounds()
 {
     loadFile(Sounds::LASER_SHOOT);
     loadFile(Sounds::EXPLOSION);
 
 }
 
-void Sound::play(Sounds name)
+void SoundData::play(Sounds name)
 {
     switch (name) {
     case Sounds::LASER_SHOOT:

@@ -6,10 +6,11 @@
 #include "Entity.h"
 #include "EntitiesList.h"
 #include "FileMenager.h"
+#include "SpriteData.h"
 
 import WindowBox;
 
-class Player: public Entity, public WindowBox {
+class Player: public Entity, public WindowBox, public SpriteData {
 public:
 	Player();
 

@@ -1,5 +1,5 @@
-#ifndef SOUND_H
-#define SOUND_H
+#ifndef SOUNDDATA_H
+#define SOUNDDATA_H
 
 #include <SFML/Audio.hpp>
 #include <string>
@@ -12,7 +12,7 @@ enum class Sounds {
     EXPLOSION
 };
 
-class Sound {
+class SoundData {
 public:
     static void play(Sounds);
     void initSounds();

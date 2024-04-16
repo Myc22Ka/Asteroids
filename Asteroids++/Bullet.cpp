@@ -2,17 +2,17 @@
 #include "Asteroid.h"
 #include "Physics.h"
 #include "Score.h"
-#include "Sound.h"
+#include "SoundData.h"
 
 Bullet::Bullet(sf::Vector2f position, sf::Vector2f direction, const float& angle) :
     direction(direction), 
-    Entity(position, angle - 225, 0, FileMenager::playerData.bullet_size, sf::Color::Green),
+    Entity(position, angle, 0, FileMenager::playerData.bullet_size, sf::Color::Green),
     lifeTime(FileMenager::playerData.bullet_lifetime){
 
-    damage = 50;
+    spriteInfo = getSprite(Sprites::BULLET);
+    setRotation(spriteInfo.sprite, angle);
+    damage = 25;
     drawHitboxes();
-
-    drawSprite(Sprites::BULLET, angle + 45);
 }
 
 void Bullet::update(float deltaTime)
@@ -31,7 +31,7 @@ void Bullet::update(float deltaTime)
 void Bullet::render(sf::RenderWindow& window)
 {
     sf::Transform transform;
-	window.draw(sprite, transform.translate(position));
+	window.draw(spriteInfo.sprite, transform.translate(position));
     if (WindowBox::hitboxesVisibility) window.draw(shape, transform);
 }
 
@@ -49,13 +49,17 @@ void Bullet::collisionDetection()
 
             if (physics::intersects(position, size >> 1, asteroid->position, asteroid->size >> 1) && lifeTime > 0) {
                 lifeTime = 0;
-                asteroid->health -= damage >> 1;
+                asteroid->health -= damage;
 
                 if (asteroid->health <= 0) {
-                    EntitiesList::toRemoveList.push_back(
-                        std::find(EntitiesList::entities.begin(), EntitiesList::entities.end(), asteroid));
+                    asteroid->spriteInfo = getSprite(Sprites::EXPLOSION);
+                    asteroid->loadFullCycleSprite(asteroid->spriteInfo, 0.15);
+
+                    //EntitiesList::toRemoveList.push_back(
+                     //   std::find(EntitiesList::entities.begin(), EntitiesList::entities.end(), asteroid));
+
                     Score::score += 10;
-                    Sound::play(Sounds::EXPLOSION);
+                    SoundData::play(Sounds::EXPLOSION);
                 }
             }
         }

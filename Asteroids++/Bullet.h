@@ -8,7 +8,7 @@
 #include "EntitiesList.h"
 #include "Player.h"
 
-class Bullet: public Entity {
+class Bullet: public Entity, public SpriteData {
 public:
 	Bullet(sf::Vector2f, sf::Vector2f, const float&);
 

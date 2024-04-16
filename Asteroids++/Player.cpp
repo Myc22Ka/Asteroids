@@ -3,30 +3,25 @@
 #include "Asteroid.h"
 #include "Physics.h"
 #include "EntitiesList.h"
-#include "Sound.h"
+#include "SoundData.h"
 #include <iostream>
 
 constexpr double M_PI = 3.14159265358979323846;
 float Player::dashTimer = 0;
 
-Player::Player() : 
+Player::Player() :
 	Entity(sf::Vector2f(FileMenager::playerData.start_position_x, FileMenager::playerData.start_position_y), FileMenager::playerData.start_position_angle, 0, FileMenager::playerData.size, sf::Color::Blue), 
     shootTimer(), 
     speed(FileMenager::playerData.speed)
 {
-	spriteLifeTime = FileMenager::playerData.sprite_cycle_time;
-
+    spriteInfo = getSprite(Sprites::SHIP);
 	drawHitboxes();
-
-	drawSprite(Sprites::SHIP, 90);
-
-    //setSprite(1);
 }
 
 void Player::render(sf::RenderWindow& window)
 {
 	sf::Transform transform;
-	window.draw(sprite, transform.translate(position).rotate(angle));
+	window.draw(spriteInfo.sprite, transform.translate(position).rotate(angle));
 	if(WindowBox::hitboxesVisibility) window.draw(shape, transform);
 }
 
@@ -34,7 +29,7 @@ void Player::update(float deltaTime) {
     const auto turnSpeed = FileMenager::playerData.turn_speed;
     shootTimer -= deltaTime;
     dashTimer -= deltaTime;
-    spriteLifeTime -= deltaTime;
+    //spriteLifeTime -= deltaTime;
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !isDashing) {
         angle -= turnSpeed * deltaTime;
@@ -55,7 +50,7 @@ void Player::update(float deltaTime) {
         shootTimer = FileMenager::playerData.bullet_shoot_delay;
         float radians = angle * (M_PI / 180.0f);
         EntitiesList::toAddList.push_back(new Bullet(position, sf::Vector2f(cos(radians), sin(radians)), angle));
-        Sound::play(Sounds::LASER_SHOOT);
+        SoundData::play(Sounds::LASER_SHOOT);
     }
 
     //if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && spriteLifeTime <= 0) {
@@ -86,7 +81,7 @@ void Player::collisionDetection()
 			Asteroid* asteroid = dynamic_cast<Asteroid*>(EntitiesList::entities[i]);
 
 			if (physics::intersects(position, radius, asteroid->position, asteroid->size >> 1)) {
-				Sound::play(Sounds::EXPLOSION);
+				SoundData::play(Sounds::EXPLOSION);
 				gameOver();
 			}
 		}

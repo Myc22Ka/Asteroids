@@ -3,6 +3,7 @@
 #include "FileMenager.h"
 #include "EntitiesList.h"
 #include "Score.h"
+#include "SpriteData.h"
 #include <unordered_map>
 
 export module WindowBox;

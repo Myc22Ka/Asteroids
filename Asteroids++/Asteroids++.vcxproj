@@ -30,7 +30,8 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ProgressCircle.cpp" />
     <ClCompile Include="Score.cpp" />
-    <ClCompile Include="Sound.cpp" />
+    <ClCompile Include="SoundData.cpp" />
+    <ClCompile Include="SpriteData.cpp" />
     <ClCompile Include="WindowBox.cpp" />
     <ClCompile Include="WindowBox.ixx" />
   </ItemGroup>
@@ -45,7 +46,8 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="ProgressCircle.h" />
     <ClInclude Include="Score.h" />
-    <ClInclude Include="Sound.h" />
+    <ClInclude Include="SoundData.h" />
+    <ClInclude Include="SpriteData.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="config.txt" />
@@ -54,6 +56,7 @@
     <Image Include="assets\asteroid.png" />
     <Image Include="assets\bullet.png" />
     <Image Include="assets\ship.png" />
+    <Image Include="assets\sprites\explosion.png" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="assets\font.ttf" />

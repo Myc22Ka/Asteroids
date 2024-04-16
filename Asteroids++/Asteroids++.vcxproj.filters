@@ -37,6 +37,15 @@
     <Filter Include="Source Files\Draws">
       <UniqueIdentifier>{94cb9061-6ccd-42d9-8dae-9713b6159f9e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Resources">
+      <UniqueIdentifier>{7d9f4489-e6ac-499e-9add-52e99e7fdc3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Resources">
+      <UniqueIdentifier>{2bf4657a-73e0-4f9c-9223-6bb299abba18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\assets\sprites">
+      <UniqueIdentifier>{0d5e3e19-bee2-418f-888e-3a6c0febb779}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -48,16 +57,10 @@
     <ClCompile Include="WindowBox.ixx">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="FileMenager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Physics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Score.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sound.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Asteroid.cpp">
@@ -81,15 +84,21 @@
     <ClCompile Include="HealthBar.cpp">
       <Filter>Source Files\Draws</Filter>
     </ClCompile>
+    <ClCompile Include="SpriteData.cpp">
+      <Filter>Source Files\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="FileMenager.cpp">
+      <Filter>Source Files\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundData.cpp">
+      <Filter>Source Files\Resources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Physics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Score.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Sound.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Asteroid.h">
@@ -104,9 +113,6 @@
     <ClInclude Include="EntitiesList.h">
       <Filter>Header Files\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="FileMenager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Entity.h">
       <Filter>Header Files\Objects\Entities</Filter>
     </ClInclude>
@@ -116,6 +122,15 @@
     <ClInclude Include="HealthBar.h">
       <Filter>Header Files\Draws</Filter>
     </ClInclude>
+    <ClInclude Include="FileMenager.h">
+      <Filter>Header Files\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundData.h">
+      <Filter>Header Files\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteData.h">
+      <Filter>Header Files\Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="config.txt">
@@ -123,14 +138,17 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="assets\ship.png">
-      <Filter>Resource Files\assets</Filter>
-    </Image>
     <Image Include="assets\asteroid.png">
-      <Filter>Resource Files\assets</Filter>
+      <Filter>Resource Files\assets\sprites</Filter>
     </Image>
     <Image Include="assets\bullet.png">
-      <Filter>Resource Files\assets</Filter>
+      <Filter>Resource Files\assets\sprites</Filter>
+    </Image>
+    <Image Include="assets\ship.png">
+      <Filter>Resource Files\assets\sprites</Filter>
+    </Image>
+    <Image Include="assets\sprites\explosion.png">
+      <Filter>Resource Files\assets\sprites</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>

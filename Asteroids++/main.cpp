@@ -1,6 +1,7 @@
 #include <iostream>
 #include "FileMenager.h"
-#include "Sound.h"
+#include "SoundData.h"
+#include "SpriteData.h"
 
 import WindowBox;
 
@@ -10,8 +11,11 @@ int main()
     fileMenager.setFileName("config.txt");
     fileMenager.setDataFromFile();
 
-    Sound sounds;
+    SoundData sounds;
     sounds.initSounds();
+
+    SpriteData sprite;
+    sprite.loadAllSprites();
 
     WindowBox window;
 
