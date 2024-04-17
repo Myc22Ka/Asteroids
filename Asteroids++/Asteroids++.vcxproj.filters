@@ -93,6 +93,9 @@
     <ClCompile Include="SoundData.cpp">
       <Filter>Source Files\Resources</Filter>
     </ClCompile>
+    <ClCompile Include="Explosion.cpp">
+      <Filter>Source Files\Objects\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Physics.h">
@@ -130,6 +133,9 @@
     </ClInclude>
     <ClInclude Include="SpriteData.h">
       <Filter>Header Files\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Explosion.h">
+      <Filter>Header Files\Objects\Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

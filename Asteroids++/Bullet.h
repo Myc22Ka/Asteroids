@@ -7,6 +7,7 @@
 #include "FileMenager.h"
 #include "EntitiesList.h"
 #include "Player.h"
+#include "Explosion.h"
 
 class Bullet: public Entity, public SpriteData {
 public:
@@ -23,6 +24,7 @@ private:
 	float lifeTime;
 
 	friend Player;
+	friend Explosion;
 };
 
 #endif

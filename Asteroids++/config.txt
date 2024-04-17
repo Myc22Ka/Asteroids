@@ -25,5 +25,5 @@ player_dash_length: 3 # dash length in player sizes
 
 enemy_asteroid_spin: 25
 enemy_asteroid_speed: 120
-enemy_asteroid_spawn_time: 2
+enemy_asteroid_spawn_time: 1
 enemy_asteroid_size: 64

@@ -11,7 +11,7 @@ Bullet::Bullet(sf::Vector2f position, sf::Vector2f direction, const float& angle
 
     spriteInfo = getSprite(Sprites::BULLET);
     setRotation(spriteInfo.sprite, angle);
-    damage = 25;
+    damage = 100;
     drawHitboxes();
 }
 
@@ -52,11 +52,10 @@ void Bullet::collisionDetection()
                 asteroid->health -= damage;
 
                 if (asteroid->health <= 0) {
-                    asteroid->spriteInfo = getSprite(Sprites::EXPLOSION);
-                    asteroid->loadFullCycleSprite(asteroid->spriteInfo, 0.15);
+                    EntitiesList::toAddList.push_back(new Explosion(asteroid->position));
 
-                    //EntitiesList::toRemoveList.push_back(
-                     //   std::find(EntitiesList::entities.begin(), EntitiesList::entities.end(), asteroid));
+                    EntitiesList::toRemoveList.push_back(
+                        std::find(EntitiesList::entities.begin(), EntitiesList::entities.end(), asteroid));
 
                     Score::score += 10;
                     SoundData::play(Sounds::EXPLOSION);

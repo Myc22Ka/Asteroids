@@ -10,7 +10,8 @@
 enum EntityType {
     TYPE_ASTEROID,
     TYPE_PLAYER,
-    TYPE_BULLET
+    TYPE_BULLET,
+    TYPE_EXPLOSION
 };
 
 class Entity {
