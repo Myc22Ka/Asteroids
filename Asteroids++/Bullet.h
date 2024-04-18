@@ -9,7 +9,7 @@
 #include "Player.h"
 #include "Explosion.h"
 
-class Bullet: public Entity, public SpriteData {
+class Bullet: public Entity {
 public:
 	Bullet(sf::Vector2f, sf::Vector2f, const float&);
 

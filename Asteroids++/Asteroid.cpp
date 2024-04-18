@@ -25,8 +25,8 @@ void Asteroid::render(sf::RenderWindow& window)
 {
 	sf::Transform transform;
 	window.draw(spriteInfo.sprite, transform.translate(position).rotate(angle));
-	healthBar.draw(window);
 	if(WindowBox::hitboxesVisibility) window.draw(shape, transform);
+	healthBar.draw(window);
 }
 
 void Asteroid::update(float deltaTime) {
@@ -86,7 +86,7 @@ void Asteroid::collisionDetection()
 					const float overlap = (this->size + otherAsteroid->size) - physics::distance(this->position, otherAsteroid->position);
 
 					// Separate the asteroids along the collision normal to resolve overlap
-					const sf::Vector2f separationVector = normal * overlap * 0.001f;
+					const sf::Vector2f separationVector = normal * overlap * 0.01f;
 					this->position += separationVector;
 					otherAsteroid->position -= separationVector;
 

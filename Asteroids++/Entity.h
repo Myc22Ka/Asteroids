@@ -14,7 +14,7 @@ enum EntityType {
     TYPE_EXPLOSION
 };
 
-class Entity {
+class Entity : public SpriteData {
 public:
     
     Entity(sf::Vector2f position, float angle, int spriteState, int size, sf::Color hitboxColor);

@@ -6,11 +6,10 @@
 #include "Entity.h"
 #include "EntitiesList.h"
 #include "FileMenager.h"
-#include "SpriteData.h"
 
 import WindowBox;
 
-class Player: public Entity, public WindowBox, public SpriteData {
+class Player: public Entity, public WindowBox {
 public:
 	Player();
 
@@ -25,6 +24,7 @@ private:
 	float shootTimer;
 	bool isDashing = false;
 	float speed;
+	int spriteState;
 };
 
 #endif

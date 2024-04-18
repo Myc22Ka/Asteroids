@@ -5,11 +5,10 @@
 #include <SFML/Graphics.hpp>
 #include "Entity.h"
 #include "FileMenager.h"
-#include "SpriteData.h"
 
 import WindowBox;
 
-class Explosion : public Entity, public SpriteData {
+class Explosion : public Entity {
 public:
 	Explosion(sf::Vector2f position, int size);
 
@@ -19,7 +18,7 @@ public:
 	void collisionDetection() override;
 
 private:
-	Sprites setRnadomSprite();
+	Sprites setRandomSprite();
 	int spriteState;
 };
 

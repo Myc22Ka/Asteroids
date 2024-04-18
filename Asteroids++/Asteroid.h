@@ -10,7 +10,7 @@
 
 import WindowBox;
 
-class Asteroid : public Entity, public WindowBox, public SpriteData {
+class Asteroid : public Entity, public WindowBox {
 public:
 	Asteroid();
 

@@ -29,7 +29,7 @@ void Player::update(float deltaTime) {
     const auto turnSpeed = FileMenager::playerData.turn_speed;
     shootTimer -= deltaTime;
     dashTimer -= deltaTime;
-    //spriteLifeTime -= deltaTime;
+    spriteInfo.spriteLifeTime -= deltaTime;
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !isDashing) {
         angle -= turnSpeed * deltaTime;
@@ -53,11 +53,11 @@ void Player::update(float deltaTime) {
         SoundData::play(Sounds::LASER_SHOOT);
     }
 
-    //if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && spriteLifeTime <= 0) {
-    //   spriteLifeTime = FileMenager::playerData.sprite_cycle_time;
-    //    spriteState = (spriteState + 1) % 3;
-    //    setSprite(spriteState);
-    //}
+    if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && spriteInfo.spriteLifeTime <= 0) {
+        spriteInfo.spriteLifeTime = FileMenager::playerData.sprite_cycle_time;
+        spriteState = (spriteState + 1) % spriteInfo.frames.size();
+        updateSprite(spriteInfo.sprite, spriteInfo.frames, spriteState);
+    }
 
     collisionDetection();
 }
