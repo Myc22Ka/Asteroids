@@ -16,6 +16,7 @@ healthBar(size, 5, sf::Color::Red, sf::Color::Black, 100)
 	direction = getRandomDirection();
 	speed = getRandomValue<float>(FileMenager::enemiesData.asteroid_speed);
 	position = getRandomPosition();
+	scaleSprite(spriteInfo.sprite, spriteInfo.size, size);
 
 	drawHitboxes();
 }

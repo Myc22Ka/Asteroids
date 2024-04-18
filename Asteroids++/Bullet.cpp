@@ -52,7 +52,7 @@ void Bullet::collisionDetection()
                 asteroid->health -= damage;
 
                 if (asteroid->health <= 0) {
-                    EntitiesList::toAddList.push_back(new Explosion(asteroid->position));
+                    EntitiesList::toAddList.push_back(new Explosion(asteroid->position, asteroid->size));
 
                     EntitiesList::toRemoveList.push_back(
                         std::find(EntitiesList::entities.begin(), EntitiesList::entities.end(), asteroid));

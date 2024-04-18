@@ -11,7 +11,7 @@ import WindowBox;
 
 class Explosion : public Entity, public SpriteData {
 public:
-	Explosion(sf::Vector2f position);
+	Explosion(sf::Vector2f position, int size);
 
 	void update(float) override;
 	void render(sf::RenderWindow&) override;
@@ -19,6 +19,7 @@ public:
 	void collisionDetection() override;
 
 private:
+	Sprites setRnadomSprite();
 	int spriteState;
 };
 

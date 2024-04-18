@@ -7,9 +7,7 @@
 #include <filesystem>
 #include <string>
 #include <unordered_map>
-#include <thread>
 #include <iostream>
-#include <condition_variable>
 
 using namespace sf;
 using namespace std;
@@ -19,7 +17,10 @@ enum class Sprites {
     SHIP,
     ASTEROID,
     BULLET,
-    EXPLOSION
+    EXPLOSION_1,
+    EXPLOSION_2,
+    EXPLOSION_3,
+    EXPLOSION_4
 };
 
 struct SpriteInfo
@@ -32,8 +33,7 @@ struct SpriteInfo
     float spriteLifeTime = 0.0f;
     int spriteState = 0;
     int rotation = 0;
-    int size = 0;
-    bool isAnimating = false;
+    float size = 0;
 };
 
 class SpriteData {
@@ -46,7 +46,7 @@ public:
     SpriteInfo getSprite(const Sprites &spriteType);
     void setRotation(Sprite& sprite, const int& angle);
     void updateSprite(Sprite& sprite, const vector<IntRect>& frames, const int& spriteState);
-    void loadFullCycleSprite(SpriteInfo& spriteInfo, float deltaTime);
+    void scaleSprite(Sprite& sprite, const int& spriteSize, const int& size);
 
     static unordered_map<string, SpriteInfo> sprites;
 };

@@ -67,51 +67,52 @@ void SpriteData::updateSprite(Sprite& sprite, const vector<IntRect>& frames, con
     sprite.setTextureRect(frames[spriteState]);
 }
 
-void SpriteData::loadFullCycleSprite(SpriteInfo& spriteInfo, float deltaTime)
+void SpriteData::scaleSprite(Sprite& sprite, const int& spriteSize, const int& size)
 {
-    spriteInfo.isAnimating = true;
-    spriteInfo.spriteLifeTime -= deltaTime;
-
-    thread animationThread([&]() {
-        for (int i = 0; i < spriteInfo.frames.size(); ++i) {
-            spriteInfo.spriteState = i;
-            updateSprite(spriteInfo.sprite, spriteInfo.frames, spriteInfo.spriteState);
-            std::this_thread::sleep_for(std::chrono::milliseconds(10));
-        }
-    });
-
-    animationThread.detach();
-    spriteInfo.isAnimating = false;
+    const float scale = static_cast<float>(size) / spriteSize;
+    sprite.setScale(scale, scale);
 }
 
 void SpriteData::initSprite(const string& filename){
+    sprites[filename].spriteState = 0;
+
     if (filename == "ship") {
         sprites[filename].spriteType = Sprites::SHIP;
-        sprites[filename].spriteState = 0;
         sprites[filename].rotation = 90;
         sprites[filename].size = 64;
         return;
     }
     if (filename == "asteroid") {
         sprites[filename].spriteType = Sprites::ASTEROID;
-        sprites[filename].spriteState = 0;
         sprites[filename].rotation = 0;
         sprites[filename].size = 64;
         return;
     }
     if (filename == "bullet") {
         sprites[filename].spriteType = Sprites::BULLET;
-        sprites[filename].spriteState = 0;
         sprites[filename].rotation = 45;
         sprites[filename].size = 64;
         return;
     }
-    if (filename == "explosion") {
-        sprites[filename].spriteType = Sprites::EXPLOSION;
-        sprites[filename].spriteState = 0;
-        sprites[filename].rotation = 0;
-        sprites[filename].size = 128;
-        sprites[filename].spriteLifeTime = 0.15;
+
+    sprites[filename].rotation = 0;
+    sprites[filename].size = 256;
+    sprites[filename].spriteLifeTime = 0.15;
+
+    if (filename == "explosion1") {
+        sprites[filename].spriteType = Sprites::EXPLOSION_1;
+        return;
+    }
+    if (filename == "explosion2") {
+        sprites[filename].spriteType = Sprites::EXPLOSION_2;
+        return;
+    }
+    if (filename == "explosion3") {
+        sprites[filename].spriteType = Sprites::EXPLOSION_3;
+        return;
+    }
+    if (filename == "explosion4") {
+        sprites[filename].spriteType = Sprites::EXPLOSION_4;
         return;
     }
 }
