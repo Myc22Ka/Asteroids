@@ -4,34 +4,38 @@
 
 #include <SFML/Graphics.hpp>
 #include "Entity.h"
-#include "EntitiesList.h"
+#include "Game.h"
 #include "FileMenager.h"
 #include "HealthBar.h"
+#include "Bullet.h"
+#include <iostream>
+#include <random>
+#include <ranges>
+#include "Physics.h"
 
-import WindowBox;
-
-class Asteroid : public Entity, public WindowBox {
+class Asteroid : public Entity {
 public:
 	Asteroid();
 
-	void render(sf::RenderWindow&) override;
-	void update(float) override;
+	void render(RenderWindow& window) override;
+	void update(float deltaTime) override;
 	const EntityType getEntityType() override;
 	void collisionDetection() override;
 
-	const sf::CircleShape& getVertexShape() const;
+	const CircleShape& getVertexShape() const;
 
-	const sf::Vector2f getRandomDirection();
-	const sf::Vector2f getRandomPosition();
+	const Vector2f getRandomPosition() const;
+	const Vector2f getRandomDirection();
 	const float getRandomAngle();
 
 	template<typename T>
 	const T getRandomValue(const T&);
 
-	sf::Vector2f direction;
+	Vector2f direction;
 	float speed;
 	int health;
 private:
+
 	int spriteState;
 	HealthBar healthBar;
 };

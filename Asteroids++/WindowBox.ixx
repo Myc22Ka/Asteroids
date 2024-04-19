@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "FileMenager.h"
-#include "EntitiesList.h"
+#include "Game.h"
 #include "Score.h"
 #include "SpriteData.h"
 #include <unordered_map>
@@ -17,10 +17,8 @@ public:
 	static void gameOver();
 	static void init();
 	void begin();
-	static bool hitboxesVisibility;
 
 private:
-	sf::RenderWindow window;
-	static bool isGameOver;
+	RenderWindow window;
 	static float asteroidSpawnTime;
 };

@@ -5,15 +5,15 @@
 #include <SFML/Graphics.hpp>
 #include "Entity.h"
 #include "FileMenager.h"
-
-import WindowBox;
+#include "Game.h"
+#include <random>
 
 class Explosion : public Entity {
 public:
-	Explosion(sf::Vector2f position, int size);
+	Explosion(Vector2f position, int size);
 
-	void update(float) override;
-	void render(sf::RenderWindow&) override;
+	void update(float deltaTime) override;
+	void render(RenderWindow& window) override;
 	const EntityType getEntityType() override;
 	void collisionDetection() override;
 

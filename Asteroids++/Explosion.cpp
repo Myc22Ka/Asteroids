@@ -1,6 +1,4 @@
 #include "Explosion.h"
-#include "EntitiesList.h"
-#include <random>
 
 const Sprites EXPLOSIONS[] = { Sprites::EXPLOSION_1, Sprites::EXPLOSION_2, Sprites::EXPLOSION_3, Sprites::EXPLOSION_4 };
 
@@ -15,10 +13,8 @@ Explosion::Explosion(sf::Vector2f position, int asteroidSize) : Entity(position,
 
 void Explosion::update(float deltaTime)
 {
-    if (spriteState == spriteInfo.frames.size() - 1) {
-        EntitiesList::toRemoveList.push_back(
-            std::find(EntitiesList::entities.begin(), EntitiesList::entities.end(), this));
-    }
+    if (spriteState == spriteInfo.frames.size() - 1) Game::removeEntity(this);
+
     spriteInfo.spriteLifeTime -= deltaTime;
 
     if (spriteInfo.spriteLifeTime <= 0) {
@@ -32,7 +28,7 @@ void Explosion::render(sf::RenderWindow& window)
 {
     sf::Transform transform;
     window.draw(spriteInfo.sprite, transform.translate(position));
-    if (WindowBox::hitboxesVisibility) window.draw(shape, transform);
+    if (Game::hitboxesVisibility) window.draw(shape, transform);
 }
 
 const EntityType Explosion::getEntityType()

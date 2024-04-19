@@ -5,7 +5,9 @@ PlayerData FileMenager::playerData;
 ScreenData FileMenager::screenData;
 EnemiesData FileMenager::enemiesData;
 
-FileMenager::FileMenager() {}
+FileMenager::FileMenager(){
+	fileName = nullptr;
+}
 
 FileMenager::~FileMenager()
 {
@@ -26,24 +28,24 @@ const char* FileMenager::getFileName() const
 	return fileName;
 }
 
-void FileMenager::setDataFromFile() {
-	std::ifstream file(fileName);
-	std::map<std::string, float> dataMap;
-	std::string line;
+void FileMenager::setDataFromFile() const {
+	ifstream file(fileName);
+	map<string, float> dataMap;
+	string line;
 
 	if (!file.is_open()) {
-		std::cerr << "Error: Could not open file: " << fileName << std::endl;
+		cerr << "Error: Could not open file: " << fileName << endl;
 		return;
 	}
 
-	const std::regex reg("([a-zA-Z_]+):\\s*(-?\\d*\\.?\\d+)");
+	const regex reg("([a-zA-Z_]+):\\s*(-?\\d*\\.?\\d+)");
 
-	while (std::getline(file, line)) {
-		std::smatch matches;
+	while (getline(file, line)) {
+		smatch matches;
 
-		if (std::regex_search(line, matches, reg)) {
-			std::string key = matches[1].str();
-			double value = std::stof(matches[2].str());
+		if (regex_search(line, matches, reg)) {
+			string key = matches[1].str();
+			double value = stof(matches[2].str());
 			dataMap[key] = value;
 		}
 	}

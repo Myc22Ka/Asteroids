@@ -4,12 +4,15 @@
 
 #include <SFML/Graphics.hpp>
 
+using namespace sf;
+using namespace std;
+
 class Score
 {
 public:
 	static size_t score;
-	static sf::Text scoreText;
-	static sf::Font font;
+	static Text scoreText;
+	static Font font;
 	
 	static void init();
 };

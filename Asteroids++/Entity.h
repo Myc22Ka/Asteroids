@@ -6,7 +6,6 @@
 #include "SoundData.h"
 #include "SpriteData.h"
 
-// Enum to represent different types of entities
 enum EntityType {
     TYPE_ASTEROID,
     TYPE_PLAYER,
@@ -17,20 +16,21 @@ enum EntityType {
 class Entity : public SpriteData {
 public:
     
-    Entity(sf::Vector2f position, float angle, int spriteState, int size, sf::Color hitboxColor);
+    Entity(Vector2f position, float angle, int spriteState, int size, Color hitboxColor);
 
     virtual void update(float deltaTime) = 0;
-    virtual void render(sf::RenderWindow& window) = 0;
+    virtual void render(RenderWindow& window) = 0;
     virtual const EntityType getEntityType() = 0;
     virtual void collisionDetection() = 0;
 
     void drawHitboxes();
 
-    sf::Color hitboxColor;
-    sf::Vector2f position;
-    sf::CircleShape shape;
+    Color hitboxColor;
+    Vector2f position;
+    CircleShape shape;
     float angle;
     int size;
+    double radius;
     SpriteInfo spriteInfo;
 };
 

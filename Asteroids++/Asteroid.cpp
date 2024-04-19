@@ -1,40 +1,32 @@
 #include "Asteroid.h"
-#include "Bullet.h"
-#include "EntitiesList.h"
-#include <iostream>
-#include <random>
-#include <ranges>
-#include "Physics.h"
 
 constexpr double M_PI = 3.14159265358979323846;
 
-Asteroid::Asteroid() : Entity(sf::Vector2f(), getRandomAngle(), 0, getRandomValue<int>(FileMenager::enemiesData.asteroid_size), sf::Color::Red),
+Asteroid::Asteroid() : Entity(Vector2f(), getRandomAngle(), 0, getRandomValue<int>(FileMenager::enemiesData.asteroid_size), Color::Red),
 health(100),
-healthBar(size, 5, sf::Color::Red, sf::Color::Black, 100)
+healthBar(size, 5, Color::Red, Color::Black, 100)
 {
 	spriteInfo = getSprite(Sprites::ASTEROID);
 	direction = getRandomDirection();
-	speed = getRandomValue<float>(FileMenager::enemiesData.asteroid_speed);
+	speed = getRandomValue<double>(FileMenager::enemiesData.asteroid_speed);
 	position = getRandomPosition();
 	scaleSprite(spriteInfo.sprite, spriteInfo.size, size);
 
 	drawHitboxes();
 }
 
-void Asteroid::render(sf::RenderWindow& window)
+void Asteroid::render(RenderWindow& window)
 {
-	sf::Transform transform;
+	Transform transform;
 	window.draw(spriteInfo.sprite, transform.translate(position).rotate(angle));
-	if(WindowBox::hitboxesVisibility) window.draw(shape, transform);
+	if(Game::hitboxesVisibility) window.draw(shape, transform);
 	healthBar.draw(window);
 }
 
 void Asteroid::update(float deltaTime) {
 	angle += FileMenager::enemiesData.asteroid_spin * deltaTime;
-	position += sf::Vector2f(direction.x * speed * deltaTime, direction.y * speed * deltaTime);
+	position += Vector2f(direction.x * speed * deltaTime, direction.y * speed * deltaTime);
 	spriteInfo.spriteLifeTime -= deltaTime;
-
-	const int radius = size >> 1;
 
 	if (position.x < radius) {
 		direction.x = abs(direction.x);
@@ -50,19 +42,19 @@ void Asteroid::update(float deltaTime) {
 		direction.y = -abs(direction.y);
 	}
 
-	healthBar.updateBar(sf::Vector2f{ position.x - radius, position.y + radius });
+	healthBar.updateBar(Vector2f{ position.x - (float)radius, position.y + (float)radius });
 	healthBar.setCurrentValue(health);
 
 	if (spriteInfo.spriteLifeTime <= 0) {
 		spriteInfo.spriteLifeTime = FileMenager::playerData.sprite_cycle_time;
-		spriteState = (spriteState + 1) % 2;
+		spriteState = (spriteState + 1) % spriteInfo.frames.size();
 		updateSprite(spriteInfo.sprite, spriteInfo.frames, spriteState);
 	}
 
 	collisionDetection();
 }
 
-const sf::CircleShape& Asteroid::getVertexShape() const
+const CircleShape& Asteroid::getVertexShape() const
 {
 	return shape;
 }
@@ -74,24 +66,24 @@ const EntityType Asteroid::getEntityType()
 
 void Asteroid::collisionDetection()
 {
-	for (const auto& entity : EntitiesList::entities) {
+	for (const auto& entity : Game::entities) {
 		if (entity->getEntityType() == EntityType::TYPE_ASTEROID && entity != this) {
 			Asteroid* otherAsteroid = dynamic_cast<Asteroid*>(entity);
 
 			if(otherAsteroid)
-				if (physics::intersects(this->position, size >> 1, otherAsteroid->position, otherAsteroid->size >> 1)) {
-					const sf::Vector2f normal = physics::normalize(this->position - otherAsteroid->position);
+				if (physics::intersects(this->position, radius, otherAsteroid->position, otherAsteroid->radius)) {
+					const Vector2f normal = physics::normalize(this->position - otherAsteroid->position);
 
 					// Calculate overlap distance
 					const float overlap = (this->size + otherAsteroid->size) - physics::distance(this->position, otherAsteroid->position);
 
 					// Separate the asteroids along the collision normal to resolve overlap
-					const sf::Vector2f separationVector = normal * overlap * 0.01f;
+					const Vector2f separationVector = normal * overlap * 0.01f;
 					this->position += separationVector;
 					otherAsteroid->position -= separationVector;
 
 					// Calculate relative velocity along the normal direction
-					const sf::Vector2f relativeVelocity = this->speed * physics::normalize(this->direction) - otherAsteroid->speed * physics::normalize(otherAsteroid->direction);
+					const Vector2f relativeVelocity = this->speed * physics::normalize(this->direction) - otherAsteroid->speed * physics::normalize(otherAsteroid->direction);
 					const float velAlongNormal = physics::dotProduct(relativeVelocity, normal);
 
 					// Calculate total mass
@@ -102,7 +94,7 @@ void Asteroid::collisionDetection()
 					const float maxChangeMagnitude = maxChangeFactor * velAlongNormal / totalMass;
 
 					// Calculate the change in direction based on momentum conservation, limited by the maximum change
-					const sf::Vector2f changeInDirection = std::min(maxChangeMagnitude, std::abs(velAlongNormal)) * normal;
+					const Vector2f changeInDirection = min(maxChangeMagnitude, abs(velAlongNormal)) * normal;
 
 					// Apply change in direction to each asteroid
 					this->direction -= changeInDirection;
@@ -112,47 +104,46 @@ void Asteroid::collisionDetection()
 	}
 }
 
-const sf::Vector2f Asteroid::getRandomPosition()
+const Vector2f Asteroid::getRandomPosition() const
 {
-	const int radius = size >> 1;
+	random_device rd;
+	mt19937 gen(rd());
+	uniform_real_distribution<double> xAxis(radius, FileMenager::screenData.size_width - radius);
+	uniform_real_distribution<double> yAxis(radius, FileMenager::screenData.size_height - radius);
 
-	std::random_device rd;
-	std::mt19937 gen(rd());
-	std::uniform_real_distribution<float> xAxis(radius, FileMenager::screenData.size_width - radius);
-	std::uniform_real_distribution<float> yAxis(radius, FileMenager::screenData.size_height - radius);
+	auto player = Game::doesEntityExist(EntityType::TYPE_PLAYER);
 
-	auto player = std::ranges::find_if(EntitiesList::entities, [](Entity* entity) {
-		return entity->getEntityType() == EntityType::TYPE_PLAYER;
-		});
-
-	if (player != EntitiesList::entities.end()) {
-		sf::Vector2f randomPosition;
+	if (player) {
+		Vector2f randomPosition;
 
 		do {
-			randomPosition = sf::Vector2f(xAxis(gen), yAxis(gen));
-		} while (physics::intersects(randomPosition, radius, (*player)->position, (*player)->size << 1));
+			randomPosition = Vector2f(xAxis(gen), yAxis(gen));
+		} while (physics::intersects(randomPosition, radius, player->position, player->size << 1));
 
 		return randomPosition;
+	}
+	else {
+		return Vector2f(); 
 	}
 }
 
 const float Asteroid::getRandomAngle()
 {
-	std::random_device rd;
-	std::mt19937 gen(rd());
-	std::uniform_real_distribution<float> dist(0.0, 360.0);
+	random_device rd;
+	mt19937 gen(rd());
+	uniform_real_distribution<float> dist(0.0, 360.0);
 
 	return dist(gen);
 }
 
-const sf::Vector2f Asteroid::getRandomDirection()
+const Vector2f Asteroid::getRandomDirection()
 {
-	std::random_device rd;
-	std::mt19937 gen(rd());
-	std::uniform_real_distribution<float> dist(0.0, 2.0f * M_PI);
+	random_device rd;
+	mt19937 gen(rd());
+	uniform_real_distribution<float> dist(0.0, 2.0f * M_PI);
 
 	float angle = dist(gen);
-	return sf::Vector2f(cos(angle), sin(angle));
+	return Vector2f(cos(angle), sin(angle));
 }
 
 template<typename T>
@@ -160,9 +151,9 @@ inline const T Asteroid::getRandomValue(const T& base)
 {
 	const double based = base;
 		
-	std::random_device rd;
-	std::mt19937 gen(rd());
-	std::uniform_real_distribution<double> dist(0.75 * based, 1.25 * based);
+	random_device rd;
+	mt19937 gen(rd());
+	uniform_real_distribution<double> dist(0.75 * based, 1.25 * based);
 
 	return static_cast<T>(dist(gen));
 }

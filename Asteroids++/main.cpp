@@ -3,6 +3,9 @@
 #include "SoundData.h"
 #include "SpriteData.h"
 
+using namespace sf;
+using namespace std;
+
 import WindowBox;
 
 int main()

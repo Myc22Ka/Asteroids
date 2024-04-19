@@ -4,17 +4,19 @@
 
 #include <SFML/Graphics.hpp>
 #include "Entity.h"
-#include "EntitiesList.h"
+#include "Game.h"
 #include "FileMenager.h"
+#include "Bullet.h"
+#include "Asteroid.h"
+#include "Physics.h"
+#include "SoundData.h"
 
-import WindowBox;
-
-class Player: public Entity, public WindowBox {
+class Player: public Entity {
 public:
 	Player();
 
-	void render(sf::RenderWindow&) override;
-	void update(float) override;
+	void render(RenderWindow& window) override;
+	void update(float deltaTime) override;
 	const EntityType getEntityType() override;
 	void collisionDetection() override;
 

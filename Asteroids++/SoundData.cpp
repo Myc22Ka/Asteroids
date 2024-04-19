@@ -1,10 +1,13 @@
 #include "SoundData.h"
 #include "FileMenager.h"
 
-std::unordered_map <std::string, sf::Sound> SoundData::sounds;
+unordered_map <string, Sound> SoundData::sounds;
 
-const std::string LASER_SHOOT = "laserShoot";
-const std::string EXPLOSION = "explosion";
+const string soundDefaultDir = "./assets/sounds/";
+const string extension = ".wav";
+
+const string LASER_SHOOT = "laserShoot";
+const string EXPLOSION = "explosion";
 
 void SoundData::loadFile(Sounds str)
 {
@@ -18,14 +21,14 @@ void SoundData::loadFile(Sounds str)
         name = EXPLOSION;
         break;
     default:
-        std::cerr << "Error: Invalid Sound Name\n";
+        cerr << "Error: Invalid Sound Name\n";
         return;
     }
 
     filename += name + extension;
 
     if (!soundBuffers[name].loadFromFile(filename)) {
-        std::cout << "Error: Could not find sound file: " << filename << std::endl;
+        cout << "Error: Could not find sound file: " << filename << endl;
         return;
     }
 
@@ -36,7 +39,6 @@ void SoundData::initSounds()
 {
     loadFile(Sounds::LASER_SHOOT);
     loadFile(Sounds::EXPLOSION);
-
 }
 
 void SoundData::play(Sounds name)
@@ -49,7 +51,7 @@ void SoundData::play(Sounds name)
         sounds[EXPLOSION].play();
         break;
     default:
-        std::cerr << "Error: Cannot play Sound\n";
+        cerr << "Error: Cannot play Sound\n";
         return;
     }
 }

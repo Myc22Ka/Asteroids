@@ -11,7 +11,7 @@
 
 using namespace sf;
 using namespace std;
-namespace fs = std::filesystem;
+namespace fs = filesystem;
 
 enum class Sprites {
     SHIP,
@@ -43,7 +43,9 @@ private:
     const int getTextureWidth(const Texture& texture);
 public:
     void loadAllSprites();
+
     SpriteInfo getSprite(const Sprites &spriteType);
+
     void setRotation(Sprite& sprite, const int& angle);
     void updateSprite(Sprite& sprite, const vector<IntRect>& frames, const int& spriteState);
     void scaleSprite(Sprite& sprite, const int& spriteSize, const int& size);

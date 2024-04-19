@@ -9,6 +9,8 @@
 #include <regex>
 #include <sstream>
 
+using namespace std;
+
 struct ScreenData {
     float size_height;
     float size_width;
@@ -52,7 +54,7 @@ public:
     void setFileName(const char*);
  
     const char* getFileName() const;
-    void setDataFromFile();
+    void setDataFromFile() const;
 };
 
 #endif

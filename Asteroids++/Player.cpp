@@ -1,16 +1,10 @@
 #include "Player.h"
-#include "Bullet.h"
-#include "Asteroid.h"
-#include "Physics.h"
-#include "EntitiesList.h"
-#include "SoundData.h"
-#include <iostream>
 
 constexpr double M_PI = 3.14159265358979323846;
 float Player::dashTimer = 0;
 
 Player::Player() :
-	Entity(sf::Vector2f(FileMenager::playerData.start_position_x, FileMenager::playerData.start_position_y), FileMenager::playerData.start_position_angle, 0, FileMenager::playerData.size, sf::Color::Blue), 
+	Entity(Vector2f(FileMenager::playerData.start_position_x, FileMenager::playerData.start_position_y), FileMenager::playerData.start_position_angle, 0, FileMenager::playerData.size, Color::Blue), 
     shootTimer(), 
     speed(FileMenager::playerData.speed)
 {
@@ -18,11 +12,11 @@ Player::Player() :
 	drawHitboxes();
 }
 
-void Player::render(sf::RenderWindow& window)
+void Player::render(RenderWindow& window)
 {
-	sf::Transform transform;
+	Transform transform;
 	window.draw(spriteInfo.sprite, transform.translate(position).rotate(angle));
-	if(WindowBox::hitboxesVisibility) window.draw(shape, transform);
+	if(Game::hitboxesVisibility) window.draw(shape, transform);
 }
 
 void Player::update(float deltaTime) {
@@ -31,13 +25,13 @@ void Player::update(float deltaTime) {
     dashTimer -= deltaTime;
     spriteInfo.spriteLifeTime -= deltaTime;
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !isDashing) {
+    if (Keyboard::isKeyPressed(Keyboard::A) && !isDashing) {
         angle -= turnSpeed * deltaTime;
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !isDashing) {
+    if (Keyboard::isKeyPressed(Keyboard::D) && !isDashing) {
         angle += turnSpeed * deltaTime;
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+    if (Keyboard::isKeyPressed(Keyboard::W)) {
         float radians = angle * (M_PI / 180.0f);
 
         position.x += cos(radians) * speed * deltaTime;
@@ -46,14 +40,15 @@ void Player::update(float deltaTime) {
 
     dashAbility(deltaTime);
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && shootTimer <= 0) {
+    if (Keyboard::isKeyPressed(Keyboard::Space) && shootTimer <= 0) {
         shootTimer = FileMenager::playerData.bullet_shoot_delay;
         float radians = angle * (M_PI / 180.0f);
-        EntitiesList::toAddList.push_back(new Bullet(position, sf::Vector2f(cos(radians), sin(radians)), angle));
+
+        Game::addToEntities(new Bullet(position, Vector2f(cos(radians), sin(radians)), angle));
         SoundData::play(Sounds::LASER_SHOOT);
     }
 
-    if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && spriteInfo.spriteLifeTime <= 0) {
+    if (!Keyboard::isKeyPressed(Keyboard::Space) && spriteInfo.spriteLifeTime <= 0) {
         spriteInfo.spriteLifeTime = FileMenager::playerData.sprite_cycle_time;
         spriteState = (spriteState + 1) % spriteInfo.frames.size();
         updateSprite(spriteInfo.sprite, spriteInfo.frames, spriteState);
@@ -69,20 +64,18 @@ const EntityType Player::getEntityType()
 
 void Player::collisionDetection()
 {
-	const int radius = size >> 1;
-	const float radiusf = size >> 1;
 
-	position.x = std::min(std::max(position.x, radiusf), FileMenager::screenData.size_width - radius);
-	position.y = std::min(std::max(position.y, radiusf), FileMenager::screenData.size_height - radius);
+	position.x = min(max((double)position.x, radius), FileMenager::screenData.size_width - radius);
+	position.y = min(max((double)position.y, radius), FileMenager::screenData.size_height - radius);
 
-	for (size_t i = 0; i < EntitiesList::entities.size(); i++)
+	for (size_t i = 0; i < Game::entities.size(); i++)
 	{
-		if (typeid(*EntitiesList::entities[i]) == typeid(Asteroid)) {
-			Asteroid* asteroid = dynamic_cast<Asteroid*>(EntitiesList::entities[i]);
+		if (typeid(*Game::entities[i]) == typeid(Asteroid)) {
+			Asteroid* asteroid = dynamic_cast<Asteroid*>(Game::entities[i]);
 
-			if (physics::intersects(position, radius, asteroid->position, asteroid->size >> 1)) {
+			if (physics::intersects(position, radius, asteroid->position, asteroid->radius)) {
 				SoundData::play(Sounds::EXPLOSION);
-				gameOver();
+				Game::gameOver();
 			}
 		}
 	}
@@ -92,23 +85,23 @@ void Player::dashAbility(const float& deltaTime)
 {
     const auto animationDuration = FileMenager::playerData.dash_duration;
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::R) && !isDashing && dashTimer <= 0 && !sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+    if (Keyboard::isKeyPressed(Keyboard::R) && !isDashing && dashTimer <= 0 && !Keyboard::isKeyPressed(Keyboard::Space)) {
         isDashing = true;
         dashTimer = FileMenager::playerData.dash_time_delay;
 
         float radians = angle * (M_PI / 180.0f);
 
-        sf::Vector2f endPoint(position.x + cos(radians) * size * FileMenager::playerData.dash_length, position.y + sin(radians) * size * 2);
+        Vector2f endPoint(position.x + cos(radians) * size * FileMenager::playerData.dash_length, position.y + sin(radians) * FileMenager::playerData.dash_length);
 
-        std::thread animationThread([this, endPoint, animationDuration]() {
-            sf::Clock clock;
+        thread animationThread([this, endPoint, animationDuration]() {
+            Clock clock;
 
             while (true) {
                 float elapsedTime = clock.getElapsedTime().asSeconds();
                 float t = elapsedTime / animationDuration;
                 if (t > 1.0f) t = animationDuration;
 
-                sf::Vector2f interpolatedPosition = position + (endPoint - position) * t;
+                Vector2f interpolatedPosition = position + (endPoint - position) * t;
                 position = interpolatedPosition;
 
 
@@ -117,7 +110,7 @@ void Player::dashAbility(const float& deltaTime)
                     break;
                 }
 
-                std::this_thread::sleep_for(std::chrono::milliseconds(10));
+                this_thread::sleep_for(chrono::milliseconds(10));
             }
         });
 

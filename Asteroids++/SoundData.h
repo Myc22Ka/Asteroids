@@ -7,6 +7,9 @@
 #include <thread>
 #include <iostream>
 
+using namespace sf;
+using namespace std;
+
 enum class Sounds {
     LASER_SHOOT,
     EXPLOSION
@@ -19,16 +22,13 @@ public:
     void loadFile(Sounds);
 
 
-    static std::unordered_map <std::string, sf::Sound> sounds;
+    static unordered_map <string, Sound> sounds;
 
 private:
-    const std::string soundDefaultDir = "./assets/sounds/";
-    const std::string extension = ".wav";
+    unordered_map<string, SoundBuffer> soundBuffers;
 
-    std::unordered_map<std::string, sf::SoundBuffer> soundBuffers;
-
-    std::string name;
-    std::string filename;
+    string name;
+    string filename;
 
 };
 
