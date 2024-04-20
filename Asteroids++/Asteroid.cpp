@@ -10,7 +10,8 @@ healthBar(size, 5, Color::Red, Color::Black, 100)
 	direction = getRandomDirection();
 	speed = getRandomValue<double>(FileMenager::enemiesData.asteroid_speed);
 	position = getRandomPosition();
-	scaleSprite(spriteInfo.sprite, spriteInfo.size, size);
+
+	scaleSprite(spriteInfo.sprite, spriteInfo.spriteSize, size);
 
 	drawHitboxes();
 }
@@ -45,11 +46,11 @@ void Asteroid::update(float deltaTime) {
 	healthBar.updateBar(Vector2f{ position.x - (float)radius, position.y + (float)radius });
 	healthBar.setCurrentValue(health);
 
-	if (spriteInfo.spriteLifeTime <= 0) {
-		spriteInfo.spriteLifeTime = FileMenager::playerData.sprite_cycle_time;
-		spriteState = (spriteState + 1) % spriteInfo.frames.size();
-		updateSprite(spriteInfo.sprite, spriteInfo.frames, spriteState);
-	}
+	//if (spriteInfo.spriteLifeTime <= 0) {
+	//	spriteInfo.spriteLifeTime = FileMenager::playerData.sprite_cycle_time;
+ 	//	spriteState = (spriteState + 1) % spriteInfo.frames.size();
+	//	updateSprite(spriteInfo.sprite, spriteInfo.frames, spriteState);
+	//}
 
 	collisionDetection();
 }
@@ -131,7 +132,7 @@ const float Asteroid::getRandomAngle()
 {
 	random_device rd;
 	mt19937 gen(rd());
-	uniform_real_distribution<float> dist(0.0, 360.0);
+	uniform_real_distribution<double> dist(0.0, 360.0);
 
 	return dist(gen);
 }
@@ -140,9 +141,9 @@ const Vector2f Asteroid::getRandomDirection()
 {
 	random_device rd;
 	mt19937 gen(rd());
-	uniform_real_distribution<float> dist(0.0, 2.0f * M_PI);
+	uniform_real_distribution<double> dist(0.0, 2.0f * M_PI);
 
-	float angle = dist(gen);
+	double angle = dist(gen);
 	return Vector2f(cos(angle), sin(angle));
 }
 
@@ -153,7 +154,7 @@ inline const T Asteroid::getRandomValue(const T& base)
 		
 	random_device rd;
 	mt19937 gen(rd());
-	uniform_real_distribution<double> dist(0.75 * based, 1.25 * based);
+	uniform_real_distribution<double> dist(0.5 * based, 1.5 * based);
 
 	return static_cast<T>(dist(gen));
 }

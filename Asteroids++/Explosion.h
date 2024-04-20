@@ -19,7 +19,7 @@ public:
 
 private:
 	Sprites setRandomSprite();
-	int spriteState;
+	int spriteState = 0;
 };
 
 #endif

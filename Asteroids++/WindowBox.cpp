@@ -5,7 +5,8 @@ module;
 #include <iostream>
 #include "Score.h"
 #include "Physics.h"
-#include "ProgressCircle.h"
+#include "DashBar.h"
+#include "HealthBar.h"
 
 module WindowBox;
 
@@ -15,10 +16,21 @@ WindowBox::WindowBox() {}
 
 void WindowBox::displayWindow()
 {
-    window.create(sf::VideoMode(FileMenager::screenData.size_width, FileMenager::screenData.size_height), "Asteroids++", sf::Style::Close | sf::Style::Titlebar);
+    window.create(VideoMode(FileMenager::screenData.size_width, FileMenager::screenData.size_height), "Asteroids++", Style::Close | Style::Titlebar);
     window.setFramerateLimit(60);
 
-    sf::Clock clock;
+    Texture backgroundTexture;
+    if (!backgroundTexture.loadFromFile("./assets/background.png")) {
+        cout << "Error: Cannot load background!" << endl;
+    }
+
+    Sprite backgroundSprite(backgroundTexture);
+
+    sf::Vector2u windowSize = window.getSize();
+
+    backgroundSprite.setScale(windowSize.x / (float)backgroundTexture.getSize().x, windowSize.y / (float)backgroundTexture.getSize().y);
+
+    Clock clock;
     init();
     begin();
 
@@ -36,11 +48,14 @@ void WindowBox::displayWindow()
             }
         }
 
-        float deltaTime = clock.restart().asSeconds();
+
+        double deltaTime = clock.restart().asSeconds();
 
         Game::toAddList.clear();
         Game::toRemoveList.clear();
+
         window.clear();
+        window.draw(backgroundSprite);
 
         asteroidSpawnTime -= deltaTime;
 
@@ -83,9 +98,10 @@ void WindowBox::displayWindow()
         Score::scoreText.setString(std::to_string(Score::score));
         window.draw(Score::scoreText);
 
-        ProgressCircle dashTimer(50.0f);
-        dashTimer.setValue(1 - Player::dashTimer / FileMenager::playerData.dash_time_delay);
-        window.draw(dashTimer);
+        DashBar dashBar;
+
+        dashBar.update(min(1 - Player::dashTimer / FileMenager::playerData.dash_time_delay, 1.0));
+        dashBar.draw(window);
 
         if (Game::isGameOver) {
             Game::entities.clear();

@@ -20,13 +20,13 @@ public:
 	const EntityType getEntityType() override;
 	void collisionDetection() override;
 
-	static float dashTimer;
+	static double dashTimer;
 private:
-	void dashAbility(const float&);
-	float shootTimer;
+	void dashAbility(const double&);
+	double shootTimer;
 	bool isDashing = false;
-	float speed;
-	int spriteState;
+	int spriteState = 0;
+	double speed;
 };
 
 #endif

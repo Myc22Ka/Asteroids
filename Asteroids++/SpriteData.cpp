@@ -2,26 +2,107 @@
 
 const auto defaultDir = "./assets/sprites";
 
-unordered_map<string, SpriteInfo> SpriteData::sprites;
+const vector<pair<string, Sprites>> objects = {
+        {"ship", Sprites::SHIP},
+        {"asteroid", Sprites::ASTEROID},
+        {"bullet", Sprites::BULLET},
+        {"explosion1", Sprites::EXPLOSION_1},
+        {"explosion2", Sprites::EXPLOSION_2},
+        {"explosion3", Sprites::EXPLOSION_3},
+        {"explosion4", Sprites::EXPLOSION_4},
+        {"dashAbility", Sprites::DASH_ABILITY}
+};
+
+unordered_map<Sprites, SpriteInfo> SpriteData::sprites;
+
+void SpriteData::populateSpriteInfo(const string& objectKey, const Sprites& spriteType)
+{
+    if (document.HasMember(objectKey.c_str()) && document[objectKey.c_str()].IsObject()) {
+        const Value& object = document[objectKey.c_str()];
+    
+        if (object.HasMember("hitboxSize") && object["hitboxSize"].IsNumber()) {
+            sprites[spriteType].hitboxSize = object["hitboxSize"].GetInt();
+        }
+        if (object.HasMember("spriteSize") && object["spriteSize"].IsNumber()) {
+            sprites[spriteType].spriteSize = object["spriteSize"].GetInt();
+        }
+        if (object.HasMember("rotation") && object["rotation"].IsNumber()) {
+            sprites[spriteType].rotation = object["rotation"].GetInt();
+        }
+        if (object.HasMember("spriteState") && object["spriteState"].IsNumber()) {
+            sprites[spriteType].spriteState = object["spriteState"].GetInt();
+        }
+        if (object.HasMember("spriteLifeTime") && object["spriteLifeTime"].IsNumber()) {
+            sprites[spriteType].spriteLifeTime = object["spriteLifeTime"].GetDouble();
+        }
+    }
+}
+
+void SpriteData::loadJSONData(const string& filename) {
+    string jsonString;
+    ifstream jsonFile(filename);
+    if (!jsonFile.is_open()) {
+        cerr << "Unable to open file " << filename << endl;
+        return;
+    }
+
+    string line;
+    while (getline(jsonFile, line)) {
+        jsonString += line + "\n";
+    }
+    jsonFile.close();
+
+    document.Parse(jsonString.c_str());
+
+    if (document.IsObject()) {
+        for (auto& obj : objects) {
+            populateSpriteInfo(obj.first, obj.second);
+        }
+    }
+    else {
+        cerr << "Failed to parse JSON from file " << filename << endl;
+        return;
+    }
+}
+
+template<typename T>
+inline const T SpriteData::getJSONProperty(const string& property, Value& spriteData)
+{
+    if (spriteData.HasMember(property.c_str()) && spriteData[property.c_str()].IsNumber()) {
+        return static_cast<T>(spriteData[property.c_str()].GetDouble());
+    }
+    return T();
+}
+
 
 void SpriteData::loadAllSprites()
 {
+    Sprites type = {};
+
+    for (const auto& entry : fs::directory_iterator(defaultDir))
+        if (fs::is_regular_file(entry.path()) && entry.path().extension() == ".json") loadJSONData(entry.path().string());
 
     for (const auto& entry : fs::directory_iterator(defaultDir)) {
         if (fs::is_regular_file(entry.path()) && entry.path().extension() == ".png") {
             const auto filename = entry.path().stem().string();
-            
-            initSprite(filename);
 
-            if (!sprites[filename].texture.loadFromFile(entry.path().string())) {
+
+            for (const auto& obj : objects) {
+                if (obj.first == filename) {
+                    type = obj.second;
+                    break;
+                }
+            }
+
+            if (!sprites[type].texture.loadFromFile(entry.path().string())) {
                 cout << "Error: Invalid Sprite Name\n" << endl;
                 return;
             }
 
-            sprites[filename].texture.setSmooth(true);
+            sprites[type].texture.setSmooth(true);
 
-            const auto w = getTextureWidth(sprites[filename].texture) / sprites[filename].size;
-            const auto h = getTextureHeight(sprites[filename].texture) / sprites[filename].size;
+            const auto w = getTextureWidth(sprites[type].texture) / sprites[type].spriteSize;
+            const auto h = getTextureHeight(sprites[type].texture) / sprites[type].spriteSize;
             const auto n = w * h;
 
             int y = 0;
@@ -30,31 +111,26 @@ void SpriteData::loadAllSprites()
                 int x = 0;
                 for (int i = 0; i < w; i++)
                 {
-                    const auto rect = sf::IntRect(x, y, sprites[filename].size, sprites[filename].size);
-                    sprites[filename].frames.push_back(rect);
-                    x += sprites[filename].size;
+                    const auto rect = IntRect(x, y, sprites[type].spriteSize, sprites[type].spriteSize);
+                    sprites[type].frames.push_back(rect);
+                    x += sprites[type].spriteSize;
                 }
-                y += sprites[filename].size;
+                y += sprites[type].spriteSize;
             }
-            sprites[filename].sprite.setTexture(sprites[filename].texture);
-            sprites[filename].sprite.setTextureRect(sprites[filename].frames[0]);
-            sprites[filename].sprite.rotate(sprites[filename].rotation);
 
-            const sf::Rect center = sprites[filename].sprite.getLocalBounds();
-            sprites[filename].sprite.setOrigin((int)center.width >> 1, (int)center.height >> 1);
+            sprites[type].sprite.setTexture(sprites[type].texture);
+            sprites[type].sprite.setTextureRect(sprites[type].frames[0]);
+            sprites[type].sprite.rotate(sprites[type].rotation);
+
+            const Rect center = sprites[type].sprite.getLocalBounds();
+            sprites[type].sprite.setOrigin((int)center.width >> 1, (int)center.height >> 1);
         }
     }
-
 }
 
 SpriteInfo SpriteData::getSprite(const Sprites& spriteType)
 {
-    for (const auto& pair : sprites) {
-        if (pair.second.spriteType == spriteType) {
-            return pair.second;
-        }
-    }
-    return SpriteInfo();
+    return sprites[spriteType];
 }
 
 void SpriteData::setRotation(Sprite& sprite, const int& angle)
@@ -69,52 +145,8 @@ void SpriteData::updateSprite(Sprite& sprite, const vector<IntRect>& frames, con
 
 void SpriteData::scaleSprite(Sprite& sprite, const int& spriteSize, const int& size)
 {
-    const float scale = static_cast<float>(size) / spriteSize;
+    const double scale = (double)size / spriteSize;
     sprite.setScale(scale, scale);
-}
-
-void SpriteData::initSprite(const string& filename){
-    sprites[filename].spriteState = 0;
-
-    if (filename == "ship") {
-        sprites[filename].spriteType = Sprites::SHIP;
-        sprites[filename].rotation = 90;
-        sprites[filename].size = 64;
-        return;
-    }
-    if (filename == "asteroid") {
-        sprites[filename].spriteType = Sprites::ASTEROID;
-        sprites[filename].rotation = 0;
-        sprites[filename].size = 64;
-        return;
-    }
-    if (filename == "bullet") {
-        sprites[filename].spriteType = Sprites::BULLET;
-        sprites[filename].rotation = 45;
-        sprites[filename].size = 64;
-        return;
-    }
-
-    sprites[filename].rotation = 0;
-    sprites[filename].size = 256;
-    sprites[filename].spriteLifeTime = 0.15;
-
-    if (filename == "explosion1") {
-        sprites[filename].spriteType = Sprites::EXPLOSION_1;
-        return;
-    }
-    if (filename == "explosion2") {
-        sprites[filename].spriteType = Sprites::EXPLOSION_2;
-        return;
-    }
-    if (filename == "explosion3") {
-        sprites[filename].spriteType = Sprites::EXPLOSION_3;
-        return;
-    }
-    if (filename == "explosion4") {
-        sprites[filename].spriteType = Sprites::EXPLOSION_4;
-        return;
-    }
 }
 
 const int SpriteData::getTextureWidth(const Texture& texture)

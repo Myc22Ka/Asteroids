@@ -78,9 +78,6 @@
     <ClCompile Include="Player.cpp">
       <Filter>Source Files\Objects\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="ProgressCircle.cpp">
-      <Filter>Source Files\Draws</Filter>
-    </ClCompile>
     <ClCompile Include="HealthBar.cpp">
       <Filter>Source Files\Draws</Filter>
     </ClCompile>
@@ -95,6 +92,9 @@
     </ClCompile>
     <ClCompile Include="Explosion.cpp">
       <Filter>Source Files\Objects\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="DashBar.cpp">
+      <Filter>Source Files\Draws</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -119,9 +119,6 @@
     <ClInclude Include="Entity.h">
       <Filter>Header Files\Objects\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="ProgressCircle.h">
-      <Filter>Header Files\Draws</Filter>
-    </ClInclude>
     <ClInclude Include="HealthBar.h">
       <Filter>Header Files\Draws</Filter>
     </ClInclude>
@@ -136,6 +133,12 @@
     </ClInclude>
     <ClInclude Include="Explosion.h">
       <Filter>Header Files\Objects\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DashBar.h">
+      <Filter>Header Files\Draws</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -169,5 +172,10 @@
     <Media Include="assets\sounds\laserShoot.wav">
       <Filter>Resource Files\assets\sounds</Filter>
     </Media>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\sprites\sprites_data.json">
+      <Filter>Resource Files\assets\sprites</Filter>
+    </None>
   </ItemGroup>
 </Project>

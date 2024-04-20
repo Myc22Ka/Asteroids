@@ -4,11 +4,11 @@ const Sprites EXPLOSIONS[] = { Sprites::EXPLOSION_1, Sprites::EXPLOSION_2, Sprit
 
 Explosion::Explosion(sf::Vector2f position, int asteroidSize) : Entity(position, 0, 0, 256, sf::Color::Cyan) {
     spriteInfo = getSprite(setRandomSprite());
-    drawHitboxes();
+    //drawHitboxes();
 
-    const float newSize = size * (static_cast<float>(asteroidSize) / 64);
+    const auto newSize = size * asteroidSize / spriteInfo.hitboxSize;
 
-    scaleSprite(spriteInfo.sprite, spriteInfo.size, newSize);
+    scaleSprite(spriteInfo.sprite, spriteInfo.spriteSize, newSize);
 };
 
 void Explosion::update(float deltaTime)

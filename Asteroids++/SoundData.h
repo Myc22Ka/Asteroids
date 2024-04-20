@@ -12,7 +12,9 @@ using namespace std;
 
 enum class Sounds {
     LASER_SHOOT,
-    EXPLOSION
+    EXPLOSION,
+    DASH_ABILITY,
+    DASH_ABILITY_RESTORE
 };
 
 class SoundData {

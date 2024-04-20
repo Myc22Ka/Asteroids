@@ -2,7 +2,8 @@
 #include "FileMenager.h"
 
 Entity::Entity(Vector2f position, float angle, int spriteState, int size, Color hitboxColor)
-	: position(position), angle(angle), size(size), hitboxColor(hitboxColor), radius(size >> 1) {}
+	: position(position), angle(angle), size(size), hitboxColor(hitboxColor), radius(size >> 1) {
+}
 
 void Entity::drawHitboxes()
 {

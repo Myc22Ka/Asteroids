@@ -8,6 +8,8 @@ const string extension = ".wav";
 
 const string LASER_SHOOT = "laserShoot";
 const string EXPLOSION = "explosion";
+const string DASH_ABILITY = "dashAbility";
+const string DASH_ABILITY_RESTORE = "regainDash";
 
 void SoundData::loadFile(Sounds str)
 {
@@ -19,6 +21,12 @@ void SoundData::loadFile(Sounds str)
         break;
     case Sounds::EXPLOSION:
         name = EXPLOSION;
+        break;
+    case Sounds::DASH_ABILITY:
+        name = DASH_ABILITY;
+        break;
+    case Sounds::DASH_ABILITY_RESTORE:
+        name = DASH_ABILITY_RESTORE;
         break;
     default:
         cerr << "Error: Invalid Sound Name\n";
@@ -39,6 +47,8 @@ void SoundData::initSounds()
 {
     loadFile(Sounds::LASER_SHOOT);
     loadFile(Sounds::EXPLOSION);
+    loadFile(Sounds::DASH_ABILITY);
+    loadFile(Sounds::DASH_ABILITY_RESTORE);
 }
 
 void SoundData::play(Sounds name)
@@ -49,6 +59,12 @@ void SoundData::play(Sounds name)
         break;
     case Sounds::EXPLOSION:
         sounds[EXPLOSION].play();
+        break;
+    case Sounds::DASH_ABILITY:
+        sounds[DASH_ABILITY].play();
+        break;
+    case Sounds::DASH_ABILITY_RESTORE:
+        sounds[DASH_ABILITY_RESTORE].play();
         break;
     default:
         cerr << "Error: Cannot play Sound\n";

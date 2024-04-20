@@ -1,0 +1,58 @@
+{
+  "ship": {
+    "hitboxSize": 64,
+    "spriteSize": 64,
+    "rotation": 90,
+    "spriteState": 0,
+    "spriteLifeTime": 0
+  },
+  "asteroid": {
+    "hitboxSize": 64,
+    "spriteSize": 64,
+    "rotation": 0,
+    "spriteState": 0,
+    "spriteLifeTime": 0
+  },
+  "bullet": {
+    "hitboxSize": 16,
+    "spriteSize": 120,
+    "rotation": 0,
+    "spriteState": 0,
+    "spriteLifeTime": 0
+  },
+  "explosion1": {
+    "hitboxSize": 64,
+    "spriteSize": 256,
+    "rotation": 0,
+    "spriteState": 0,
+    "spriteLifeTime": 0.15
+  },
+  "explosion2": {
+    "hitboxSize": 64,
+    "spriteSize": 256,
+    "rotation": 0,
+    "spriteState": 0,
+    "spriteLifeTime": 0.15
+  },
+  "explosion3": {
+    "hitboxSize": 64,
+    "spriteSize": 256,
+    "rotation": 0,
+    "spriteState": 0,
+    "spriteLifeTime": 0.15
+  },
+  "explosion4": {
+    "hitboxSize": 64,
+    "spriteSize": 256,
+    "rotation": 0,
+    "spriteState": 0,
+    "spriteLifeTime": 0.15
+  },
+  "dashAbility": {
+    "hitboxSize": 0,
+    "spriteSize": 128,
+    "rotation": 0,
+    "spriteState": 0,
+    "spriteLifeTime": 0
+  }
+}

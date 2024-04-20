@@ -18,7 +18,7 @@ player_bullet_lifetime: 3
 player_sprite_cycle_time: 0.3
 
 player_dash_time_delay: 2 # in seconds
-player_dash_duration: 0.3 # keep it below 0.5
+player_dash_duration: 0.4 # keep it below 0.5
 player_dash_length: 3 # dash length in player sizes
 
 # enemies data

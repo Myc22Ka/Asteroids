@@ -14,7 +14,6 @@ public:
 	WindowBox();
 
 	void displayWindow();
-	static void gameOver();
 	static void init();
 	void begin();
 

@@ -11,7 +11,7 @@ Bullet::Bullet(Vector2f position, Vector2f direction, const float& angle) :
 
     spriteInfo = getSprite(Sprites::BULLET);
     setRotation(spriteInfo.sprite, angle);
-    damage = 100;
+    damage = 50;
     drawHitboxes();
 }
 

@@ -8,15 +8,16 @@ class HealthBar {
 private:
     sf::RectangleShape bar;
     sf::RectangleShape outline;
-    float maxWidth;
-    float currentValue;
-    float maxValue;
+    double maxWidth;
+    double currentValue;
+    double maxValue;
 
 public:
-    HealthBar(float width, float height, sf::Color fillColor, sf::Color outlineColor, float maxValue);
+    HealthBar(double width, double height, sf::Color fillColor, sf::Color outlineColor, double maxValue);
+    void updateBarValue();
     void updateBar(const sf::Vector2f& position);
-    void setCurrentValue(float value);
-    void draw(sf::RenderWindow& window);
+    void setCurrentValue(double value);
+    void draw(sf::RenderWindow& window) const;
 };
 
 #endif

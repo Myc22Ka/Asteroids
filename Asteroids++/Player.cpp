@@ -1,7 +1,7 @@
 #include "Player.h"
 
 constexpr double M_PI = 3.14159265358979323846;
-float Player::dashTimer = 0;
+double Player::dashTimer = 0.0;
 
 Player::Player() :
 	Entity(Vector2f(FileMenager::playerData.start_position_x, FileMenager::playerData.start_position_y), FileMenager::playerData.start_position_angle, 0, FileMenager::playerData.size, Color::Blue), 
@@ -9,6 +9,7 @@ Player::Player() :
     speed(FileMenager::playerData.speed)
 {
     spriteInfo = getSprite(Sprites::SHIP);
+    spriteState = spriteInfo.spriteState;
 	drawHitboxes();
 }
 
@@ -48,11 +49,11 @@ void Player::update(float deltaTime) {
         SoundData::play(Sounds::LASER_SHOOT);
     }
 
-    if (!Keyboard::isKeyPressed(Keyboard::Space) && spriteInfo.spriteLifeTime <= 0) {
-        spriteInfo.spriteLifeTime = FileMenager::playerData.sprite_cycle_time;
-        spriteState = (spriteState + 1) % spriteInfo.frames.size();
-        updateSprite(spriteInfo.sprite, spriteInfo.frames, spriteState);
-    }
+    //if (!Keyboard::isKeyPressed(Keyboard::Space) && spriteInfo.spriteLifeTime <= 0) {
+    //    spriteInfo.spriteLifeTime = FileMenager::playerData.sprite_cycle_time;
+    //    spriteState = (spriteState + 1) % spriteInfo.frames.size();
+    //    updateSprite(spriteInfo.sprite, spriteInfo.frames, spriteState);
+    //}
 
     collisionDetection();
 }
@@ -81,7 +82,7 @@ void Player::collisionDetection()
 	}
 }
 
-void Player::dashAbility(const float& deltaTime)
+void Player::dashAbility(const double& deltaTime)
 {
     const auto animationDuration = FileMenager::playerData.dash_duration;
 
@@ -89,21 +90,22 @@ void Player::dashAbility(const float& deltaTime)
         isDashing = true;
         dashTimer = FileMenager::playerData.dash_time_delay;
 
-        float radians = angle * (M_PI / 180.0f);
+        double radians = angle * (M_PI / 180.0f);
 
-        Vector2f endPoint(position.x + cos(radians) * size * FileMenager::playerData.dash_length, position.y + sin(radians) * FileMenager::playerData.dash_length);
+        Vector2f endPoint(position.x + cos(radians) * size * FileMenager::playerData.dash_length, position.y + sin(radians) * size * FileMenager::playerData.dash_length);
 
+        SoundData::play(Sounds::DASH_ABILITY);
         thread animationThread([this, endPoint, animationDuration]() {
+            this_thread::sleep_for(chrono::milliseconds(50));
             Clock clock;
 
             while (true) {
                 float elapsedTime = clock.getElapsedTime().asSeconds();
                 float t = elapsedTime / animationDuration;
-                if (t > 1.0f) t = animationDuration;
+                if (t > 1.0f) t = 1.0f;
 
                 Vector2f interpolatedPosition = position + (endPoint - position) * t;
                 position = interpolatedPosition;
-
 
                 if (t >= animationDuration) {
                     isDashing = false;
