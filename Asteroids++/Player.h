@@ -16,7 +16,7 @@ public:
 	Player();
 
 	void render(RenderWindow& window) override;
-	void update(float deltaTime) override;
+	void update(double deltaTime) override;
 	const EntityType getEntityType() override;
 	void collisionDetection() override;
 
@@ -25,7 +25,6 @@ private:
 	void dashAbility(const double&);
 	double shootTimer;
 	bool isDashing = false;
-	int spriteState = 0;
 	double speed;
 };
 

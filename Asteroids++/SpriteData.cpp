@@ -5,6 +5,8 @@ const auto defaultDir = "./assets/sprites";
 const vector<pair<string, Sprites>> objects = {
         {"ship", Sprites::SHIP},
         {"asteroid", Sprites::ASTEROID},
+        {"multiAsteroid", Sprites::MULTI_ASTEROID},
+        {"singleAsteroid", Sprites::SINGLE_ASTEROID},
         {"bullet", Sprites::BULLET},
         {"explosion1", Sprites::EXPLOSION_1},
         {"explosion2", Sprites::EXPLOSION_2},

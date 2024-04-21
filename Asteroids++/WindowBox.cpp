@@ -10,7 +10,7 @@ module;
 
 module WindowBox;
 
-float WindowBox::asteroidSpawnTime = FileMenager::enemiesData.asteroid_spawn_time;
+double WindowBox::asteroidSpawnTime = FileMenager::enemiesData.asteroid_spawn_time;
 
 WindowBox::WindowBox() {}
 
@@ -28,7 +28,7 @@ void WindowBox::displayWindow()
 
     sf::Vector2u windowSize = window.getSize();
 
-    backgroundSprite.setScale(windowSize.x / (float)backgroundTexture.getSize().x, windowSize.y / (float)backgroundTexture.getSize().y);
+    backgroundSprite.setScale(windowSize.x / (double)backgroundTexture.getSize().x, windowSize.y / (double)backgroundTexture.getSize().y);
 
     Clock clock;
     init();
@@ -47,7 +47,6 @@ void WindowBox::displayWindow()
                 }
             }
         }
-
 
         double deltaTime = clock.restart().asSeconds();
 
@@ -91,7 +90,7 @@ void WindowBox::displayWindow()
         }
 
         if (asteroidSpawnTime <= 0) {
-            Game::entities.push_back(new Asteroid());
+            Game::entities.push_back(Game::getRandomEntity());
             asteroidSpawnTime = FileMenager::enemiesData.asteroid_spawn_time;
         }
 

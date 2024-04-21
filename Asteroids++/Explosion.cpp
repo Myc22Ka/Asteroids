@@ -2,8 +2,7 @@
 
 const Sprites EXPLOSIONS[] = { Sprites::EXPLOSION_1, Sprites::EXPLOSION_2, Sprites::EXPLOSION_3, Sprites::EXPLOSION_4 };
 
-Explosion::Explosion(sf::Vector2f position, int asteroidSize) : Entity(position, 0, 0, 256, sf::Color::Cyan) {
-    spriteInfo = getSprite(setRandomSprite());
+Explosion::Explosion(sf::Vector2f position, int asteroidSize) : Entity(position, 0, 256, sf::Color::Cyan, getSprite(setRandomSprite())) {
     //drawHitboxes();
 
     const auto newSize = size * asteroidSize / spriteInfo.hitboxSize;
@@ -11,16 +10,16 @@ Explosion::Explosion(sf::Vector2f position, int asteroidSize) : Entity(position,
     scaleSprite(spriteInfo.sprite, spriteInfo.spriteSize, newSize);
 };
 
-void Explosion::update(float deltaTime)
+void Explosion::update(double deltaTime)
 {
-    if (spriteState == spriteInfo.frames.size() - 1) Game::removeEntity(this);
+    if (spriteInfo.spriteState == spriteInfo.frames.size() - 1) Game::removeEntity(this);
 
     spriteInfo.spriteLifeTime -= deltaTime;
 
     if (spriteInfo.spriteLifeTime <= 0) {
         spriteInfo.spriteLifeTime = 0.01;
-        spriteState = (spriteState + 1) % spriteInfo.frames.size();
-        updateSprite(spriteInfo.sprite, spriteInfo.frames, spriteState);
+        spriteInfo.spriteState = (spriteInfo.spriteState + 1) % spriteInfo.frames.size();
+        updateSprite(spriteInfo.sprite, spriteInfo.frames, spriteInfo.spriteState);
     }
 }
 

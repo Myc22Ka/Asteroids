@@ -1,6 +1,6 @@
 #pragma once
-#ifndef ASTEROID_H
-#define ASTEROID_H
+#ifndef ASTEROID2_H
+#define ASTEROID2_H
 
 #include <SFML/Graphics.hpp>
 #include "Entity.h"
@@ -13,25 +13,30 @@
 #include <ranges>
 #include "Physics.h"
 
-class Asteroid : public Entity {
+class Asteroid2 : public Entity {
 public:
-	Asteroid(double health, SpriteInfo spriteInfo);
+	Asteroid2();
 
 	void render(RenderWindow& window) override;
-	void update(double deltaTime) override;
-	virtual const EntityType getEntityType() override = 0;
+	void update(float deltaTime) override;
+	const EntityType getEntityType() override;
 	void collisionDetection() override;
+
+	const CircleShape& getVertexShape() const;
 
 	const Vector2f getRandomPosition() const;
 	const Vector2f getRandomDirection();
-	const double getRandomAngle();
+	const float getRandomAngle();
 
 	template<typename T>
 	const T getRandomValue(const T&);
 
 	Vector2f direction;
-	double speed;
-	double health;
+	float speed;
+	int health;
+private:
+
+	int spriteState;
 	HealthBar healthBar;
 };
 

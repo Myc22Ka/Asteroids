@@ -1,15 +1,21 @@
 #include "Player.h"
+#include "MultiAsteroid.h"
+#include "SingleAsteroid.h"
 
 constexpr double M_PI = 3.14159265358979323846;
 double Player::dashTimer = 0.0;
 
 Player::Player() :
-	Entity(Vector2f(FileMenager::playerData.start_position_x, FileMenager::playerData.start_position_y), FileMenager::playerData.start_position_angle, 0, FileMenager::playerData.size, Color::Blue), 
+	Entity(
+        Vector2f(FileMenager::playerData.start_position_x, FileMenager::playerData.start_position_y), 
+        FileMenager::playerData.start_position_angle, 
+        FileMenager::playerData.size, 
+        Color::Blue,
+        getSprite(Sprites::SHIP)
+    ), 
     shootTimer(), 
     speed(FileMenager::playerData.speed)
 {
-    spriteInfo = getSprite(Sprites::SHIP);
-    spriteState = spriteInfo.spriteState;
 	drawHitboxes();
 }
 
@@ -20,7 +26,7 @@ void Player::render(RenderWindow& window)
 	if(Game::hitboxesVisibility) window.draw(shape, transform);
 }
 
-void Player::update(float deltaTime) {
+void Player::update(double deltaTime) {
     const auto turnSpeed = FileMenager::playerData.turn_speed;
     shootTimer -= deltaTime;
     dashTimer -= deltaTime;
@@ -49,11 +55,11 @@ void Player::update(float deltaTime) {
         SoundData::play(Sounds::LASER_SHOOT);
     }
 
-    //if (!Keyboard::isKeyPressed(Keyboard::Space) && spriteInfo.spriteLifeTime <= 0) {
-    //    spriteInfo.spriteLifeTime = FileMenager::playerData.sprite_cycle_time;
-    //    spriteState = (spriteState + 1) % spriteInfo.frames.size();
-    //    updateSprite(spriteInfo.sprite, spriteInfo.frames, spriteState);
-    //}
+    if (!Keyboard::isKeyPressed(Keyboard::Space) && spriteInfo.spriteLifeTime <= 0) {
+        spriteInfo.spriteLifeTime = FileMenager::playerData.sprite_cycle_time;
+        spriteInfo.spriteState = (spriteInfo.spriteState + 1) % spriteInfo.frames.size();
+        updateSprite(spriteInfo.sprite, spriteInfo.frames, spriteInfo.spriteState);
+    }
 
     collisionDetection();
 }
@@ -69,12 +75,14 @@ void Player::collisionDetection()
 	position.x = min(max((double)position.x, radius), FileMenager::screenData.size_width - radius);
 	position.y = min(max((double)position.y, radius), FileMenager::screenData.size_height - radius);
 
+    //Entity* collidingEnemy = Game::findCollidingEnemy(*this);
+
 	for (size_t i = 0; i < Game::entities.size(); i++)
 	{
-		if (typeid(*Game::entities[i]) == typeid(Asteroid)) {
-			Asteroid* asteroid = dynamic_cast<Asteroid*>(Game::entities[i]);
+		if (typeid(*Game::entities[i]) == typeid(SingleAsteroid) || typeid(*Game::entities[i]) == typeid(MultiAsteroid)) {
+			Asteroid* enemy = dynamic_cast<Asteroid*>(Game::entities[i]);
 
-			if (physics::intersects(position, radius, asteroid->position, asteroid->radius)) {
+			if (physics::intersects(position, radius, enemy->position, enemy->radius)) {
 				SoundData::play(Sounds::EXPLOSION);
 				Game::gameOver();
 			}

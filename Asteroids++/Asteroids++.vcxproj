@@ -28,9 +28,11 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="FileMenager.cpp" />
+    <ClCompile Include="MultiAsteroid.cpp" />
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Score.cpp" />
+    <ClCompile Include="SingleAsteroid.cpp" />
     <ClCompile Include="SoundData.cpp" />
     <ClCompile Include="SpriteData.cpp" />
     <ClCompile Include="WindowBox.cpp" />
@@ -45,10 +47,12 @@
     <ClInclude Include="Explosion.h" />
     <ClInclude Include="FileMenager.h" />
     <ClInclude Include="HealthBar.h" />
+    <ClInclude Include="MultiAsteroid.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Score.h" />
+    <ClInclude Include="SingleAsteroid.h" />
     <ClInclude Include="SoundData.h" />
     <ClInclude Include="SpriteData.h" />
   </ItemGroup>

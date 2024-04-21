@@ -18,6 +18,8 @@ using namespace rapidjson;
 enum class Sprites {
     SHIP,
     ASTEROID,
+    MULTI_ASTEROID,
+    SINGLE_ASTEROID,
     BULLET,
     EXPLOSION_1,
     EXPLOSION_2,

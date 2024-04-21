@@ -19,5 +19,5 @@ public:
 
 private:
 	RenderWindow window;
-	static float asteroidSpawnTime;
+	static double asteroidSpawnTime;
 };

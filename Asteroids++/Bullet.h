@@ -13,13 +13,20 @@ class Bullet: public Entity {
 public:
 	Bullet(Vector2f, Vector2f, const float&);
 
-	void update(float) override;
+	void update(double deltaTime) override;
 	void render(RenderWindow&) override;
 	const EntityType getEntityType() override;
 	void collisionDetection() override;
 
+
+
 	int damage;
 private:
+	
+	void singleAsteroidHit(const int& i);
+
+	void multiAsteroidHit(const int& i);
+
 	Vector2f direction;
 	float lifeTime;
 };

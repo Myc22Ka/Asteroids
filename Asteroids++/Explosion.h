@@ -12,14 +12,13 @@ class Explosion : public Entity {
 public:
 	Explosion(Vector2f position, int size);
 
-	void update(float deltaTime) override;
+	void update(double deltaTime) override;
 	void render(RenderWindow& window) override;
 	const EntityType getEntityType() override;
 	void collisionDetection() override;
 
 private:
 	Sprites setRandomSprite();
-	int spriteState = 0;
 };
 
 #endif

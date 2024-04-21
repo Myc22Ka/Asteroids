@@ -29,7 +29,10 @@ public:
 	static void addToEntities(Entity*);
 	static Entity* doesEntityExist(EntityType type);
 
+	static Entity* getRandomEntity();
+
 	static void gameOver();
+private:
 };
 
 #endif

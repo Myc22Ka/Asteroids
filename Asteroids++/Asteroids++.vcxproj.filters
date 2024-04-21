@@ -46,6 +46,12 @@
     <Filter Include="Resource Files\assets\sprites">
       <UniqueIdentifier>{0d5e3e19-bee2-418f-888e-3a6c0febb779}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Objects\Entities\Enemies">
+      <UniqueIdentifier>{c180881f-b11b-472b-8c06-e16b5d3404aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Objects\Entities\Enemies">
+      <UniqueIdentifier>{739e7a61-889c-46bd-9012-07e7cd08c7b7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -62,9 +68,6 @@
     </ClCompile>
     <ClCompile Include="Score.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Asteroid.cpp">
-      <Filter>Source Files\Objects\Entities</Filter>
     </ClCompile>
     <ClCompile Include="Bullet.cpp">
       <Filter>Source Files\Objects\Entities</Filter>
@@ -96,6 +99,15 @@
     <ClCompile Include="DashBar.cpp">
       <Filter>Source Files\Draws</Filter>
     </ClCompile>
+    <ClCompile Include="Asteroid.cpp">
+      <Filter>Source Files\Objects\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="MultiAsteroid.cpp">
+      <Filter>Source Files\Objects\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="SingleAsteroid.cpp">
+      <Filter>Source Files\Objects\Entities\Enemies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Physics.h">
@@ -103,9 +115,6 @@
     </ClInclude>
     <ClInclude Include="Score.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Asteroid.h">
-      <Filter>Header Files\Objects\Entities</Filter>
     </ClInclude>
     <ClInclude Include="Bullet.h">
       <Filter>Header Files\Objects\Entities</Filter>
@@ -139,6 +148,15 @@
     </ClInclude>
     <ClInclude Include="DashBar.h">
       <Filter>Header Files\Draws</Filter>
+    </ClInclude>
+    <ClInclude Include="Asteroid.h">
+      <Filter>Header Files\Objects\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="MultiAsteroid.h">
+      <Filter>Header Files\Objects\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="SingleAsteroid.h">
+      <Filter>Header Files\Objects\Entities\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

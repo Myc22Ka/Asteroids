@@ -1,4 +1,7 @@
 #include "Game.h"
+#include <random>
+#include "MultiAsteroid.h"
+#include "SingleAsteroid.h"
 
 vector<Entity*> Game::entities;
 list<vector<Entity*>::iterator> Game::toRemoveList;
@@ -39,4 +42,16 @@ Entity* Game::doesEntityExist(EntityType type) {
 
 void Game::gameOver(){
     isGameOver = true;
+}
+
+Entity* Game::getRandomEntity(){
+    vector<Entity*> enemies = { new MultiAsteroid(), new SingleAsteroid() };
+
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<int> dist(0, enemies.size() - 1);
+
+    int randomIndex = dist(gen);
+
+    return enemies[randomIndex];
 }
