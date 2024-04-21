@@ -12,7 +12,11 @@ const vector<pair<string, Sprites>> objects = {
         {"explosion3", Sprites::EXPLOSION_3},
         {"explosion4", Sprites::EXPLOSION_4},
         {"dashBar", Sprites::DASHBAR},
-        {"pickup", Sprites::PICKUP}
+        {"pickup1", Sprites::PICKUP_1},
+        {"pickup2", Sprites::PICKUP_2},
+        {"pickup3", Sprites::PICKUP_3},
+        {"pickup4", Sprites::PICKUP_4},
+        {"collected", Sprites::COLLECTED}
 };
 
 unordered_map<Sprites, SpriteInfo> SpriteData::sprites;
@@ -21,6 +25,7 @@ void SpriteData::populateSpriteInfo(const string& objectKey, const Sprites& spri
 {
     if (document.HasMember(objectKey.c_str()) && document[objectKey.c_str()].IsObject()) {
         const Value& object = document[objectKey.c_str()];
+        sprites[spriteType].spriteType = spriteType;
     
         if (object.HasMember("hitboxSize") && object["hitboxSize"].IsNumber()) {
             sprites[spriteType].hitboxSize = object["hitboxSize"].GetInt();

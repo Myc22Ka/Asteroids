@@ -52,9 +52,6 @@
     <Filter Include="Source Files\Objects\Entities\Enemies">
       <UniqueIdentifier>{739e7a61-889c-46bd-9012-07e7cd08c7b7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Objects\Entities\Pickups">
-      <UniqueIdentifier>{833d7e21-b37f-4564-a4e6-fcdc7b7c76ae}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -112,7 +109,7 @@
       <Filter>Source Files\Objects\Entities\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="Pickup.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Objects\Entities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -165,7 +162,7 @@
       <Filter>Header Files\Objects\Entities\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="Pickup.h">
-      <Filter>Header Files\Objects\Entities\Pickups</Filter>
+      <Filter>Header Files\Objects\Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

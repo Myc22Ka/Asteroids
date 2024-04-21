@@ -12,7 +12,10 @@ enum EntityType {
     TYPE_PLAYER,
     TYPE_BULLET,
     TYPE_EXPLOSION,
-    TYPE_PICKUP
+    TYPE_PICKUP_1,
+    TYPE_PICKUP_2,
+    TYPE_PICKUP_3,
+    TYPE_PICKUP_4
 };
 
 class Entity : public SpriteData {
@@ -29,6 +32,7 @@ public:
     void drawHitboxes(const int radius);
 
     void setSpriteFullCycle(double deltaTime);
+    void setSpriteFullCycle(SpriteInfo spriteInfo);
 
     Color hitboxColor;
     Vector2f position;

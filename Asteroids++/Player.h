@@ -12,7 +12,15 @@
 #include "SoundData.h"
 
 struct PlayerStats {
+	double speed;
+	double turnSpeed;
+	double lifes;
+
 	double shootOffset;
+	double accurancy;
+	double bulletSize;
+	double bulletDamage;
+	double bulletSpeed;
 };
 
 class Player: public Entity {
@@ -31,7 +39,6 @@ private:
 	void dashAbility(const double&);
 	double shootTimer;
 	bool isDashing = false;
-	double speed;
 };
 
 #endif

@@ -6,22 +6,21 @@
 #include "SoundData.h"
 #include "Pickup.h"
 
-
 Bullet::Bullet(Vector2f position, Vector2f direction, const float& angle) :
     direction(direction), 
-    Entity(position, angle, FileMenager::playerData.bullet_size, Color::Green, getSprite(Sprites::BULLET)),
+    Entity(position, angle, Player::playerStats.bulletSize, Color::Green, getSprite(Sprites::BULLET)),
     lifeTime(FileMenager::playerData.bullet_lifetime)
 {
     setRotation(spriteInfo.sprite, angle);
-    damage = 50;
     drawHitboxes();
+
+    scaleSprite(spriteInfo.sprite, FileMenager::playerData.bullet_size, size);
 }
 
 void Bullet::update(double deltaTime)
 {
-    auto bulletSpeed = FileMenager::playerData.bullet_speed;
     lifeTime -= deltaTime;
-    position += Vector2f(direction.x * bulletSpeed * deltaTime, direction.y * bulletSpeed * deltaTime);
+    position += Vector2f(direction.x * Player::playerStats.bulletSpeed * deltaTime, direction.y * Player::playerStats.bulletSpeed * deltaTime);
     if (lifeTime <= 0) Game::removeEntity(this);
 
     collisionDetection();
@@ -49,24 +48,49 @@ void Bullet::collisionDetection()
     }
 }
 
+void Bullet::spawnPickup(const Vector2f& position)
+{
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<double> dist(0, 1);
+
+    auto propability = dist(gen);
+
+    if (propability > 0.25) return;
+
+    if (propability < 0.02) {
+        Game::addToEntities(new Pickup(position, getSprite(Pickup::pickups[3])));
+        return;
+    }
+    if (propability < 0.08) {
+        Game::addToEntities(new Pickup(position, getSprite(Pickup::pickups[2])));
+        return;
+    }
+    if (propability < 0.15) {
+        Game::addToEntities(new Pickup(position, getSprite(Pickup::pickups[1])));
+        return;
+    }
+    if (propability < 0.25) {
+        Game::addToEntities(new Pickup(position, getSprite(Pickup::pickups[0])));
+        return;
+    }
+    
+}
+
 void Bullet::singleAsteroidHit(const int& i)
 {
     SingleAsteroid* asteroid = dynamic_cast<SingleAsteroid*>(Game::entities[i]);
     
     if (physics::intersects(position, radius, asteroid->position, asteroid->radius) && lifeTime > 0) {
         lifeTime = 0;
-        asteroid->health -= damage;
+        asteroid->health -= Player::playerStats.bulletDamage;
     
         if (asteroid->health <= 0) {
             Game::toAddList.push_back(new Explosion(asteroid->position, asteroid->size));
     
             Game::removeEntity(asteroid);
 
-            random_device rd;
-            mt19937 gen(rd());
-            uniform_real_distribution<double> dist(0, 1);
-
-            Game::addToEntities(new Pickup(asteroid->position));
+            spawnPickup(asteroid->position);
     
             Score::score += 10;
             SoundData::play(Sounds::EXPLOSION);
@@ -80,7 +104,7 @@ void Bullet::multiAsteroidHit(const int& i)
     
     if (physics::intersects(position, radius, asteroid->position, asteroid->radius) && lifeTime > 0) {
         lifeTime = 0;
-        asteroid->health -= damage;
+        asteroid->health -= Player::playerStats.bulletDamage;
     
         if (asteroid->health <= 0) {
             Game::toAddList.push_back(new Explosion(asteroid->position, asteroid->size));

@@ -71,12 +71,44 @@
     "currentSpriteLifeTime": 0,
     "defaultSpriteLifeTime": 0.15
   },
-  "pickup": {
+  "pickup1": {
     "hitboxSize": 32,
     "spriteSize": 32,
     "rotation": 0,
     "spriteState": 0,
     "currentSpriteLifeTime": 0,
     "defaultSpriteLifeTime": 0.05
+  },
+  "pickup2": {
+    "hitboxSize": 32,
+    "spriteSize": 32,
+    "rotation": 0,
+    "spriteState": 0,
+    "currentSpriteLifeTime": 0,
+    "defaultSpriteLifeTime": 0.05
+  },
+  "pickup3": {
+    "hitboxSize": 32,
+    "spriteSize": 32,
+    "rotation": 0,
+    "spriteState": 0,
+    "currentSpriteLifeTime": 0,
+    "defaultSpriteLifeTime": 0.05
+  },
+  "pickup4": {
+    "hitboxSize": 32,
+    "spriteSize": 32,
+    "rotation": 0,
+    "spriteState": 0,
+    "currentSpriteLifeTime": 0,
+    "defaultSpriteLifeTime": 0.05
+  },
+  "collected": {
+    "hitboxSize": 32,
+    "spriteSize": 32,
+    "rotation": 0,
+    "spriteState": 0,
+    "currentSpriteLifeTime": 0,
+    "defaultSpriteLifeTime": 0.03
   }
 }

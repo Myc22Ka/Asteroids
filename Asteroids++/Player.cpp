@@ -14,8 +14,7 @@ Player::Player() :
         Color::Blue,
         getSprite(Sprites::SHIP)
     ), 
-    shootTimer(), 
-    speed(FileMenager::playerData.speed)
+    shootTimer()
 {
 	drawHitboxes();
     setPlayerStats();
@@ -29,29 +28,28 @@ void Player::render(RenderWindow& window)
 }
 
 void Player::update(double deltaTime) {
-    const auto turnSpeed = FileMenager::playerData.turn_speed;
     shootTimer -= deltaTime;
     dashTimer -= deltaTime;
 
     spriteInfo.currentSpriteLifeTime -= deltaTime;
 
     if (Keyboard::isKeyPressed(Keyboard::A) && !isDashing) {
-        angle -= turnSpeed * deltaTime;
+        angle -= playerStats.turnSpeed * deltaTime;
     }
     if (Keyboard::isKeyPressed(Keyboard::D) && !isDashing) {
-        angle += turnSpeed * deltaTime;
+        angle += playerStats.turnSpeed * deltaTime;
     }
     if (Keyboard::isKeyPressed(Keyboard::W)) {
         float radians = angle * (M_PI / 180.0f);
 
-        position.x += cos(radians) * speed * deltaTime;
-        position.y += sin(radians) * speed * deltaTime;
+        position.x += cos(radians) * playerStats.speed * deltaTime;
+        position.y += sin(radians) * playerStats.speed * deltaTime;
     }
 
     dashAbility(deltaTime);
 
     if (Keyboard::isKeyPressed(Keyboard::Space) && shootTimer <= 0) {
-        shootTimer = FileMenager::playerData.bullet_shoot_delay - Player::playerStats.shootOffset;
+        shootTimer = Player::playerStats.shootOffset;
         float radians = angle * (M_PI / 180.0f);
 
         Game::addToEntities(new Bullet(position, Vector2f(cos(radians), sin(radians)), angle));
@@ -131,5 +129,12 @@ void Player::dashAbility(const double& deltaTime)
 
 void Player::setPlayerStats()
 {
-    Player::playerStats.shootOffset = 0;
+    Player::playerStats.shootOffset = FileMenager::playerData.bullet_shoot_delay;
+    Player::playerStats.accurancy = 0; // doesnt respected yet.
+    Player::playerStats.bulletDamage = 50;
+    Player::playerStats.bulletSize = FileMenager::playerData.bullet_size;
+    Player::playerStats.bulletSpeed = FileMenager::playerData.bullet_speed;
+    Player::playerStats.lifes = 3; // doesnt respected yet.
+    Player::playerStats.speed = FileMenager::playerData.speed;
+    Player::playerStats.turnSpeed = FileMenager::playerData.turn_speed;
 }

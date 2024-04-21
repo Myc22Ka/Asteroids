@@ -26,7 +26,11 @@ enum class Sprites {
     EXPLOSION_3,
     EXPLOSION_4,
     DASHBAR,
-    PICKUP
+    PICKUP_1,
+    PICKUP_2,
+    PICKUP_3,
+    PICKUP_4,
+    COLLECTED
 };
 
 struct SpriteInfo

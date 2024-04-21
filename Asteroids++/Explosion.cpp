@@ -8,7 +8,13 @@ Explosion::Explosion(sf::Vector2f position, int asteroidSize) : Entity(position,
     const auto newSize = size * asteroidSize / spriteInfo.hitboxSize;
 
     scaleSprite(spriteInfo.sprite, spriteInfo.spriteSize, newSize * 3 / 2);
-};
+}
+Explosion::Explosion(Vector2f position, int s, SpriteInfo spriteInfo) : Entity(position, 0, 256, sf::Color::Cyan, getSprite(Sprites::COLLECTED))
+{
+    const auto newSize = size * s / spriteInfo.hitboxSize;
+
+    scaleSprite(spriteInfo.sprite, spriteInfo.spriteSize, newSize * 3 / 2);
+}
 
 void Explosion::update(double deltaTime)
 {

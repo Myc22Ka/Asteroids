@@ -39,3 +39,12 @@ void Entity::setSpriteFullCycle(double deltaTime){
 		updateSprite(spriteInfo.sprite, spriteInfo.frames, spriteInfo.spriteState);
 	}
 }
+
+void Entity::setSpriteFullCycle(SpriteInfo spriteInfo) {
+
+	if (spriteInfo.currentSpriteLifeTime <= 0) {
+		spriteInfo.currentSpriteLifeTime = spriteInfo.defaultSpriteLifeTime;;
+		spriteInfo.spriteState = (spriteInfo.spriteState + 1) % spriteInfo.frames.size();
+		updateSprite(spriteInfo.sprite, spriteInfo.frames, spriteInfo.spriteState);
+	}
+}

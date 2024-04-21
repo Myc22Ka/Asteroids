@@ -17,12 +17,9 @@ public:
 	void render(RenderWindow&) override;
 	const EntityType getEntityType() override;
 	void collisionDetection() override;
-
-
-
-	int damage;
 private:
 	
+	void spawnPickup(const Vector2f& position);
 	void singleAsteroidHit(const int& i);
 
 	void multiAsteroidHit(const int& i);
