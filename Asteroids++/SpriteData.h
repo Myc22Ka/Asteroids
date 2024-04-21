@@ -25,7 +25,8 @@ enum class Sprites {
     EXPLOSION_2,
     EXPLOSION_3,
     EXPLOSION_4,
-    DASH_ABILITY
+    DASHBAR,
+    PICKUP
 };
 
 struct SpriteInfo
@@ -35,8 +36,9 @@ struct SpriteInfo
     vector<IntRect> frames;
     Sprites spriteType = Sprites();
 
-    double spriteLifeTime = 0.0f;
-    int spriteState = 0;
+    double currentSpriteLifeTime = 0;
+    double defaultSpriteLifeTime = 0;
+    size_t spriteState = 0;
     int rotation = 0;
     int spriteSize = 0;
     int hitboxSize = 0;

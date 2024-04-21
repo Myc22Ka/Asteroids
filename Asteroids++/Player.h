@@ -11,6 +11,10 @@
 #include "Physics.h"
 #include "SoundData.h"
 
+struct PlayerStats {
+	double shootOffset;
+};
+
 class Player: public Entity {
 public:
 	Player();
@@ -20,8 +24,10 @@ public:
 	const EntityType getEntityType() override;
 	void collisionDetection() override;
 
+	static PlayerStats playerStats;
 	static double dashTimer;
 private:
+	void setPlayerStats();
 	void dashAbility(const double&);
 	double shootTimer;
 	bool isDashing = false;

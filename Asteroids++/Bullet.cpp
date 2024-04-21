@@ -4,6 +4,7 @@
 #include "Physics.h"
 #include "Score.h"
 #include "SoundData.h"
+#include "Pickup.h"
 
 
 Bullet::Bullet(Vector2f position, Vector2f direction, const float& angle) :
@@ -60,6 +61,12 @@ void Bullet::singleAsteroidHit(const int& i)
             Game::toAddList.push_back(new Explosion(asteroid->position, asteroid->size));
     
             Game::removeEntity(asteroid);
+
+            random_device rd;
+            mt19937 gen(rd());
+            uniform_real_distribution<double> dist(0, 1);
+
+            Game::addToEntities(new Pickup(asteroid->position));
     
             Score::score += 10;
             SoundData::play(Sounds::EXPLOSION);
@@ -80,16 +87,19 @@ void Bullet::multiAsteroidHit(const int& i)
     
             Game::removeEntity(asteroid);
 
-            float distance = 50.0f; // Adjust as needed
+            auto asteroid1 = new SingleAsteroid(asteroid->position, asteroid->getRandomDirection());
+            auto asteroid2 = new SingleAsteroid(Vector2f(asteroid->position.x + asteroid1->radius, asteroid->position.y + asteroid1->radius), asteroid->getRandomDirection());
 
-            sf::Vector2f position1 = asteroid->position + sf::Vector2f(0.0f, -distance); // Above
-            sf::Vector2f position2 = asteroid->position + sf::Vector2f(-distance * sqrt(3) / 2, distance / 2); // Bottom-left
-            sf::Vector2f position3 = asteroid->position + sf::Vector2f(distance * sqrt(3) / 2, distance / 2); // Bottom-right
+            const auto bounceDirection = physics::bounceDirection(asteroid1, asteroid2, 1.0f);
 
-            Game::addToEntities(new SingleAsteroid(position1, sf::Vector2f(0.0f, -1)));
-            Game::addToEntities(new SingleAsteroid(position2, sf::Vector2f(-1 * sqrt(3) / 2, 1 / 2)));
-            Game::addToEntities(new SingleAsteroid(position3, sf::Vector2f(1 * sqrt(3) / 2, 1 / 2)));
+            asteroid1->position += bounceDirection.second;
+            asteroid2->position -= bounceDirection.second;
 
+            asteroid1->direction -= bounceDirection.first;
+            asteroid2->direction += bounceDirection.first;
+
+            Game::addToEntities(new SingleAsteroid(asteroid1->position, asteroid1->direction));
+            Game::addToEntities(new SingleAsteroid(asteroid2->position, asteroid2->direction));
     
             Score::score += 20;
             SoundData::play(Sounds::EXPLOSION);

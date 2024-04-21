@@ -14,7 +14,8 @@ enum class Sounds {
     LASER_SHOOT,
     EXPLOSION,
     DASH_ABILITY,
-    DASH_ABILITY_RESTORE
+    DASH_ABILITY_RESTORE,
+    PICKUP
 };
 
 class SoundData {

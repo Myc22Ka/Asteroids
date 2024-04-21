@@ -22,7 +22,6 @@ void Asteroid::render(RenderWindow& window)
 void Asteroid::update(double deltaTime) {
 	angle += FileMenager::enemiesData.asteroid_spin * deltaTime;
 	position += Vector2f(direction.x * speed * deltaTime, direction.y * speed * deltaTime);
-	spriteInfo.spriteLifeTime -= deltaTime;
 
 	if (position.x < radius) {
 		direction.x = abs(direction.x);
@@ -41,11 +40,7 @@ void Asteroid::update(double deltaTime) {
 	healthBar.updateBar(Vector2f{ position.x - (float)radius, position.y + (float)radius });
 	healthBar.setCurrentValue(health);
 
-	if (spriteInfo.spriteLifeTime <= 0) {
-		spriteInfo.spriteLifeTime = FileMenager::playerData.sprite_cycle_time;
-		spriteInfo.spriteState = (spriteInfo.spriteState + 1) % spriteInfo.frames.size();
-		updateSprite(spriteInfo.sprite, spriteInfo.frames, spriteInfo.spriteState);
-	}
+	setSpriteFullCycle(deltaTime);
 
 	collisionDetection();
 }
@@ -60,7 +55,7 @@ void Asteroid::collisionDetection()
 			if (!otherAsteroid) return;
 
 				if (physics::intersects(this->position, radius, otherAsteroid->position, otherAsteroid->radius)) {
-					const auto bounceDirection = physics::bounceDirection(this, otherAsteroid);
+					const auto bounceDirection = physics::bounceDirection(this, otherAsteroid, 0.01f);
 
 					this->position += bounceDirection.second;
 					otherAsteroid->position -= bounceDirection.second;

@@ -52,6 +52,9 @@
     <Filter Include="Source Files\Objects\Entities\Enemies">
       <UniqueIdentifier>{739e7a61-889c-46bd-9012-07e7cd08c7b7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Objects\Entities\Pickups">
+      <UniqueIdentifier>{833d7e21-b37f-4564-a4e6-fcdc7b7c76ae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -108,6 +111,9 @@
     <ClCompile Include="SingleAsteroid.cpp">
       <Filter>Source Files\Objects\Entities\Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="Pickup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Physics.h">
@@ -157,6 +163,9 @@
     </ClInclude>
     <ClInclude Include="SingleAsteroid.h">
       <Filter>Header Files\Objects\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Pickup.h">
+      <Filter>Header Files\Objects\Entities\Pickups</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

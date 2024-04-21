@@ -30,6 +30,7 @@
     <ClCompile Include="FileMenager.cpp" />
     <ClCompile Include="MultiAsteroid.cpp" />
     <ClCompile Include="Physics.cpp" />
+    <ClCompile Include="Pickup.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Score.cpp" />
     <ClCompile Include="SingleAsteroid.cpp" />
@@ -49,6 +50,7 @@
     <ClInclude Include="HealthBar.h" />
     <ClInclude Include="MultiAsteroid.h" />
     <ClInclude Include="Physics.h" />
+    <ClInclude Include="Pickup.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Score.h" />

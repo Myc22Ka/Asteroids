@@ -34,7 +34,7 @@ float physics::distance(const Vector2f& p1, const Vector2f& p2)
 	return sqrt(pow(p2.x - p1.x, 2) + pow(p2.y - p1.y, 2));
 }
 
-pair<Vector2f, Vector2f> physics::bounceDirection(const Asteroid* thisAsteroid, const Asteroid* otherAsteroid)
+pair<Vector2f, Vector2f> physics::bounceDirection(const Asteroid* thisAsteroid, const Asteroid* otherAsteroid,const float& separationDistance)
 {
 	const Vector2f normal = physics::normalize(thisAsteroid->position - otherAsteroid->position);
 
@@ -42,7 +42,7 @@ pair<Vector2f, Vector2f> physics::bounceDirection(const Asteroid* thisAsteroid, 
 	const float overlap = (thisAsteroid->size + otherAsteroid->size) - physics::distance(thisAsteroid->position, otherAsteroid->position);
 
 	// Separate the asteroids along the collision normal to resolve overlap
-	const Vector2f separationVector = normal * overlap * 0.01f;
+	const Vector2f separationVector = normal * overlap * separationDistance;
 
 	// Calculate relative velocity along the normal direction
 	const Vector2f relativeVelocity = static_cast<float>(thisAsteroid->speed) * physics::normalize(thisAsteroid->direction) - static_cast<float>(otherAsteroid->speed) * physics::normalize(otherAsteroid->direction);

@@ -12,5 +12,5 @@ namespace physics {
 	Vector2f normalize(const Vector2f& v);
 	float dotProduct(const Vector2f& v1, const Vector2f& v2);
 	float distance(const Vector2f& p1, const Vector2f& p2);
-	pair<Vector2f, Vector2f> bounceDirection(const Asteroid* thisAsteroid, const Asteroid* otherAsteroid);
+	pair<Vector2f, Vector2f> bounceDirection(const Asteroid* thisAsteroid, const Asteroid* otherAsteroid, const float& separationDistance);
 }

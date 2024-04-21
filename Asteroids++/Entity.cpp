@@ -29,3 +29,13 @@ void Entity::drawHitboxes(const int radius)
 	shape.setOutlineColor(hitboxColor);
 	shape.setOutlineThickness(1.5f);
 }
+
+void Entity::setSpriteFullCycle(double deltaTime){
+	spriteInfo.currentSpriteLifeTime -= deltaTime;
+
+	if (spriteInfo.currentSpriteLifeTime <= 0) {
+		spriteInfo.currentSpriteLifeTime = spriteInfo.defaultSpriteLifeTime;;
+		spriteInfo.spriteState = (spriteInfo.spriteState + 1) % spriteInfo.frames.size();
+		updateSprite(spriteInfo.sprite, spriteInfo.frames, spriteInfo.spriteState);
+	}
+}

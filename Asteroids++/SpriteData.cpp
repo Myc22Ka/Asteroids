@@ -4,7 +4,6 @@ const auto defaultDir = "./assets/sprites";
 
 const vector<pair<string, Sprites>> objects = {
         {"ship", Sprites::SHIP},
-        {"asteroid", Sprites::ASTEROID},
         {"multiAsteroid", Sprites::MULTI_ASTEROID},
         {"singleAsteroid", Sprites::SINGLE_ASTEROID},
         {"bullet", Sprites::BULLET},
@@ -12,7 +11,8 @@ const vector<pair<string, Sprites>> objects = {
         {"explosion2", Sprites::EXPLOSION_2},
         {"explosion3", Sprites::EXPLOSION_3},
         {"explosion4", Sprites::EXPLOSION_4},
-        {"dashAbility", Sprites::DASH_ABILITY}
+        {"dashBar", Sprites::DASHBAR},
+        {"pickup", Sprites::PICKUP}
 };
 
 unordered_map<Sprites, SpriteInfo> SpriteData::sprites;
@@ -34,8 +34,11 @@ void SpriteData::populateSpriteInfo(const string& objectKey, const Sprites& spri
         if (object.HasMember("spriteState") && object["spriteState"].IsNumber()) {
             sprites[spriteType].spriteState = object["spriteState"].GetInt();
         }
-        if (object.HasMember("spriteLifeTime") && object["spriteLifeTime"].IsNumber()) {
-            sprites[spriteType].spriteLifeTime = object["spriteLifeTime"].GetDouble();
+        if (object.HasMember("defaultSpriteLifeTime") && object["defaultSpriteLifeTime"].IsNumber()) {
+            sprites[spriteType].defaultSpriteLifeTime = object["defaultSpriteLifeTime"].GetDouble();
+        }
+        if (object.HasMember("currentSpriteLifeTime") && object["currentSpriteLifeTime"].IsNumber()) {
+            sprites[spriteType].currentSpriteLifeTime = object["currentSpriteLifeTime"].GetDouble();
         }
     }
 }

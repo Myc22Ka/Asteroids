@@ -7,20 +7,14 @@ Explosion::Explosion(sf::Vector2f position, int asteroidSize) : Entity(position,
 
     const auto newSize = size * asteroidSize / spriteInfo.hitboxSize;
 
-    scaleSprite(spriteInfo.sprite, spriteInfo.spriteSize, newSize);
+    scaleSprite(spriteInfo.sprite, spriteInfo.spriteSize, newSize * 3 / 2);
 };
 
 void Explosion::update(double deltaTime)
 {
     if (spriteInfo.spriteState == spriteInfo.frames.size() - 1) Game::removeEntity(this);
 
-    spriteInfo.spriteLifeTime -= deltaTime;
-
-    if (spriteInfo.spriteLifeTime <= 0) {
-        spriteInfo.spriteLifeTime = 0.01;
-        spriteInfo.spriteState = (spriteInfo.spriteState + 1) % spriteInfo.frames.size();
-        updateSprite(spriteInfo.sprite, spriteInfo.frames, spriteInfo.spriteState);
-    }
+    setSpriteFullCycle(deltaTime);
 }
 
 void Explosion::render(sf::RenderWindow& window)

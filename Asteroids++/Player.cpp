@@ -4,6 +4,7 @@
 
 constexpr double M_PI = 3.14159265358979323846;
 double Player::dashTimer = 0.0;
+PlayerStats Player::playerStats;
 
 Player::Player() :
 	Entity(
@@ -17,6 +18,7 @@ Player::Player() :
     speed(FileMenager::playerData.speed)
 {
 	drawHitboxes();
+    setPlayerStats();
 }
 
 void Player::render(RenderWindow& window)
@@ -30,7 +32,8 @@ void Player::update(double deltaTime) {
     const auto turnSpeed = FileMenager::playerData.turn_speed;
     shootTimer -= deltaTime;
     dashTimer -= deltaTime;
-    spriteInfo.spriteLifeTime -= deltaTime;
+
+    spriteInfo.currentSpriteLifeTime -= deltaTime;
 
     if (Keyboard::isKeyPressed(Keyboard::A) && !isDashing) {
         angle -= turnSpeed * deltaTime;
@@ -48,15 +51,15 @@ void Player::update(double deltaTime) {
     dashAbility(deltaTime);
 
     if (Keyboard::isKeyPressed(Keyboard::Space) && shootTimer <= 0) {
-        shootTimer = FileMenager::playerData.bullet_shoot_delay;
+        shootTimer = FileMenager::playerData.bullet_shoot_delay - Player::playerStats.shootOffset;
         float radians = angle * (M_PI / 180.0f);
 
         Game::addToEntities(new Bullet(position, Vector2f(cos(radians), sin(radians)), angle));
         SoundData::play(Sounds::LASER_SHOOT);
     }
 
-    if (!Keyboard::isKeyPressed(Keyboard::Space) && spriteInfo.spriteLifeTime <= 0) {
-        spriteInfo.spriteLifeTime = FileMenager::playerData.sprite_cycle_time;
+    if (!Keyboard::isKeyPressed(Keyboard::Space) && spriteInfo.currentSpriteLifeTime <= 0) {
+        spriteInfo.currentSpriteLifeTime = spriteInfo.defaultSpriteLifeTime;
         spriteInfo.spriteState = (spriteInfo.spriteState + 1) % spriteInfo.frames.size();
         updateSprite(spriteInfo.sprite, spriteInfo.frames, spriteInfo.spriteState);
     }
@@ -75,8 +78,6 @@ void Player::collisionDetection()
 	position.x = min(max((double)position.x, radius), FileMenager::screenData.size_width - radius);
 	position.y = min(max((double)position.y, radius), FileMenager::screenData.size_height - radius);
 
-    //Entity* collidingEnemy = Game::findCollidingEnemy(*this);
-
 	for (size_t i = 0; i < Game::entities.size(); i++)
 	{
 		if (typeid(*Game::entities[i]) == typeid(SingleAsteroid) || typeid(*Game::entities[i]) == typeid(MultiAsteroid)) {
@@ -94,7 +95,7 @@ void Player::dashAbility(const double& deltaTime)
 {
     const auto animationDuration = FileMenager::playerData.dash_duration;
 
-    if (Keyboard::isKeyPressed(Keyboard::R) && !isDashing && dashTimer <= 0 && !Keyboard::isKeyPressed(Keyboard::Space)) {
+    if (Keyboard::isKeyPressed(Keyboard::R) && !isDashing && dashTimer <= 0) {
         isDashing = true;
         dashTimer = FileMenager::playerData.dash_time_delay;
 
@@ -126,4 +127,9 @@ void Player::dashAbility(const double& deltaTime)
 
         animationThread.detach();
     }
+}
+
+void Player::setPlayerStats()
+{
+    Player::playerStats.shootOffset = 0;
 }

@@ -4,7 +4,7 @@
 #include "Player.h"
 
 DashBar::DashBar() {
-	spriteInfo = getSprite(Sprites::DASH_ABILITY);
+	spriteInfo = getSprite(Sprites::DASHBAR);
     position = Vector2f(FileMenager::screenData.size_width - (spriteInfo.spriteSize >> 1) - 10, spriteInfo.spriteSize >> 2);
     spriteState = 0;
 }
