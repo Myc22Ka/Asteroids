@@ -73,7 +73,7 @@ void FileMenager::setDataFromFile() const {
 	FileMenager::enemiesData.asteroid_spin = dataMap["enemy_asteroid_spin"];
 	FileMenager::enemiesData.asteroid_speed = dataMap["enemy_asteroid_speed"];
 	FileMenager::enemiesData.asteroid_spawn_time = dataMap["enemy_asteroid_spawn_time"];
-	FileMenager::enemiesData.asteroid_size = dataMap["enemy_asteroid_size"];
+	FileMenager::enemiesData.asteroid_size = static_cast<int>(dataMap["enemy_asteroid_size"]);
 
 	return;
 }

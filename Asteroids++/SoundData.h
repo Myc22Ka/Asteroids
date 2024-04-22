@@ -6,7 +6,9 @@
 #include <unordered_map>
 #include <thread>
 #include <iostream>
+#include <filesystem>
 
+namespace fs = std::filesystem;
 using namespace sf;
 using namespace std;
 
@@ -15,24 +17,21 @@ enum class Sounds {
     EXPLOSION,
     DASH_ABILITY,
     DASH_ABILITY_RESTORE,
-    PICKUP
+    PICKUP_1,
+    PICKUP_2,
+    PICKUP_3,
+    PICKUP_4
 };
 
 class SoundData {
 public:
+    void loadAllSounds();
     static void play(Sounds);
-    void initSounds();
-    void loadFile(Sounds);
 
-
-    static unordered_map <string, Sound> sounds;
+    static unordered_map <Sounds, Sound> sounds;
 
 private:
-    unordered_map<string, SoundBuffer> soundBuffers;
-
-    string name;
-    string filename;
-
+    unordered_map<Sounds, SoundBuffer> soundBuffers;
 };
 
 #endif

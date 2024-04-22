@@ -1,7 +1,5 @@
 #include "Pickup.h"
 
-vector<Sprites> Pickup::pickups{ Sprites::PICKUP_1, Sprites::PICKUP_2, Sprites::PICKUP_3, Sprites::PICKUP_4 };
-
 Pickup::Pickup(Vector2f position, SpriteInfo s): Entity(position, 0, 64, Color::Cyan, s),
 lifeTime(5)
 {
@@ -18,7 +16,7 @@ void Pickup::render(RenderWindow& window)
 	if (Game::hitboxesVisibility) window.draw(shape, transform);
 }
 
-void Pickup::update(double deltaTime)
+void Pickup::update(float deltaTime)
 {
 	collected.currentSpriteLifeTime -= deltaTime;
 	lifeTime -= deltaTime;
@@ -40,6 +38,8 @@ const EntityType Pickup::getEntityType()
 		return EntityType::TYPE_PICKUP_3;
 	case Sprites::PICKUP_4:
 		return EntityType::TYPE_PICKUP_4;
+	case Sprites::CHEST:
+		return EntityType::TYPE_CHEST;
 	default:
 		return EntityType();
 	}
@@ -53,7 +53,7 @@ void Pickup::collisionDetection()
 
 			if (!player) return;
 
-			if (physics::intersects(this->position, this->radius, player->position, player->radius) && lifeTime > 0) {
+			if (physics::intersects(this->position, static_cast<float>(this->radius), player->position, player->radius) && static_cast<float>(lifeTime) > 0) {
 				lifeTime = 0;
 
 				switch (getEntityType())
@@ -61,14 +61,17 @@ void Pickup::collisionDetection()
 				case EntityType::TYPE_PICKUP_1:
 					if(Player::playerStats.shootOffset >= 0.11) Player::playerStats.shootOffset -= 0.01;
 					Score::score += 10;
+					SoundData::play(Sounds::PICKUP_1);
 					break;
 				case EntityType::TYPE_PICKUP_2:
 					Player::playerStats.bulletDamage += 50;
 					Score::score += 20;
+					SoundData::play(Sounds::PICKUP_2);
 					break;
 				case EntityType::TYPE_PICKUP_3:
 					if(Player::playerStats.bulletSize <= 50) Player::playerStats.bulletSize += 1;
 					Score::score += 50;
+					SoundData::play(Sounds::PICKUP_3);
 					break;
 				case EntityType::TYPE_PICKUP_4:
 					if (Player::playerStats.speed < 350) {
@@ -76,12 +79,17 @@ void Pickup::collisionDetection()
 						Player::playerStats.turnSpeed += 5;
 					}
 					Score::score += 100;
+					SoundData::play(Sounds::PICKUP_4);
 					break;
+				case EntityType::TYPE_CHEST:
+					if (!Player::playerStats.piercing) Player::playerStats.piercing = true;
+
+					Score::score += 1000;
+					SoundData::play(Sounds::PICKUP_4);
 				}
-				SoundData::play(Sounds::PICKUP);
 				Game::addToEntities(new Explosion(this->position, this->size, collected));
 
-				cout << Player::playerStats.speed << endl;
+				cout << Player::playerStats.bulletDamage << endl;
 			}
 		}
 	}

@@ -13,7 +13,7 @@ public:
 	Explosion(Vector2f position, int size);
 	Explosion(Vector2f position, int size, SpriteInfo spriteInfo);
 
-	void update(double deltaTime) override;
+	void update(float deltaTime) override;
 	void render(RenderWindow& window) override;
 	const EntityType getEntityType() override;
 	void collisionDetection() override;

@@ -12,9 +12,8 @@ class Pickup : public Entity {
 public:
     Pickup(Vector2f position, SpriteInfo spriteInfo);
 
-    static vector<Sprites> pickups;
     void render(RenderWindow& window) override;
-    void update(double deltaTime) override;
+    void update(float deltaTime) override;
     const EntityType getEntityType() override;
     void collisionDetection() override;
 private:

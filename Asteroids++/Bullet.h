@@ -8,24 +8,31 @@
 #include "Game.h"
 #include "Player.h"
 #include "Explosion.h"
+#include <unordered_set>
 
 class Bullet: public Entity {
 public:
 	Bullet(Vector2f, Vector2f, const float&);
 
-	void update(double deltaTime) override;
+	void update(float deltaTime) override;
 	void render(RenderWindow&) override;
-	const EntityType getEntityType() override;
+	virtual const EntityType getEntityType() override = 0;
 	void collisionDetection() override;
-private:
-	
-	void spawnPickup(const Vector2f& position);
-	void singleAsteroidHit(const int& i);
 
-	void multiAsteroidHit(const int& i);
+	void spawnPickup(const Vector2f& position);
+
+	virtual void singleAsteroidHit(const int& i) = 0;
+	virtual void multiAsteroidHit(const int& i) = 0;
+
+	void destroySingleAsteroid(const int& i);
+	void destroyMultiAsteroid(const int& i);
 
 	Vector2f direction;
 	float lifeTime;
+
+	unordered_set<int> hitAsteroids{};
+private:
+	static bool piercing;
 };
 
 #endif

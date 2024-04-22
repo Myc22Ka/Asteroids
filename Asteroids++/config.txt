@@ -10,7 +10,7 @@ player_start_position_x: 500
 player_start_position_y: 500 # some text that should be ignored
 player_start_position_angle: 0
 player_speed: 200
-player_turn_speed: 150
+player_turn_speed: 200
 player_bullet_size: 16
 player_bullet_speed: 500
 player_bullet_shoot_delay: 0.2
@@ -25,5 +25,5 @@ player_dash_length: 3 # dash length in player sizes
 
 enemy_asteroid_spin: 25
 enemy_asteroid_speed: 120
-enemy_asteroid_spawn_time: 1
+enemy_asteroid_spawn_time: 3
 enemy_asteroid_size: 64

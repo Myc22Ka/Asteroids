@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "MultiAsteroid.h"
 #include "SingleAsteroid.h"
+#include "SingleBullet.h"
 
 constexpr double M_PI = 3.14159265358979323846;
 double Player::dashTimer = 0.0;
@@ -27,7 +28,7 @@ void Player::render(RenderWindow& window)
 	if(Game::hitboxesVisibility) window.draw(shape, transform);
 }
 
-void Player::update(double deltaTime) {
+void Player::update(float deltaTime) {
     shootTimer -= deltaTime;
     dashTimer -= deltaTime;
 
@@ -52,7 +53,7 @@ void Player::update(double deltaTime) {
         shootTimer = Player::playerStats.shootOffset;
         float radians = angle * (M_PI / 180.0f);
 
-        Game::addToEntities(new Bullet(position, Vector2f(cos(radians), sin(radians)), angle));
+        Game::addToEntities(new SingleBullet(position, Vector2f(cos(radians), sin(radians)), angle));
         SoundData::play(Sounds::LASER_SHOOT);
     }
 
@@ -129,12 +130,14 @@ void Player::dashAbility(const double& deltaTime)
 
 void Player::setPlayerStats()
 {
-    Player::playerStats.shootOffset = FileMenager::playerData.bullet_shoot_delay;
-    Player::playerStats.accurancy = 0; // doesnt respected yet.
-    Player::playerStats.bulletDamage = 50;
-    Player::playerStats.bulletSize = FileMenager::playerData.bullet_size;
-    Player::playerStats.bulletSpeed = FileMenager::playerData.bullet_speed;
-    Player::playerStats.lifes = 3; // doesnt respected yet.
-    Player::playerStats.speed = FileMenager::playerData.speed;
-    Player::playerStats.turnSpeed = FileMenager::playerData.turn_speed;
+    playerStats.shootOffset = FileMenager::playerData.bullet_shoot_delay;
+    playerStats.accurancy = 0; // doesnt respected yet.
+    playerStats.bulletDamage = 50;
+    playerStats.bulletSize = FileMenager::playerData.bullet_size;
+    playerStats.bulletSpeed = FileMenager::playerData.bullet_speed;
+    playerStats.lifes = 3; // doesnt respected yet.
+    playerStats.speed = FileMenager::playerData.speed;
+    playerStats.turnSpeed = FileMenager::playerData.turn_speed;
+
+    playerStats.piercing = { false };
 }

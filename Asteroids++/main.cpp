@@ -15,7 +15,7 @@ int main()
     fileMenager.setDataFromFile();
 
     SoundData sounds;
-    sounds.initSounds();
+    sounds.loadAllSounds();
 
     SpriteData sprite;
     sprite.loadAllSprites();

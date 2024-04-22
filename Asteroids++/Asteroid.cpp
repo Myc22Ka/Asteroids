@@ -1,11 +1,12 @@
 #include "Asteroid.h"
+#include "Score.h"
 
 constexpr double M_PI = 3.14159265358979323846;
 
 Asteroid::Asteroid(double health, SpriteInfo spriteInfo) :
 	Entity(getRandomPosition(), getRandomAngle(), getRandomValue<int>(FileMenager::enemiesData.asteroid_size), Color::Red, spriteInfo),
-	health(health),
-	healthBar(size, 5, Color::Red, Color::Black, health),
+	health(health + floor(Score::score >> 9) * health),
+	healthBar(size, 5, Color::Red, Color::Black, health + floor(Score::score >> 9) * health),
 	direction(getRandomDirection()),
 	speed(getRandomValue<double>(FileMenager::enemiesData.asteroid_speed))
 {
@@ -14,12 +15,12 @@ Asteroid::Asteroid(double health, SpriteInfo spriteInfo) :
 void Asteroid::render(RenderWindow& window)
 {
 	Transform transform;
-	window.draw(spriteInfo.sprite, transform.translate(position).rotate(angle));
+	window.draw(spriteInfo.sprite, transform.translate(position).rotate(static_cast<float>(angle)));
 	if(Game::hitboxesVisibility) window.draw(shape, transform);
 	healthBar.draw(window);
 }
 
-void Asteroid::update(double deltaTime) {
+void Asteroid::update(float deltaTime) {
 	angle += FileMenager::enemiesData.asteroid_spin * deltaTime;
 	position += Vector2f(direction.x * speed * deltaTime, direction.y * speed * deltaTime);
 

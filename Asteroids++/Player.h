@@ -21,6 +21,8 @@ struct PlayerStats {
 	double bulletSize;
 	double bulletDamage;
 	double bulletSpeed;
+
+	bool piercing;
 };
 
 class Player: public Entity {
@@ -28,7 +30,7 @@ public:
 	Player();
 
 	void render(RenderWindow& window) override;
-	void update(double deltaTime) override;
+	void update(float deltaTime) override;
 	const EntityType getEntityType() override;
 	void collisionDetection() override;
 

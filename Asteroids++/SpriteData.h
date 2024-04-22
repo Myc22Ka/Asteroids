@@ -30,7 +30,8 @@ enum class Sprites {
     PICKUP_2,
     PICKUP_3,
     PICKUP_4,
-    COLLECTED
+    COLLECTED,
+    CHEST
 };
 
 struct SpriteInfo

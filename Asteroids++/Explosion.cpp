@@ -16,7 +16,7 @@ Explosion::Explosion(Vector2f position, int s, SpriteInfo spriteInfo) : Entity(p
     scaleSprite(spriteInfo.sprite, spriteInfo.spriteSize, newSize * 3 / 2);
 }
 
-void Explosion::update(double deltaTime)
+void Explosion::update(float deltaTime)
 {
     if (spriteInfo.spriteState == spriteInfo.frames.size() - 1) Game::removeEntity(this);
 

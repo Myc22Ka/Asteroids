@@ -38,7 +38,7 @@ struct EnemiesData {
     float asteroid_spin;
     float asteroid_speed;
     float asteroid_spawn_time;
-    float asteroid_size;
+    int asteroid_size;
 };
 
 class FileMenager {

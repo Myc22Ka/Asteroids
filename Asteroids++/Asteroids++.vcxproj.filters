@@ -52,6 +52,12 @@
     <Filter Include="Source Files\Objects\Entities\Enemies">
       <UniqueIdentifier>{739e7a61-889c-46bd-9012-07e7cd08c7b7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Objects\Entities\Bullets">
+      <UniqueIdentifier>{0fde95b6-12c9-4426-9635-01a5d563540e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Objects\Entities\Bullets">
+      <UniqueIdentifier>{c49fc92c-b500-4ce3-a538-aaf11e40d4dc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -68,9 +74,6 @@
     </ClCompile>
     <ClCompile Include="Score.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Bullet.cpp">
-      <Filter>Source Files\Objects\Entities</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>Source Files\Objects</Filter>
@@ -111,6 +114,12 @@
     <ClCompile Include="Pickup.cpp">
       <Filter>Source Files\Objects\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="SingleBullet.cpp">
+      <Filter>Source Files\Objects\Entities\Bullets</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Source Files\Objects\Entities\Bullets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Physics.h">
@@ -118,9 +127,6 @@
     </ClInclude>
     <ClInclude Include="Score.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Bullet.h">
-      <Filter>Header Files\Objects\Entities</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>Header Files\Objects\Entities</Filter>
@@ -146,9 +152,6 @@
     <ClInclude Include="Explosion.h">
       <Filter>Header Files\Objects\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="DashBar.h">
       <Filter>Header Files\Draws</Filter>
     </ClInclude>
@@ -163,6 +166,12 @@
     </ClInclude>
     <ClInclude Include="Pickup.h">
       <Filter>Header Files\Objects\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Header Files\Objects\Entities\Bullets</Filter>
+    </ClInclude>
+    <ClInclude Include="SingleBullet.h">
+      <Filter>Header Files\Objects\Entities\Bullets</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

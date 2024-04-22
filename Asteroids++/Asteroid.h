@@ -18,7 +18,7 @@ public:
 	Asteroid(double health, SpriteInfo spriteInfo);
 
 	void render(RenderWindow& window) override;
-	void update(double deltaTime) override;
+	void update(float deltaTime) override;
 	virtual const EntityType getEntityType() override = 0;
 	void collisionDetection() override;
 

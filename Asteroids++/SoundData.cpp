@@ -1,81 +1,47 @@
 #include "SoundData.h"
 #include "FileMenager.h"
 
-unordered_map <string, Sound> SoundData::sounds;
+unordered_map <Sounds, Sound> SoundData::sounds;
 
-const string soundDefaultDir = "./assets/sounds/";
-const string extension = ".wav";
+const string defaultDir = "./assets/sounds/";
 
-const string LASER_SHOOT = "laserShoot";
-const string EXPLOSION = "explosion";
-const string DASH_ABILITY = "dashAbility";
-const string DASH_ABILITY_RESTORE = "regainDash";
-const string PICKUP = "pickup";
+const vector<pair<string, Sounds>> objects = {
+    {"laserShoot" , Sounds::LASER_SHOOT},
+    {"explosion" , Sounds::EXPLOSION},
+    {"dashAbility", Sounds::DASH_ABILITY},
+    {"regainDash", Sounds::DASH_ABILITY_RESTORE},
+    {"pickup1", Sounds::PICKUP_1},
+    {"pickup2", Sounds::PICKUP_2},
+    {"pickup3", Sounds::PICKUP_3},
+    {"pickup4", Sounds::PICKUP_4}
+};
 
-void SoundData::loadFile(Sounds str)
+void SoundData::loadAllSounds()
 {
-    filename = soundDefaultDir;
+    Sounds type = {};
 
-    switch (str) {
-    case Sounds::LASER_SHOOT:
-        name = LASER_SHOOT;
-        break;
-    case Sounds::EXPLOSION:
-        name = EXPLOSION;
-        break;
-    case Sounds::DASH_ABILITY:
-        name = DASH_ABILITY;
-        break;
-    case Sounds::DASH_ABILITY_RESTORE:
-        name = DASH_ABILITY_RESTORE;
-        break;
-    case Sounds::PICKUP:
-        name = PICKUP;
-        break;
-    default:
-        cerr << "Error: Invalid Sound Name\n";
-        return;
+    for (const auto& entry : fs::directory_iterator(defaultDir)) {
+        if (fs::is_regular_file(entry.path()) && entry.path().extension() == ".wav") {
+            const auto filename = entry.path().stem().string();
+
+            for (const auto& obj : objects) {
+                if (obj.first == filename) {
+                    type = obj.second;
+                    break;
+                }
+            }
+
+            if (!soundBuffers[type].loadFromFile(entry.path().string())) {
+                cout << "Error: Could not find sound file: " << entry.path().string() << endl;
+                return;
+            }
+
+            sounds[type].setBuffer(soundBuffers[type]);
+        }
     }
-
-    filename += name + extension;
-
-    if (!soundBuffers[name].loadFromFile(filename)) {
-        cout << "Error: Could not find sound file: " << filename << endl;
-        return;
-    }
-
-    sounds[name].setBuffer(soundBuffers[name]);
-}
-
-void SoundData::initSounds()
-{
-    loadFile(Sounds::LASER_SHOOT);
-    loadFile(Sounds::EXPLOSION);
-    loadFile(Sounds::DASH_ABILITY);
-    loadFile(Sounds::DASH_ABILITY_RESTORE);
-    loadFile(Sounds::PICKUP);
 }
 
 void SoundData::play(Sounds name)
 {
-    switch (name) {
-    case Sounds::LASER_SHOOT:
-        sounds[LASER_SHOOT].play();
-        break;
-    case Sounds::EXPLOSION:
-        sounds[EXPLOSION].play();
-        break;
-    case Sounds::DASH_ABILITY:
-        sounds[DASH_ABILITY].play();
-        break;
-    case Sounds::DASH_ABILITY_RESTORE:
-        sounds[DASH_ABILITY_RESTORE].play();
-        break;
-    case Sounds::PICKUP:
-        sounds[PICKUP].play();
-        break;
-    default:
-        cerr << "Error: Cannot play Sound\n";
-        return;
-    }
+    sounds[name].play();
 }

@@ -16,7 +16,8 @@ const vector<pair<string, Sprites>> objects = {
         {"pickup2", Sprites::PICKUP_2},
         {"pickup3", Sprites::PICKUP_3},
         {"pickup4", Sprites::PICKUP_4},
-        {"collected", Sprites::COLLECTED}
+        {"collected", Sprites::COLLECTED},
+        {"chest", Sprites::CHEST}
 };
 
 unordered_map<Sprites, SpriteInfo> SpriteData::sprites;
