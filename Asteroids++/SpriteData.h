@@ -20,7 +20,8 @@ enum class Sprites {
     ASTEROID,
     MULTI_ASTEROID,
     SINGLE_ASTEROID,
-    BULLET,
+    SINGLE_BULLET,
+    PIERCING_BULLET,
     EXPLOSION_1,
     EXPLOSION_2,
     EXPLOSION_3,
@@ -30,8 +31,9 @@ enum class Sprites {
     PICKUP_2,
     PICKUP_3,
     PICKUP_4,
+    PICKUP_PIERCING,
     COLLECTED,
-    CHEST
+    HEART
 };
 
 struct SpriteInfo

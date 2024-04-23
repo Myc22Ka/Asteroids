@@ -84,7 +84,10 @@ void Player::collisionDetection()
 
 			if (physics::intersects(position, radius, enemy->position, enemy->radius)) {
 				SoundData::play(Sounds::EXPLOSION);
-				Game::gameOver();
+                resetPlayerStats();
+                playerStats.lifes -= 1;
+
+                if(playerStats.lifes == 0) Game::gameOver();
 			}
 		}
 	}
@@ -128,6 +131,15 @@ void Player::dashAbility(const double& deltaTime)
     }
 }
 
+void Player::resetPlayerStats()
+{
+    auto currentPlayerLifes = playerStats.lifes;
+    setPlayerStats();
+
+    playerStats.lifes = currentPlayerLifes;
+    position = Vector2f(FileMenager::playerData.start_position_x, FileMenager::playerData.start_position_y);
+}
+
 void Player::setPlayerStats()
 {
     playerStats.shootOffset = FileMenager::playerData.bullet_shoot_delay;
@@ -140,4 +152,11 @@ void Player::setPlayerStats()
     playerStats.turnSpeed = FileMenager::playerData.turn_speed;
 
     playerStats.piercing = { false };
+}
+
+Sprites Player::getPlayerBulletSprite()
+{
+    if (playerStats.piercing) return Sprites::PIERCING_BULLET;
+
+    return Sprites::SINGLE_BULLET;
 }

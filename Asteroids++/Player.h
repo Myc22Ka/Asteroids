@@ -25,7 +25,7 @@ struct PlayerStats {
 	bool piercing;
 };
 
-class Player: public Entity {
+class Player : public Entity {
 public:
 	Player();
 
@@ -33,10 +33,12 @@ public:
 	void update(float deltaTime) override;
 	const EntityType getEntityType() override;
 	void collisionDetection() override;
+	static Sprites getPlayerBulletSprite();
 
 	static PlayerStats playerStats;
 	static double dashTimer;
 private:
+	void resetPlayerStats();
 	void setPlayerStats();
 	void dashAbility(const double&);
 	double shootTimer;

@@ -2,11 +2,10 @@
 #include "FileMenager.h"
 #include "SoundData.h"
 #include "SpriteData.h"
+#include "WindowBox.h"
 
 using namespace sf;
 using namespace std;
-
-import WindowBox;
 
 int main()
 {

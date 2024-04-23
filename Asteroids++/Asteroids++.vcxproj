@@ -29,6 +29,7 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="FileMenager.cpp" />
     <ClCompile Include="MultiAsteroid.cpp" />
+    <ClCompile Include="PlayerHealthUI.cpp" />
     <ClCompile Include="SingleBullet.cpp" />
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="Pickup.cpp" />
@@ -38,7 +39,7 @@
     <ClCompile Include="SoundData.cpp" />
     <ClCompile Include="SpriteData.cpp" />
     <ClCompile Include="WindowBox.cpp" />
-    <ClCompile Include="WindowBox.ixx" />
+    <ClCompile Include="WindowBox.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Asteroid.h" />
@@ -50,10 +51,11 @@
     <ClInclude Include="FileMenager.h" />
     <ClInclude Include="HealthBar.h" />
     <ClInclude Include="MultiAsteroid.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerHealthUI.h" />
     <ClInclude Include="SingleBullet.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="Pickup.h" />
-    <ClInclude Include="Player.h" />
     <ClInclude Include="Score.h" />
     <ClInclude Include="SingleAsteroid.h" />
     <ClInclude Include="SoundData.h" />

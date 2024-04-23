@@ -10,7 +10,7 @@ bool Bullet::piercing{ false };
 
 Bullet::Bullet(Vector2f position, Vector2f direction, const float& angle) :
     direction(direction), 
-    Entity(position, angle, Player::playerStats.bulletSize, Color::Green, getSprite(Sprites::BULLET)),
+    Entity(position, angle, Player::playerStats.bulletSize, Color::Green, getSprite(Player::getPlayerBulletSprite())),
     lifeTime(FileMenager::playerData.bullet_lifetime)
 {
 }
@@ -51,8 +51,8 @@ void Bullet::spawnPickup(const Vector2f& position)
 
     if (propability > 0.5) return;
 
-    if (propability < 0.1) {
-        Game::addToEntities(new Pickup(position, getSprite(Sprites::CHEST)));
+    if (propability < 1) {
+        Game::addToEntities(new Pickup(position, getSprite(Sprites::PICKUP_PIERCING)));
         return;
     }
     if (propability < 0.2) {

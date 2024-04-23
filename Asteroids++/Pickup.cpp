@@ -38,8 +38,8 @@ const EntityType Pickup::getEntityType()
 		return EntityType::TYPE_PICKUP_3;
 	case Sprites::PICKUP_4:
 		return EntityType::TYPE_PICKUP_4;
-	case Sprites::CHEST:
-		return EntityType::TYPE_CHEST;
+	case Sprites::PICKUP_PIERCING:
+		return EntityType::TYPE_PICKUP_PIERCING;
 	default:
 		return EntityType();
 	}
@@ -81,15 +81,13 @@ void Pickup::collisionDetection()
 					Score::score += 100;
 					SoundData::play(Sounds::PICKUP_4);
 					break;
-				case EntityType::TYPE_CHEST:
+				case EntityType::TYPE_PICKUP_PIERCING:
 					if (!Player::playerStats.piercing) Player::playerStats.piercing = true;
 
 					Score::score += 1000;
 					SoundData::play(Sounds::PICKUP_4);
 				}
 				Game::addToEntities(new Explosion(this->position, this->size, collected));
-
-				cout << Player::playerStats.bulletDamage << endl;
 			}
 		}
 	}

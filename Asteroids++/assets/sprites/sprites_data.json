@@ -23,9 +23,17 @@
     "currentSpriteLifeTime": 0,
     "defaultSpriteLifeTime": 0
   },
-  "bullet": {
+  "singleBullet": {
     "hitboxSize": 16,
     "spriteSize": 120,
+    "rotation": 0,
+    "spriteState": 0,
+    "currentSpriteLifeTime": 0,
+    "defaultSpriteLifeTime": 0
+  },
+  "piercingBullet": {
+    "hitboxSize": 16,
+    "spriteSize": 115,
     "rotation": 0,
     "spriteState": 0,
     "currentSpriteLifeTime": 0,
@@ -111,12 +119,20 @@
     "currentSpriteLifeTime": 0,
     "defaultSpriteLifeTime": 0.03
   },
-  "chest": {
-    "hitboxSize": 48,
-    "spriteSize": 48,
+  "pickupPiercing": {
+    "hitboxSize": 32,
+    "spriteSize": 32,
     "rotation": 0,
     "spriteState": 0,
     "currentSpriteLifeTime": 0,
-    "defaultSpriteLifeTime": 0.2
+    "defaultSpriteLifeTime": 0.05
+  },
+  "heart": {
+    "hitboxSize": 64,
+    "spriteSize": 32,
+    "rotation": 0,
+    "spriteState": 0,
+    "currentSpriteLifeTime": 0,
+    "defaultSpriteLifeTime": 0.5
   }
 }

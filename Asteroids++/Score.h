@@ -13,7 +13,7 @@ public:
 	static size_t score;
 	static Text scoreText;
 	static Font font;
-	
+
 	static void init();
 };
 

@@ -66,7 +66,7 @@
     <ClCompile Include="WindowBox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WindowBox.ixx">
+    <ClCompile Include="WindowBox.h">
       <Filter>Header Files</Filter>
     </ClCompile>
     <ClCompile Include="Physics.cpp">
@@ -120,6 +120,9 @@
     <ClCompile Include="Bullet.cpp">
       <Filter>Source Files\Objects\Entities\Bullets</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerHealthUI.cpp">
+      <Filter>Source Files\Draws</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Physics.h">
@@ -127,9 +130,6 @@
     </ClInclude>
     <ClInclude Include="Score.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Header Files\Objects\Entities</Filter>
     </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>Header Files\Objects</Filter>
@@ -172,6 +172,12 @@
     </ClInclude>
     <ClInclude Include="SingleBullet.h">
       <Filter>Header Files\Objects\Entities\Bullets</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files\Objects\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerHealthUI.h">
+      <Filter>Header Files\Draws</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -12,7 +12,7 @@
 
 class Bullet: public Entity {
 public:
-	Bullet(Vector2f, Vector2f, const float&);
+	Bullet(Vector2f position, Vector2f direction, const float& angle);
 
 	void update(float deltaTime) override;
 	void render(RenderWindow&) override;

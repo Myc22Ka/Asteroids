@@ -6,9 +6,8 @@
 #include "SpriteData.h"
 #include <unordered_map>
 
-export module WindowBox;
 
-export class WindowBox
+class WindowBox
 {
 public:
 	WindowBox();
@@ -20,4 +19,5 @@ public:
 private:
 	RenderWindow window;
 	static double asteroidSpawnTime;
+	static double heartAnimationTimer;
 };
