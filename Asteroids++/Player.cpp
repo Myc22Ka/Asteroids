@@ -2,6 +2,7 @@
 #include "MultiAsteroid.h"
 #include "SingleAsteroid.h"
 #include "SingleBullet.h"
+#include "WindowBox.h"
 
 constexpr double M_PI = 3.14159265358979323846;
 double Player::dashTimer = 0.0;
@@ -15,7 +16,8 @@ Player::Player() :
         Color::Blue,
         getSprite(Sprites::SHIP)
     ), 
-    shootTimer()
+    shootTimer(),
+    invincibilityFrames(0)
 {
 	drawHitboxes();
     setPlayerStats();
@@ -31,6 +33,7 @@ void Player::render(RenderWindow& window)
 void Player::update(float deltaTime) {
     shootTimer -= deltaTime;
     dashTimer -= deltaTime;
+    invincibilityFrames -= deltaTime;
 
     spriteInfo.currentSpriteLifeTime -= deltaTime;
 
@@ -63,7 +66,12 @@ void Player::update(float deltaTime) {
         updateSprite(spriteInfo.sprite, spriteInfo.frames, spriteInfo.spriteState);
     }
 
-    collisionDetection();
+    position.x = min(max((double)position.x, radius), FileMenager::screenData.size_width - radius);
+    position.y = min(max((double)position.y, radius), FileMenager::screenData.size_height - radius);
+
+    if(invincibilityFrames < 0) collisionDetection();
+
+    cout << invincibilityFrames << endl;
 }
 
 const EntityType Player::getEntityType()
@@ -73,24 +81,23 @@ const EntityType Player::getEntityType()
 
 void Player::collisionDetection()
 {
+    for (const auto& entity : Game::entities)
+    {
+        if (auto* enemy = dynamic_cast<Asteroid*>(entity))
+        {
+            if (!physics::intersects(position, radius, enemy->position, enemy->radius))
+                continue;
 
-	position.x = min(max((double)position.x, radius), FileMenager::screenData.size_width - radius);
-	position.y = min(max((double)position.y, radius), FileMenager::screenData.size_height - radius);
+            SoundData::play(Sounds::EXPLOSION);
+            resetPlayerStats();
+            playerStats.lifes -= 1;
+            WindowBox::playerHealthUIs.back().death = true;
+            invincibilityFrames = 5;
 
-	for (size_t i = 0; i < Game::entities.size(); i++)
-	{
-		if (typeid(*Game::entities[i]) == typeid(SingleAsteroid) || typeid(*Game::entities[i]) == typeid(MultiAsteroid)) {
-			Asteroid* enemy = dynamic_cast<Asteroid*>(Game::entities[i]);
-
-			if (physics::intersects(position, radius, enemy->position, enemy->radius)) {
-				SoundData::play(Sounds::EXPLOSION);
-                resetPlayerStats();
-                playerStats.lifes -= 1;
-
-                if(playerStats.lifes == 0) Game::gameOver();
-			}
-		}
-	}
+            if (playerStats.lifes == 0)
+                Game::gameOver();
+        }
+    }
 }
 
 void Player::dashAbility(const double& deltaTime)
@@ -100,12 +107,13 @@ void Player::dashAbility(const double& deltaTime)
     if (Keyboard::isKeyPressed(Keyboard::R) && !isDashing && dashTimer <= 0) {
         isDashing = true;
         dashTimer = FileMenager::playerData.dash_time_delay;
+        invincibilityFrames = 0;
 
         double radians = angle * (M_PI / 180.0f);
 
         Vector2f endPoint(position.x + cos(radians) * size * FileMenager::playerData.dash_length, position.y + sin(radians) * size * FileMenager::playerData.dash_length);
 
-        SoundData::play(Sounds::DASH_ABILITY);
+        if(invincibilityFrames < 0) SoundData::play(Sounds::DASH_ABILITY);
         thread animationThread([this, endPoint, animationDuration]() {
             this_thread::sleep_for(chrono::milliseconds(50));
             Clock clock;
@@ -118,7 +126,7 @@ void Player::dashAbility(const double& deltaTime)
                 Vector2f interpolatedPosition = position + (endPoint - position) * t;
                 position = interpolatedPosition;
 
-                if (t >= animationDuration) {
+                if (t >= animationDuration || this->invincibilityFrames > 0) {
                     isDashing = false;
                     break;
                 }
@@ -147,7 +155,7 @@ void Player::setPlayerStats()
     playerStats.bulletDamage = 50;
     playerStats.bulletSize = FileMenager::playerData.bullet_size;
     playerStats.bulletSpeed = FileMenager::playerData.bullet_speed;
-    playerStats.lifes = 3; // doesnt respected yet.
+    playerStats.lifes = 3;
     playerStats.speed = FileMenager::playerData.speed;
     playerStats.turnSpeed = FileMenager::playerData.turn_speed;
 

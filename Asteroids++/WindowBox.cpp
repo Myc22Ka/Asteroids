@@ -9,7 +9,7 @@
 #include "PlayerHealthUI.h"
 
 double WindowBox::asteroidSpawnTime = FileMenager::enemiesData.asteroid_spawn_time;
-double WindowBox::heartAnimationTimer{ 0.05 };
+vector<PlayerHealthUI> WindowBox::playerHealthUIs;
 
 WindowBox::WindowBox() {}
 
@@ -32,15 +32,6 @@ void WindowBox::displayWindow()
     Clock clock;
     init();
     begin();
-
-    /*vector<PlayerHealthUI> playerHealthUIs;
-    Vector2f position(100, 100);
-
-    for (int i = 0; i < Player::playerStats.lifes; ++i) {
-        playerHealthUIs.emplace_back(position);
-
-        position.x += 20.0f;
-    }*/
 
     while (window.isOpen()) {
         sf::Event e{};
@@ -65,7 +56,6 @@ void WindowBox::displayWindow()
         window.draw(backgroundSprite);
 
         asteroidSpawnTime -= deltaTime;
-        heartAnimationTimer -= deltaTime;
 
         for (size_t i = 0; i < Game::entities.size(); i++)
         {
@@ -111,14 +101,10 @@ void WindowBox::displayWindow()
         dashBar.update(min(1 - Player::dashTimer / FileMenager::playerData.dash_time_delay, 1.0));
         dashBar.draw(window);
 
-        /*for (size_t i = 0; i < playerHealthUIs.size(); ++i) {
-            if (heartAnimationTimer <= 0) {
-                playerHealthUIs[i].update();
-                heartAnimationTimer = 0.05;
-            }
-
+        for (size_t i = 0; i < playerHealthUIs.size(); ++i) {
+            playerHealthUIs[i].update(deltaTime);
             playerHealthUIs[i].draw(window);
-        }*/
+        }
 
         if (Game::isGameOver) {
             Game::entities.clear();
@@ -135,6 +121,15 @@ void WindowBox::begin()
     Game::isGameOver = false;
     Game::entities.push_back(new Player());
     asteroidSpawnTime = FileMenager::enemiesData.asteroid_spawn_time;
+    playerHealthUIs.clear();
+
+    double offset = 0;
+
+    for (int i = 0; i < Player::playerStats.lifes; ++i) {
+        playerHealthUIs.push_back(offset);
+
+        offset += 20.0f;
+    }
 }
 
 void WindowBox::init()

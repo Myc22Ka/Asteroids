@@ -43,6 +43,7 @@ private:
 	void dashAbility(const double&);
 	double shootTimer;
 	bool isDashing = false;
+	double invincibilityFrames;
 };
 
 #endif

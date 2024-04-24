@@ -133,6 +133,6 @@
     "rotation": 0,
     "spriteState": 0,
     "currentSpriteLifeTime": 0,
-    "defaultSpriteLifeTime": 0.5
+    "defaultSpriteLifeTime": 0.05
   }
 }

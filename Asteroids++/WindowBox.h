@@ -5,7 +5,7 @@
 #include "Score.h"
 #include "SpriteData.h"
 #include <unordered_map>
-
+#include "PlayerHealthUI.h"
 
 class WindowBox
 {
@@ -16,8 +16,8 @@ public:
 	static void init();
 	void begin();
 
+	static vector<PlayerHealthUI> playerHealthUIs;
 private:
 	RenderWindow window;
 	static double asteroidSpawnTime;
-	static double heartAnimationTimer;
 };
