@@ -1,4 +1,5 @@
 #include "Pickup.h"
+#include "WindowBox.h"
 
 Pickup::Pickup(Vector2f position, SpriteInfo s): Entity(position, 0, 64, Color::Cyan, s),
 lifeTime(5)
@@ -40,6 +41,8 @@ const EntityType Pickup::getEntityType()
 		return EntityType::TYPE_PICKUP_4;
 	case Sprites::PICKUP_PIERCING:
 		return EntityType::TYPE_PICKUP_PIERCING;
+	case Sprites::HEART1UP:
+		return EntityType::TYPE_PICKUP_HEART1UP;
 	default:
 		return EntityType();
 	}
@@ -83,9 +86,16 @@ void Pickup::collisionDetection()
 					break;
 				case EntityType::TYPE_PICKUP_PIERCING:
 					if (!Player::playerStats.piercing) Player::playerStats.piercing = true;
-
 					Score::score += 1000;
 					SoundData::play(Sounds::PICKUP_4);
+					break;
+				case EntityType::TYPE_PICKUP_HEART1UP:
+					if (Player::playerStats.lifes <= 5) {
+						Player::playerStats.lifes += 1;
+						WindowBox::playerHealthUIs.push_back(WindowBox::playerHealthUIs.back().offset + 20.0);
+					}
+					Score::score += 200;
+					break;
 				}
 				Game::addToEntities(new Explosion(this->position, this->size, collected));
 			}

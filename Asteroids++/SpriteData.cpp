@@ -17,6 +17,7 @@ const vector<pair<string, Sprites>> objects = {
         {"pickup2", Sprites::PICKUP_2},
         {"pickup3", Sprites::PICKUP_3},
         {"pickup4", Sprites::PICKUP_4},
+        {"heart1UP", Sprites::HEART1UP},
         {"pickupPiercing", Sprites::PICKUP_PIERCING},
         {"collected", Sprites::COLLECTED},
         {"heart", Sprites::HEART}

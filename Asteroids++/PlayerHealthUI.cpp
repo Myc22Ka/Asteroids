@@ -1,7 +1,7 @@
 #include "PlayerHealthUI.h"
 #include "WindowBox.h"
 
-PlayerHealthUI::PlayerHealthUI(const double& offset)
+PlayerHealthUI::PlayerHealthUI(const double& offset) : offset(offset)
 {
     spriteInfo = getSprite(Sprites::HEART);
 	position = Vector2f(FileMenager::screenData.size_width - (spriteInfo.spriteSize >> 1) - 10 - offset, getSprite(Sprites::DASHBAR).spriteSize >> 1 - spriteInfo.spriteSize);

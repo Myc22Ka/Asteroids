@@ -16,7 +16,8 @@ enum EntityType {
     TYPE_PICKUP_2,
     TYPE_PICKUP_3,
     TYPE_PICKUP_4,
-    TYPE_PICKUP_PIERCING
+    TYPE_PICKUP_PIERCING,
+    TYPE_PICKUP_HEART1UP
 };
 
 class Entity : public SpriteData {

@@ -70,8 +70,6 @@ void Player::update(float deltaTime) {
     position.y = min(max((double)position.y, radius), FileMenager::screenData.size_height - radius);
 
     if(invincibilityFrames < 0) collisionDetection();
-
-    cout << invincibilityFrames << endl;
 }
 
 const EntityType Player::getEntityType()
@@ -113,7 +111,7 @@ void Player::dashAbility(const double& deltaTime)
 
         Vector2f endPoint(position.x + cos(radians) * size * FileMenager::playerData.dash_length, position.y + sin(radians) * size * FileMenager::playerData.dash_length);
 
-        if(invincibilityFrames < 0) SoundData::play(Sounds::DASH_ABILITY);
+        if(invincibilityFrames <= 0) SoundData::play(Sounds::DASH_ABILITY);
         thread animationThread([this, endPoint, animationDuration]() {
             this_thread::sleep_for(chrono::milliseconds(50));
             Clock clock;

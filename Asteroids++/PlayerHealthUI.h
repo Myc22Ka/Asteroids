@@ -19,6 +19,7 @@ public:
     void draw(RenderWindow& window) const;
 
     bool death = false;
+    double offset;
 };
 
 #endif
