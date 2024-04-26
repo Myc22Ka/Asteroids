@@ -34,7 +34,7 @@ public:
     void drawHitboxes(const int radius);
 
     void setSpriteFullCycle(double deltaTime);
-    void setSpriteFullCycle(SpriteInfo spriteInfo);
+    void setSpriteFullCycle(SpriteInfo& spriteInfo);
 
     Color hitboxColor;
     Vector2f position;

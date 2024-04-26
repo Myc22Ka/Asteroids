@@ -13,7 +13,6 @@ private:
     Vector2f position;
     double currentValue = 1;
     SpriteInfo spriteInfo;
-    int spriteState;
 public:
     DashBar();
 

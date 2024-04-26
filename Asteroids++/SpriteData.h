@@ -34,7 +34,8 @@ enum class Sprites {
     HEART1UP,
     PICKUP_PIERCING,
     COLLECTED,
-    HEART
+    HEART,
+    SHIELD
 };
 
 struct SpriteInfo

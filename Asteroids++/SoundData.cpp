@@ -13,7 +13,8 @@ const vector<pair<string, Sounds>> objects = {
     {"pickup1", Sounds::PICKUP_1},
     {"pickup2", Sounds::PICKUP_2},
     {"pickup3", Sounds::PICKUP_3},
-    {"pickup4", Sounds::PICKUP_4}
+    {"pickup4", Sounds::PICKUP_4},
+    {"heart1UP", Sounds::HEART1UP}
 };
 
 void SoundData::loadAllSounds()

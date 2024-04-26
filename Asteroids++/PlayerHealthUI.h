@@ -17,6 +17,7 @@ public:
 
     void update(float deltaTime);
     void draw(RenderWindow& window) const;
+    void setSpriteState(const int& newState);
 
     bool death = false;
     double offset;

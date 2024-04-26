@@ -35,9 +35,28 @@ void Bullet::collisionDetection()
 {
     for (size_t i = 0; i < Game::entities.size(); i++)
     {
-        if (typeid(*Game::entities[i]) == typeid(SingleAsteroid)) singleAsteroidHit(i);
+        if (typeid(*Game::entities[i]) == typeid(SingleAsteroid)) asteroidHit<SingleAsteroid>(i);
         
-        if (typeid(*Game::entities[i]) == typeid(MultiAsteroid)) multiAsteroidHit(i);
+        if (typeid(*Game::entities[i]) == typeid(MultiAsteroid)) asteroidHit<MultiAsteroid>(i);
+    }
+}
+
+template<typename T>
+void Bullet::asteroidHit(const int& i) {
+    T* asteroid = dynamic_cast<T*>(Game::entities[i]);
+
+    if (physics::intersects(position, radius, asteroid->position, asteroid->radius) && lifeTime > 0 && hitAsteroids.find(i) == hitAsteroids.end()) {
+        if (!Player::playerStats.piercing) lifeTime = 0;
+        asteroid->health -= Player::playerStats.bulletDamage;
+
+        if (asteroid->health > 0) {
+            hitAsteroids.insert(i);
+            return;
+        }
+
+        if(typeid(*Game::entities[i]) == typeid(SingleAsteroid)) destroySingleAsteroid(i);
+        if(typeid(*Game::entities[i]) == typeid(MultiAsteroid)) destroyMultiAsteroid(i);
+
     }
 }
 

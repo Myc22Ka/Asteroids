@@ -20,7 +20,8 @@ enum class Sounds {
     PICKUP_1,
     PICKUP_2,
     PICKUP_3,
-    PICKUP_4
+    PICKUP_4,
+    HEART1UP
 };
 
 class SoundData {

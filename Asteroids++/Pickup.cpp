@@ -93,7 +93,10 @@ void Pickup::collisionDetection()
 					if (Player::playerStats.lifes <= 5) {
 						Player::playerStats.lifes += 1;
 						WindowBox::playerHealthUIs.push_back(WindowBox::playerHealthUIs.back().offset + 20.0);
+						for (auto& UI : WindowBox::playerHealthUIs)
+							UI.setSpriteState(0);
 					}
+					SoundData::play(Sounds::HEART1UP);
 					Score::score += 200;
 					break;
 				}

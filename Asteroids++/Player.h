@@ -38,6 +38,8 @@ public:
 	static PlayerStats playerStats;
 	static double dashTimer;
 private:
+	SpriteInfo shield;
+
 	void resetPlayerStats();
 	void setPlayerStats();
 	void dashAbility(const double&);

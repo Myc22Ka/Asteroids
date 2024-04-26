@@ -21,8 +21,8 @@ public:
 
 	void spawnPickup(const Vector2f& position);
 
-	virtual void singleAsteroidHit(const int& i) = 0;
-	virtual void multiAsteroidHit(const int& i) = 0;
+	template<typename T>
+	void asteroidHit(const int& i);
 
 	void destroySingleAsteroid(const int& i);
 	void destroyMultiAsteroid(const int& i);

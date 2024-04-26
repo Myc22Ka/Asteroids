@@ -216,5 +216,6 @@
     <None Include="assets\sprites\sprites_data.json">
       <Filter>Resource Files\assets\sprites</Filter>
     </None>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

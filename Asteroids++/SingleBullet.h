@@ -12,8 +12,6 @@ public:
 	SingleBullet(Vector2f position, Vector2f direction, const float& angle);
 
 	const EntityType getEntityType() override;
-	void singleAsteroidHit(const int& i) override;
-	void multiAsteroidHit(const int& i) override;
 };
 
 #endif

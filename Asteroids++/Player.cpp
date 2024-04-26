@@ -19,6 +19,8 @@ Player::Player() :
     shootTimer(),
     invincibilityFrames(0)
 {
+
+    shield = getSprite(Sprites::SHIELD);
 	drawHitboxes();
     setPlayerStats();
 }
@@ -27,6 +29,7 @@ void Player::render(RenderWindow& window)
 {
 	Transform transform;
 	window.draw(spriteInfo.sprite, transform.translate(position).rotate(angle));
+    window.draw(shield.sprite, transform.rotate(-angle));
 	if(Game::hitboxesVisibility) window.draw(shape, transform);
 }
 
@@ -34,6 +37,7 @@ void Player::update(float deltaTime) {
     shootTimer -= deltaTime;
     dashTimer -= deltaTime;
     invincibilityFrames -= deltaTime;
+    shield.currentSpriteLifeTime -= deltaTime;
 
     spriteInfo.currentSpriteLifeTime -= deltaTime;
 
@@ -69,6 +73,8 @@ void Player::update(float deltaTime) {
     position.x = min(max((double)position.x, radius), FileMenager::screenData.size_width - radius);
     position.y = min(max((double)position.y, radius), FileMenager::screenData.size_height - radius);
 
+    setSpriteFullCycle(shield);
+
     if(invincibilityFrames < 0) collisionDetection();
 }
 
@@ -90,6 +96,7 @@ void Player::collisionDetection()
             resetPlayerStats();
             playerStats.lifes -= 1;
             WindowBox::playerHealthUIs.back().death = true;
+            WindowBox::playerHealthUIs.back().setSpriteState(16);
             invincibilityFrames = 5;
 
             if (playerStats.lifes == 0)
