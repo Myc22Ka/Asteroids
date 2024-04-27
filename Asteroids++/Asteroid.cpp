@@ -21,7 +21,7 @@ void Asteroid::render(RenderWindow& window)
 }
 
 void Asteroid::update(float deltaTime) {
-	angle += FileMenager::enemiesData.asteroid_spin * deltaTime;
+	/*angle += FileMenager::enemiesData.asteroid_spin * deltaTime;
 	position += Vector2f(direction.x * speed * deltaTime, direction.y * speed * deltaTime);
 
 	if (position.x < radius) {
@@ -36,7 +36,7 @@ void Asteroid::update(float deltaTime) {
 	}
 	else if (position.y > FileMenager::screenData.size_height - radius) {
 		direction.y = -abs(direction.y);
-	}
+	}*/
 
 	healthBar.updateBar(Vector2f{ position.x - (float)radius, position.y + (float)radius });
 	healthBar.setCurrentValue(health);

@@ -7,6 +7,7 @@
 #include "HealthBar.h"
 #include "WindowBox.h"
 #include "PlayerHealthUI.h"
+#include "SingleAsteroid.h"
 
 double WindowBox::asteroidSpawnTime = FileMenager::enemiesData.asteroid_spawn_time;
 vector<PlayerHealthUI> WindowBox::playerHealthUIs;
@@ -89,8 +90,10 @@ void WindowBox::displayWindow()
         }
 
         if (asteroidSpawnTime <= 0) {
-            Game::entities.push_back(Game::getRandomEntity());
-            asteroidSpawnTime = FileMenager::enemiesData.asteroid_spawn_time;
+            //Game::entities.push_back(Game::getRandomEntity());
+            //asteroidSpawnTime = FileMenager::enemiesData.asteroid_spawn_time;
+            Game::entities.push_back(new SingleAsteroid(Vector2f(800, 800), Vector2f(100, 100)));
+            asteroidSpawnTime = 100000000;
         }
 
         Score::scoreText.setString(std::to_string(Score::score));

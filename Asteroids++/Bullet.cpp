@@ -6,9 +6,11 @@
 #include "SoundData.h"
 #include "Pickup.h"
 
+constexpr double M_PI = 3.14159265358979323846;
+
 bool Bullet::piercing{ false };
 
-Bullet::Bullet(Vector2f position, Vector2f direction, const float& angle) :
+Bullet::Bullet(Vector2f position, Vector2f direction, float& angle) :
     direction(direction), 
     Entity(position, angle, Player::playerStats.bulletSize, Color::Green, getSprite(Player::getPlayerBulletSprite())),
     lifeTime(FileMenager::playerData.bullet_lifetime)
@@ -21,8 +23,79 @@ void Bullet::update(float deltaTime)
     position += Vector2f(direction.x * Player::playerStats.bulletSpeed * deltaTime, direction.y * Player::playerStats.bulletSpeed * deltaTime);
     if (lifeTime <= 0) Game::removeEntity(this);
 
+    if (Player::playerStats.bulletType.homing) homeToEnemy(deltaTime);
+
     collisionDetection();
 }
+
+void Bullet::homeToEnemy(float deltaTime) {
+    const auto enemy = findNearestEnemy();
+
+    if (enemy) {
+        Vector2f directionToEnemy = enemy->position - position;
+
+        Vector2f normalizedDirection = physics::normalize(directionToEnemy);
+
+        float speed = Player::playerStats.bulletSpeed;
+        Vector2f movement = Vector2f(normalizedDirection.x * speed * deltaTime, normalizedDirection.y * speed * deltaTime);
+
+        position += movement;
+
+        if (position.x < enemy->position.x) {
+            Vector2f homingDirection = physics::calculateDirection(position, enemy->position);
+            position += homingDirection * speed * deltaTime;
+        }
+        else if (position.x > enemy->position.x) {
+            Vector2f homingDirection = physics::calculateDirection(position, enemy->position);
+            position += homingDirection * speed * deltaTime;
+        }
+    }
+}
+
+
+
+Entity* Bullet::findNearestEnemy()
+{
+    Entity* nearestEnemy = nullptr;
+    float minTimeToEnemy = 1;
+
+    Entity* player = nullptr;
+
+    for (Entity* entity : Game::entities) {
+        if (entity->getEntityType() == EntityType::TYPE_PLAYER) player = entity;
+    }
+
+    if (!player) return nullptr;
+
+    for (Entity* entity : Game::entities)
+    {
+        if (entity->getEntityType() == EntityType::TYPE_ENEMY_SINGLE_ASTEROID)
+        {
+            Vector2f directionToAsteroid = entity->position - position;
+            float distanceToEnemy = physics::distance(position, entity->position);
+
+            float timeToEnemy = distanceToEnemy / Player::playerStats.bulletSpeed;
+
+            if (timeToEnemy < minTimeToEnemy)
+            {
+                float targetAngle = atan2(directionToAsteroid.y, directionToAsteroid.x) * 180.0f / M_PI;
+
+                float adjustedAngle = targetAngle - angle;
+
+                setRotation(spriteInfo.sprite, adjustedAngle);
+
+                angle = targetAngle;
+
+                minTimeToEnemy = timeToEnemy;
+                nearestEnemy = entity;
+            }
+        }
+    }
+
+    return nearestEnemy;
+}
+
+
 
 void Bullet::render(RenderWindow& window)
 {
@@ -46,7 +119,7 @@ void Bullet::asteroidHit(const int& i) {
     T* asteroid = dynamic_cast<T*>(Game::entities[i]);
 
     if (physics::intersects(position, radius, asteroid->position, asteroid->radius) && lifeTime > 0 && hitAsteroids.find(i) == hitAsteroids.end()) {
-        if (!Player::playerStats.piercing) lifeTime = 0;
+        if (!Player::playerStats.bulletType.piercing) lifeTime = 0;
         asteroid->health -= Player::playerStats.bulletDamage;
 
         if (asteroid->health > 0) {

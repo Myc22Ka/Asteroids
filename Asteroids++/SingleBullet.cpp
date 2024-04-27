@@ -2,7 +2,7 @@
 #include "MultiAsteroid.h"
 #include "SingleAsteroid.h"
 
-SingleBullet::SingleBullet(Vector2f position, Vector2f direction, const float& angle) : Bullet(position, direction, angle)
+SingleBullet::SingleBullet(Vector2f position, Vector2f direction, float& angle) : Bullet(position, direction, angle)
 {
     setRotation(spriteInfo.sprite, angle);
     drawHitboxes();

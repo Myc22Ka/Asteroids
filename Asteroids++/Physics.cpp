@@ -25,6 +25,20 @@ Vector2f physics::normalize(const Vector2f& v) {
     }
 }
 
+Vector2f physics::calculateDirection(const Vector2f& startPos, const Vector2f& targetPos) {
+	Vector2f direction = targetPos - startPos;
+	// Normalize the direction vector
+	float length = physics::magnitude(direction);
+	if (length != 0) {
+		direction /= length;
+	}
+	return direction;
+}
+
+float physics::magnitude(const Vector2f& vec) {
+	return sqrt(vec.x * vec.x + vec.y * vec.y);
+}
+
 float physics::dotProduct(const Vector2f& v1, const Vector2f& v2) {
     return v1.x * v2.x + v1.y * v2.y;
 }

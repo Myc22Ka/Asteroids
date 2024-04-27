@@ -12,7 +12,7 @@
 
 class Bullet: public Entity {
 public:
-	Bullet(Vector2f position, Vector2f direction, const float& angle);
+	Bullet(Vector2f position, Vector2f direction, float& angle);
 
 	void update(float deltaTime) override;
 	void render(RenderWindow&) override;
@@ -32,6 +32,9 @@ public:
 
 	unordered_set<int> hitAsteroids{};
 private:
+
+	void homeToEnemy(float deltaTime);
+	Entity* findNearestEnemy();
 	static bool piercing;
 };
 

@@ -11,6 +11,11 @@
 #include "Physics.h"
 #include "SoundData.h"
 
+struct BulletType {
+	bool piercing;
+	bool homing = true;
+};
+
 struct PlayerStats {
 	double speed;
 	double turnSpeed;
@@ -22,7 +27,7 @@ struct PlayerStats {
 	double bulletDamage;
 	double bulletSpeed;
 
-	bool piercing;
+	BulletType bulletType;
 };
 
 class Player : public Entity {

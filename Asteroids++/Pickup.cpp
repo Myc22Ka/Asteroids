@@ -85,7 +85,7 @@ void Pickup::collisionDetection()
 					SoundData::play(Sounds::PICKUP_4);
 					break;
 				case EntityType::TYPE_PICKUP_PIERCING:
-					if (!Player::playerStats.piercing) Player::playerStats.piercing = true;
+					if (!Player::playerStats.bulletType.piercing) Player::playerStats.bulletType.piercing = true;
 					Score::score += 1000;
 					SoundData::play(Sounds::PICKUP_4);
 					break;

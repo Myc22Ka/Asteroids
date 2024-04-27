@@ -9,7 +9,7 @@
 
 class SingleBullet : public Bullet {
 public:
-	SingleBullet(Vector2f position, Vector2f direction, const float& angle);
+	SingleBullet(Vector2f position, Vector2f direction, float& angle);
 
 	const EntityType getEntityType() override;
 };

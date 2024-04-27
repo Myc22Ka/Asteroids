@@ -164,12 +164,12 @@ void Player::setPlayerStats()
     playerStats.speed = FileMenager::playerData.speed;
     playerStats.turnSpeed = FileMenager::playerData.turn_speed;
 
-    playerStats.piercing = { false };
+    playerStats.bulletType.piercing = { false };
 }
 
 Sprites Player::getPlayerBulletSprite()
 {
-    if (playerStats.piercing) return Sprites::PIERCING_BULLET;
+    if (playerStats.bulletType.piercing) return Sprites::PIERCING_BULLET;
 
     return Sprites::SINGLE_BULLET;
 }
