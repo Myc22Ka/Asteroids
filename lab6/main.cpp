@@ -12,6 +12,7 @@ atomic<int> counter(0);
 mutex mtx1;
 mutex mtx2;
 condition_variable cv;
+
 atomic<int> message_counter(0);
 
 void zad1()
