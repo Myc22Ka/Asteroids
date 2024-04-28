@@ -8,8 +8,10 @@
 #include "WindowBox.h"
 #include "PlayerHealthUI.h"
 #include "SingleAsteroid.h"
+#include "Wind.h"
 
 double WindowBox::asteroidSpawnTime = FileMenager::enemiesData.asteroid_spawn_time;
+double WindowBox::windSpawnTime = 0.02;
 vector<PlayerHealthUI> WindowBox::playerHealthUIs;
 
 WindowBox::WindowBox() {}
@@ -40,7 +42,7 @@ void WindowBox::displayWindow()
             if (e.type == sf::Event::Closed) window.close();
             else if (e.type == sf::Event::KeyPressed) {
                 if (e.key.code == sf::Keyboard::Q) {
-                    std::cout << Game::entities.size() << std::endl;
+                    std::cout << Game::getParticles().size() << std::endl;
                 }
                 if (e.key.code == sf::Keyboard::H) {
                     Game::hitboxesVisibility = !Game::hitboxesVisibility;
@@ -50,50 +52,24 @@ void WindowBox::displayWindow()
 
         double deltaTime = clock.restart().asSeconds();
 
-        Game::toAddList.clear();
-        Game::toRemoveList.clear();
-
         window.clear();
         window.draw(backgroundSprite);
 
         asteroidSpawnTime -= deltaTime;
+        windSpawnTime -= deltaTime;
 
-        for (size_t i = 0; i < Game::entities.size(); i++)
+        for (auto& particle : Game::getParticles())
         {
-            Game::entities[i]->update(deltaTime);
-            Game::entities[i]->render(window);
+            if (!particle->isActive()) continue;
+            particle->render(window);
+            particle->update(deltaTime);
         }
 
-        std::vector<Entity*> entitiesToAdd;
-        std::vector<Entity*> entitiesToRemove;
-
-        for (auto& ptr : Game::toAddList) {
-            entitiesToAdd.push_back(ptr);
-        }
-        Game::toAddList.clear();
-
-        for (auto& ptr : Game::toRemoveList) {
-            entitiesToRemove.push_back(*ptr);
-        }
-        Game::toRemoveList.clear();
-
-        for (auto ptr : entitiesToAdd) {
-            Game::entities.push_back(ptr);
-        }
-
-        for (auto ptr : entitiesToRemove) {
-            auto it = std::find(Game::entities.begin(), Game::entities.end(), ptr);
-            if (it != Game::entities.end()) {
-                delete* it;
-                Game::entities.erase(it);
-            }
-        }
-
-        if (asteroidSpawnTime <= 0) {
-            //Game::entities.push_back(Game::getRandomEntity());
-            //asteroidSpawnTime = FileMenager::enemiesData.asteroid_spawn_time;
-            Game::entities.push_back(new SingleAsteroid(Vector2f(800, 800), Vector2f(100, 100)));
-            asteroidSpawnTime = 100000000;
+        for (auto& entity : Game::getEntities())
+        {
+            if (!entity || !entity->isActive()) continue;
+            entity->render(window);
+            entity->update(deltaTime);
         }
 
         Score::scoreText.setString(std::to_string(Score::score));
@@ -109,8 +85,11 @@ void WindowBox::displayWindow()
             playerHealthUIs[i].draw(window);
         }
 
+        spawnEnemy();
+        spawnWind();
+
         if (Game::isGameOver) {
-            Game::entities.clear();
+            Game::clearEntities();
             Score::score = 0;
             begin();
         }
@@ -122,7 +101,7 @@ void WindowBox::displayWindow()
 void WindowBox::begin()
 {
     Game::isGameOver = false;
-    Game::entities.push_back(new Player());
+    Game::addEntity(new Player());
     asteroidSpawnTime = FileMenager::enemiesData.asteroid_spawn_time;
     playerHealthUIs.clear();
 
@@ -132,6 +111,24 @@ void WindowBox::begin()
         playerHealthUIs.push_back(offset);
 
         offset += 20.0f;
+    }
+
+    Game::addParticle(new Particle(Vector2f(400,400), 0, Sprites::WIND, Color::White, 5, true));
+}
+
+void WindowBox::spawnEnemy()
+{
+    if (asteroidSpawnTime <= 0) {
+        Game::addEntity(Game::getRandomEntity());
+        asteroidSpawnTime = FileMenager::enemiesData.asteroid_spawn_time;
+    }
+}
+
+void WindowBox::spawnWind()
+{
+    if (windSpawnTime <= 0) {
+        Game::addEntity(new Wind());
+        windSpawnTime = 0.02;
     }
 }
 

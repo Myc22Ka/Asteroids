@@ -21,7 +21,10 @@ void Pickup::update(float deltaTime)
 {
 	collected.currentSpriteLifeTime -= deltaTime;
 	lifeTime -= deltaTime;
-	if (lifeTime <= 0) Game::removeEntity(this);
+	if (lifeTime <= 0) { 
+		Game::removeEntity(this);
+		return; 
+	}
 	setSpriteFullCycle(deltaTime);
 
 	collisionDetection();
@@ -50,7 +53,7 @@ const EntityType Pickup::getEntityType()
 
 void Pickup::collisionDetection()
 {
-	for (const auto& entity : Game::entities) {
+	Game::foreachEntity([&](Entity* entity) {
 		if (entity->getEntityType() == EntityType::TYPE_PLAYER && entity != this) {
 			Player* player = dynamic_cast<Player*>(entity);
 
@@ -62,7 +65,7 @@ void Pickup::collisionDetection()
 				switch (getEntityType())
 				{
 				case EntityType::TYPE_PICKUP_1:
-					if(Player::playerStats.shootOffset >= 0.11) Player::playerStats.shootOffset -= 0.01;
+					if (Player::playerStats.shootOffset >= 0.11) Player::playerStats.shootOffset -= 0.01;
 					Score::score += 10;
 					SoundData::play(Sounds::PICKUP_1);
 					break;
@@ -72,7 +75,7 @@ void Pickup::collisionDetection()
 					SoundData::play(Sounds::PICKUP_2);
 					break;
 				case EntityType::TYPE_PICKUP_3:
-					if(Player::playerStats.bulletSize <= 50) Player::playerStats.bulletSize += 1;
+					if (Player::playerStats.bulletSize <= 50) Player::playerStats.bulletSize += 1;
 					Score::score += 50;
 					SoundData::play(Sounds::PICKUP_3);
 					break;
@@ -100,8 +103,8 @@ void Pickup::collisionDetection()
 					Score::score += 200;
 					break;
 				}
-				Game::addToEntities(new Explosion(this->position, this->size, collected));
+				Game::addEntity(new Explosion(this->position, this->size, collected));
 			}
 		}
-	}
+	});
 }

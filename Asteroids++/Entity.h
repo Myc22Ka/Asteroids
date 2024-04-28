@@ -17,10 +17,13 @@ enum EntityType {
     TYPE_PICKUP_3,
     TYPE_PICKUP_4,
     TYPE_PICKUP_PIERCING,
-    TYPE_PICKUP_HEART1UP
+    TYPE_PICKUP_HEART1UP,
+    TYPE_PARTICLE,
+    TYPE_EVENT_WIND
 };
 
 class Entity : public SpriteData {
+    bool active = true;
 public:
     
     Entity(Vector2f position, double angle, int size, Color hitboxColor, SpriteInfo spriteInfo);
@@ -29,6 +32,9 @@ public:
     virtual void render(RenderWindow& window) = 0;
     virtual const EntityType getEntityType() = 0;
     virtual void collisionDetection() = 0;
+
+    bool isActive() const;
+    void setActive(bool active);
 
     void drawHitboxes();
     void drawHitboxes(const int radius);

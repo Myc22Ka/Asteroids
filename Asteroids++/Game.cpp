@@ -3,25 +3,39 @@
 #include "MultiAsteroid.h"
 #include "SingleAsteroid.h"
 
-vector<Entity*> Game::entities;
-list<vector<Entity*>::iterator> Game::toRemoveList;
-list<Entity*> Game::toAddList;
 bool Game::isGameOver{ false };
 bool Game::hitboxesVisibility{ false };
 
+list<Entity*> Game::entities;
+list<Particle*> Game::particles;
+vector<EntityType> Game::enemies {EntityType::TYPE_ENEMY_MULTI_ASTEROID, EntityType::TYPE_ENEMY_SINGLE_ASTEROID };
+
 Game::Game() {}
 
-void Game::setEntity(Entity* entity) {
-    entities.push_back(entity);
+void Game::addEntity(Entity* entity) {
+    entities.push_front(entity);
 }
 
-void Game::removeEntity(Entity* entity)
+list<Entity*> Game::getEntities() {
+    return entities;
+}
+
+void Game::foreachEntity(const function<void(Entity*)>& callback)
 {
-    toRemoveList.push_back(ranges::find(Game::entities, entity));
+    for (auto& entity : entities) {
+        callback(entity);
+    }
 }
 
-void Game::addToEntities(Entity* entity) {
-    toAddList.push_back(entity);
+void Game::removeEntity(Entity* entity) {
+    entities.remove_if([entity](Entity* e) {
+        if (e == entity) {
+            entity->setActive(false);
+            delete e;
+            return true; // Remove this entity from the list
+        }
+        return false; // Keep this entity in the list
+    });
 }
 
 void Game::clearEntities(){
@@ -36,7 +50,7 @@ Entity* Game::doesEntityExist(EntityType type) {
     if (player != entities.end()) {
         return *player;
     }
-        
+
     return nullptr;
 }
 
@@ -54,4 +68,36 @@ Entity* Game::getRandomEntity(){
     int randomIndex = dist(gen);
 
     return enemies[randomIndex];
+}
+
+list<Particle*> Game::getParticles()
+{
+    return particles;
+}
+
+void Game::addParticle(Particle* particle){
+    particles.push_front(particle);
+}
+
+void Game::removeParticle(Particle* particle)
+{
+    particles.remove_if([particle](Entity* e) {
+        if (e == particle) {
+            particle->setActive(false);
+            delete e;
+            return true; // Remove this entity from the list
+        }
+        return false; // Keep this entity in the list
+        });
+}
+
+bool Game::isEnemy(Entity* entity)
+{
+    auto isEntityTypeEqual = [&](EntityType type) {
+        return type == entity->getEntityType();
+        };
+
+    auto it = std::ranges::find_if(enemies, isEntityTypeEqual);
+
+    return it != enemies.end();
 }

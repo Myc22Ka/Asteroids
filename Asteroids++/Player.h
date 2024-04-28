@@ -13,7 +13,7 @@
 
 struct BulletType {
 	bool piercing;
-	bool homing = true;
+	bool homing;
 };
 
 struct PlayerStats {
@@ -38,6 +38,7 @@ public:
 	void update(float deltaTime) override;
 	const EntityType getEntityType() override;
 	void collisionDetection() override;
+
 	static Sprites getPlayerBulletSprite();
 
 	static PlayerStats playerStats;

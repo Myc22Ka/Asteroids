@@ -27,7 +27,7 @@ public:
 	const double getRandomAngle();
 
 	template<typename T>
-	const T getRandomValue(const T&);
+	static const T getRandomValue(const T&);
 
 	Vector2f direction;
 	double speed;

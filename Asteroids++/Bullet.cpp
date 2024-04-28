@@ -5,10 +5,9 @@
 #include "Score.h"
 #include "SoundData.h"
 #include "Pickup.h"
+#include "Particle.h"
 
 constexpr double M_PI = 3.14159265358979323846;
-
-bool Bullet::piercing{ false };
 
 Bullet::Bullet(Vector2f position, Vector2f direction, float& angle) :
     direction(direction), 
@@ -20,10 +19,15 @@ Bullet::Bullet(Vector2f position, Vector2f direction, float& angle) :
 void Bullet::update(float deltaTime)
 {
     lifeTime -= deltaTime;
-    position += Vector2f(direction.x * Player::playerStats.bulletSpeed * deltaTime, direction.y * Player::playerStats.bulletSpeed * deltaTime);
-    if (lifeTime <= 0) Game::removeEntity(this);
 
-    if (Player::playerStats.bulletType.homing) homeToEnemy(deltaTime);
+    position += Vector2f(direction.x * Player::playerStats.bulletSpeed * deltaTime, direction.y * Player::playerStats.bulletSpeed * deltaTime);
+    if (lifeTime <= 0) {
+        Game::removeEntity(this);
+        return;
+    }
+
+
+    if (Player::playerStats.bulletType.homing && lifeTime < 0.9 * FileMenager::playerData.bullet_lifetime) homeToEnemy(deltaTime);
 
     collisionDetection();
 }
@@ -31,71 +35,57 @@ void Bullet::update(float deltaTime)
 void Bullet::homeToEnemy(float deltaTime) {
     const auto enemy = findNearestEnemy();
 
-    if (enemy) {
-        Vector2f directionToEnemy = enemy->position - position;
+    if (!enemy) return;
 
-        Vector2f normalizedDirection = physics::normalize(directionToEnemy);
+    Vector2f directionToEnemy = enemy->position - position;
+    float distanceToEnemy = physics::distance(position, enemy->position);
+    float timeToEnemy = distanceToEnemy / Player::playerStats.bulletSpeed;
 
-        float speed = Player::playerStats.bulletSpeed;
-        Vector2f movement = Vector2f(normalizedDirection.x * speed * deltaTime, normalizedDirection.y * speed * deltaTime);
+    float targetAngle = atan2(directionToEnemy.y, directionToEnemy.x) * 180.0f / M_PI;
 
-        position += movement;
+    float adjustedAngle = targetAngle - angle;
 
-        if (position.x < enemy->position.x) {
-            Vector2f homingDirection = physics::calculateDirection(position, enemy->position);
-            position += homingDirection * speed * deltaTime;
-        }
-        else if (position.x > enemy->position.x) {
-            Vector2f homingDirection = physics::calculateDirection(position, enemy->position);
-            position += homingDirection * speed * deltaTime;
-        }
+    angle = targetAngle;
+
+    spriteInfo.rotation = targetAngle;
+
+    setRotation(spriteInfo.sprite, adjustedAngle);
+
+    Vector2f normalizedDirection = physics::normalize(directionToEnemy);
+    int speed = Player::playerStats.bulletSpeed;
+    Vector2f movement = Vector2f(normalizedDirection.x * speed * deltaTime, normalizedDirection.y * speed * deltaTime);
+
+    position += movement;
+
+    Vector2f homingDirection = physics::calculateDirection(position, enemy->position);
+
+    if (position.x < enemy->position.x) {
+        position += homingDirection * float(speed) * deltaTime;
+    }
+    else if (position.x > enemy->position.x) {
+        position += homingDirection * float(speed) * deltaTime;
     }
 }
 
-
-
-Entity* Bullet::findNearestEnemy()
+Entity* Bullet::findNearestEnemy() const
 {
     Entity* nearestEnemy = nullptr;
-    float minTimeToEnemy = 1;
+    double minTimeToEnemy = 1.3;
 
-    Entity* player = nullptr;
-
-    for (Entity* entity : Game::entities) {
-        if (entity->getEntityType() == EntityType::TYPE_PLAYER) player = entity;
-    }
-
-    if (!player) return nullptr;
-
-    for (Entity* entity : Game::entities)
-    {
-        if (entity->getEntityType() == EntityType::TYPE_ENEMY_SINGLE_ASTEROID)
+    Game::foreachEntity([&](Entity* entity) {
+        if (Game::isEnemy(entity))
         {
-            Vector2f directionToAsteroid = entity->position - position;
-            float distanceToEnemy = physics::distance(position, entity->position);
+            float timeToEnemy = physics::distance(position, entity->position) / Player::playerStats.bulletSpeed;
 
-            float timeToEnemy = distanceToEnemy / Player::playerStats.bulletSpeed;
+            if (timeToEnemy >= minTimeToEnemy) return nullptr;
 
-            if (timeToEnemy < minTimeToEnemy)
-            {
-                float targetAngle = atan2(directionToAsteroid.y, directionToAsteroid.x) * 180.0f / M_PI;
-
-                float adjustedAngle = targetAngle - angle;
-
-                setRotation(spriteInfo.sprite, adjustedAngle);
-
-                angle = targetAngle;
-
-                minTimeToEnemy = timeToEnemy;
-                nearestEnemy = entity;
-            }
+            minTimeToEnemy = timeToEnemy;
+            nearestEnemy = entity;
         }
-    }
+    });
 
     return nearestEnemy;
 }
-
-
 
 void Bullet::render(RenderWindow& window)
 {
@@ -106,30 +96,28 @@ void Bullet::render(RenderWindow& window)
 
 void Bullet::collisionDetection()
 {
-    for (size_t i = 0; i < Game::entities.size(); i++)
+    for (auto& entity : Game::getEntities())
     {
-        if (typeid(*Game::entities[i]) == typeid(SingleAsteroid)) asteroidHit<SingleAsteroid>(i);
-        
-        if (typeid(*Game::entities[i]) == typeid(MultiAsteroid)) asteroidHit<MultiAsteroid>(i);
+        if (Game::isEnemy(entity)) asteroidHit(entity);
     }
 }
 
-template<typename T>
-void Bullet::asteroidHit(const int& i) {
-    T* asteroid = dynamic_cast<T*>(Game::entities[i]);
+void Bullet::asteroidHit(Entity* entity) {
+    Asteroid* asteroid = dynamic_cast<Asteroid*>(entity);
 
-    if (physics::intersects(position, radius, asteroid->position, asteroid->radius) && lifeTime > 0 && hitAsteroids.find(i) == hitAsteroids.end()) {
+    if (physics::intersects(position, radius, asteroid->position, asteroid->radius) && lifeTime > 0 && hitAsteroids.find(asteroid) == hitAsteroids.end()) {
         if (!Player::playerStats.bulletType.piercing) lifeTime = 0;
         asteroid->health -= Player::playerStats.bulletDamage;
 
         if (asteroid->health > 0) {
-            hitAsteroids.insert(i);
+            hitAsteroids.insert(asteroid);
             return;
         }
 
-        if(typeid(*Game::entities[i]) == typeid(SingleAsteroid)) destroySingleAsteroid(i);
-        if(typeid(*Game::entities[i]) == typeid(MultiAsteroid)) destroyMultiAsteroid(i);
+        if (asteroid->getEntityType() == EntityType::TYPE_ENEMY_SINGLE_ASTEROID) destroySingleAsteroid(entity);
+        if (asteroid->getEntityType() == EntityType::TYPE_ENEMY_MULTI_ASTEROID) destroyMultiAsteroid(entity);
 
+        Game::removeEntity(asteroid);
     }
 }
 
@@ -143,40 +131,38 @@ void Bullet::spawnPickup(const Vector2f& position)
 
     if (propability > 0.5) return;
 
-    if (propability < 1) {
-        Game::addToEntities(new Pickup(position, getSprite(Sprites::HEART1UP)));
+    if (propability < 0.01) {
+        Game::addEntity(new Pickup(position, getSprite(Sprites::HEART1UP)));
         return;
     }
     if (propability < 0.1) {
-        Game::addToEntities(new Pickup(position, getSprite(Sprites::PICKUP_PIERCING)));
+        Game::addEntity(new Pickup(position, getSprite(Sprites::PICKUP_PIERCING)));
         return;
     }
     if (propability < 0.2) {
-        Game::addToEntities(new Pickup(position, getSprite(Sprites::PICKUP_4)));
+        Game::addEntity(new Pickup(position, getSprite(Sprites::PICKUP_4)));
         return;
     }
     if (propability < 0.3) {
-        Game::addToEntities(new Pickup(position, getSprite(Sprites::PICKUP_3)));
+        Game::addEntity(new Pickup(position, getSprite(Sprites::PICKUP_3)));
         return;
     }
     if (propability < 0.4) {
-        Game::addToEntities(new Pickup(position, getSprite(Sprites::PICKUP_2)));
+        Game::addEntity(new Pickup(position, getSprite(Sprites::PICKUP_2)));
         return;
     }
     if (propability < 0.5) {
-        Game::addToEntities(new Pickup(position, getSprite(Sprites::PICKUP_1)));
+        Game::addEntity(new Pickup(position, getSprite(Sprites::PICKUP_1)));
         return;
     }
     
 }
 
-void Bullet::destroySingleAsteroid(const int& i)
+void Bullet::destroySingleAsteroid(Entity* entity)
 {
-    SingleAsteroid* asteroid = dynamic_cast<SingleAsteroid*>(Game::entities[i]);
+    SingleAsteroid* asteroid = dynamic_cast<SingleAsteroid*>(entity);
 
-    Game::toAddList.push_back(new Explosion(asteroid->position, asteroid->size));
-
-    Game::removeEntity(asteroid);
+    Game::addEntity(new Explosion(asteroid->position, asteroid->size));
 
     spawnPickup(asteroid->position);
 
@@ -184,13 +170,11 @@ void Bullet::destroySingleAsteroid(const int& i)
     SoundData::play(Sounds::EXPLOSION);
 }
 
-void Bullet::destroyMultiAsteroid(const int& i)
+void Bullet::destroyMultiAsteroid(Entity* entity)
 {
-    MultiAsteroid* asteroid = dynamic_cast<MultiAsteroid*>(Game::entities[i]);
+    MultiAsteroid* asteroid = dynamic_cast<MultiAsteroid*>(entity);
 
-    Game::toAddList.push_back(new Explosion(asteroid->position, asteroid->size));
-
-    Game::removeEntity(asteroid);
+    Game::addEntity(new Explosion(asteroid->position, asteroid->size));
 
     auto asteroid1 = new SingleAsteroid(asteroid->position, asteroid->getRandomDirection());
     auto asteroid2 = new SingleAsteroid(Vector2f(asteroid->position.x + asteroid1->radius, asteroid->position.y + asteroid1->radius), asteroid->getRandomDirection());
@@ -203,8 +187,8 @@ void Bullet::destroyMultiAsteroid(const int& i)
     asteroid1->direction -= bounceDirection.first;
     asteroid2->direction += bounceDirection.first;
 
-    Game::addToEntities(new SingleAsteroid(asteroid1->position, asteroid1->direction));
-    Game::addToEntities(new SingleAsteroid(asteroid2->position, asteroid2->direction));
+    Game::addEntity(new SingleAsteroid(asteroid1->position, asteroid1->direction));
+    Game::addEntity(new SingleAsteroid(asteroid2->position, asteroid2->direction));
 
     Score::score += 20;
     SoundData::play(Sounds::EXPLOSION);

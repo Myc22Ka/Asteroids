@@ -21,21 +21,18 @@ public:
 
 	void spawnPickup(const Vector2f& position);
 
-	template<typename T>
-	void asteroidHit(const int& i);
-
-	void destroySingleAsteroid(const int& i);
-	void destroyMultiAsteroid(const int& i);
+	void destroySingleAsteroid(Entity* entity);
+	void destroyMultiAsteroid(Entity* entity);
 
 	Vector2f direction;
 	float lifeTime;
 
-	unordered_set<int> hitAsteroids{};
 private:
-
+	unordered_set<Entity*> hitAsteroids{};
 	void homeToEnemy(float deltaTime);
-	Entity* findNearestEnemy();
-	static bool piercing;
+	Entity* findNearestEnemy() const;
+
+	void asteroidHit(Entity* entity);
 };
 
 #endif

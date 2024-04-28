@@ -6,6 +6,16 @@ Entity::Entity(Vector2f position, double angle, int size, Color hitboxColor, Spr
 {
 }
 
+bool Entity::isActive() const
+{
+	return active;
+}
+
+void Entity::setActive(bool active)
+{
+	this->active = active;
+}
+
 void Entity::drawHitboxes()
 {
 	shape.setRadius(radius);

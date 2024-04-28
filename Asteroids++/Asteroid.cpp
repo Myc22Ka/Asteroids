@@ -21,7 +21,7 @@ void Asteroid::render(RenderWindow& window)
 }
 
 void Asteroid::update(float deltaTime) {
-	/*angle += FileMenager::enemiesData.asteroid_spin * deltaTime;
+	angle += FileMenager::enemiesData.asteroid_spin * deltaTime;
 	position += Vector2f(direction.x * speed * deltaTime, direction.y * speed * deltaTime);
 
 	if (position.x < radius) {
@@ -36,7 +36,7 @@ void Asteroid::update(float deltaTime) {
 	}
 	else if (position.y > FileMenager::screenData.size_height - radius) {
 		direction.y = -abs(direction.y);
-	}*/
+	}
 
 	healthBar.updateBar(Vector2f{ position.x - (float)radius, position.y + (float)radius });
 	healthBar.setCurrentValue(health);
@@ -48,24 +48,24 @@ void Asteroid::update(float deltaTime) {
 
 void Asteroid::collisionDetection()
 {
-	for (const auto& entity : Game::entities) {
-		if ((entity->getEntityType() == EntityType::TYPE_ENEMY_MULTI_ASTEROID || entity->getEntityType() == EntityType::TYPE_ENEMY_SINGLE_ASTEROID) 
+	Game::foreachEntity([&](Entity* entity) {
+		if ((entity->getEntityType() == EntityType::TYPE_ENEMY_MULTI_ASTEROID || entity->getEntityType() == EntityType::TYPE_ENEMY_SINGLE_ASTEROID)
 			&& entity != this) {
 			Asteroid* otherAsteroid = dynamic_cast<Asteroid*>(entity);
 
 			if (!otherAsteroid) return;
 
-				if (physics::intersects(this->position, radius, otherAsteroid->position, otherAsteroid->radius)) {
-					const auto bounceDirection = physics::bounceDirection(this, otherAsteroid, 0.01f);
+			if (physics::intersects(this->position, radius, otherAsteroid->position, otherAsteroid->radius)) {
+				const auto bounceDirection = physics::bounceDirection(this, otherAsteroid, 0.01f);
 
-					this->position += bounceDirection.second;
-					otherAsteroid->position -= bounceDirection.second;
+				this->position += bounceDirection.second;
+				otherAsteroid->position -= bounceDirection.second;
 
-					this->direction -= bounceDirection.first;
-					otherAsteroid->direction += bounceDirection.first;
+				this->direction -= bounceDirection.first;
+				otherAsteroid->direction += bounceDirection.first;
 			}
 		}
-	}
+	});
 }
 
 const Vector2f Asteroid::getRandomPosition() const

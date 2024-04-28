@@ -18,6 +18,11 @@ public:
 
 	static vector<PlayerHealthUI> playerHealthUIs;
 private:
+	void spawnEnemy();
+
+	void spawnWind();
+	static double windSpawnTime;
+
 	RenderWindow window;
 	static double asteroidSpawnTime;
 };

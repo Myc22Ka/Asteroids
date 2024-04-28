@@ -3,6 +3,7 @@
 #include "SingleAsteroid.h"
 #include "SingleBullet.h"
 #include "WindowBox.h"
+#include "Particle.h"
 
 constexpr double M_PI = 3.14159265358979323846;
 double Player::dashTimer = 0.0;
@@ -41,6 +42,11 @@ void Player::update(float deltaTime) {
 
     spriteInfo.currentSpriteLifeTime -= deltaTime;
 
+    if (Keyboard::isKeyPressed(Keyboard::P)) {
+        Game::removeEntity(this);
+        return;
+    };
+
     if (Keyboard::isKeyPressed(Keyboard::A) && !isDashing) {
         angle -= playerStats.turnSpeed * deltaTime;
     }
@@ -56,11 +62,13 @@ void Player::update(float deltaTime) {
 
     dashAbility(deltaTime);
 
+    if (isDashing) Game::addParticle(new Particle(position, angle, Sprites::SHIP, Color(126, 193, 255, 100), 0.15));
+
     if (Keyboard::isKeyPressed(Keyboard::Space) && shootTimer <= 0) {
         shootTimer = Player::playerStats.shootOffset;
         float radians = angle * (M_PI / 180.0f);
 
-        Game::addToEntities(new SingleBullet(position, Vector2f(cos(radians), sin(radians)), angle));
+        Game::addEntity(new SingleBullet(position, Vector2f(cos(radians), sin(radians)), angle));
         SoundData::play(Sounds::LASER_SHOOT);
     }
 
@@ -85,12 +93,11 @@ const EntityType Player::getEntityType()
 
 void Player::collisionDetection()
 {
-    for (const auto& entity : Game::entities)
-    {
-        if (auto* enemy = dynamic_cast<Asteroid*>(entity))
+    Game::foreachEntity([this](Entity* entity) {
+        if (auto* asteroid = dynamic_cast<Asteroid*>(entity))
         {
-            if (!physics::intersects(position, radius, enemy->position, enemy->radius))
-                continue;
+            if (!physics::intersects(position, radius, asteroid->position, asteroid->radius))
+                return;
 
             SoundData::play(Sounds::EXPLOSION);
             resetPlayerStats();
@@ -102,7 +109,7 @@ void Player::collisionDetection()
             if (playerStats.lifes == 0)
                 Game::gameOver();
         }
-    }
+    });
 }
 
 void Player::dashAbility(const double& deltaTime)
@@ -165,11 +172,14 @@ void Player::setPlayerStats()
     playerStats.turnSpeed = FileMenager::playerData.turn_speed;
 
     playerStats.bulletType.piercing = { false };
+    playerStats.bulletType.homing = { true };
 }
 
 Sprites Player::getPlayerBulletSprite()
 {
     if (playerStats.bulletType.piercing) return Sprites::PIERCING_BULLET;
+
+    if (playerStats.bulletType.homing) return  Sprites::HOMING_BULLET;
 
     return Sprites::SINGLE_BULLET;
 }

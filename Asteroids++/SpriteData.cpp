@@ -8,6 +8,7 @@ const vector<pair<string, Sprites>> objects = {
         {"singleAsteroid", Sprites::SINGLE_ASTEROID},
         {"singleBullet", Sprites::SINGLE_BULLET},
         {"piercingBullet", Sprites::PIERCING_BULLET},
+        {"homingBullet", Sprites::HOMING_BULLET},
         {"explosion1", Sprites::EXPLOSION_1},
         {"explosion2", Sprites::EXPLOSION_2},
         {"explosion3", Sprites::EXPLOSION_3},
@@ -21,7 +22,8 @@ const vector<pair<string, Sprites>> objects = {
         {"pickupPiercing", Sprites::PICKUP_PIERCING},
         {"collected", Sprites::COLLECTED},
         {"heart", Sprites::HEART},
-        {"shield", Sprites::SHIELD}
+        {"shield", Sprites::SHIELD},
+        {"wind", Sprites::WIND}
 };
 
 unordered_map<Sprites, SpriteInfo> SpriteData::sprites;
