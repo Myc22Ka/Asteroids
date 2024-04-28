@@ -11,7 +11,6 @@
 #include "Wind.h"
 
 double WindowBox::asteroidSpawnTime = FileMenager::enemiesData.asteroid_spawn_time;
-double WindowBox::windSpawnTime = 0.02;
 vector<PlayerHealthUI> WindowBox::playerHealthUIs;
 
 WindowBox::WindowBox() {}
@@ -20,6 +19,8 @@ void WindowBox::displayWindow()
 {
     window.create(VideoMode(FileMenager::screenData.size_width, FileMenager::screenData.size_height), "Asteroids++", Style::Close | Style::Titlebar);
     window.setFramerateLimit(60);
+
+    Wind wind;
 
     Texture backgroundTexture;
     if (!backgroundTexture.loadFromFile("./assets/background.png")) {
@@ -47,16 +48,21 @@ void WindowBox::displayWindow()
                 if (e.key.code == sf::Keyboard::H) {
                     Game::hitboxesVisibility = !Game::hitboxesVisibility;
                 }
+                if (e.key.code == sf::Keyboard::O) {
+                    wind.activateWind(3.0f, 200.0f, 0.0f);
+                }
             }
         }
 
         double deltaTime = clock.restart().asSeconds();
 
+        wind.update(deltaTime);
+
         window.clear();
         window.draw(backgroundSprite);
+        wind.render(window);
 
         asteroidSpawnTime -= deltaTime;
-        windSpawnTime -= deltaTime;
 
         for (auto& particle : Game::getParticles())
         {
@@ -86,7 +92,6 @@ void WindowBox::displayWindow()
         }
 
         spawnEnemy();
-        spawnWind();
 
         if (Game::isGameOver) {
             Game::clearEntities();
@@ -112,8 +117,6 @@ void WindowBox::begin()
 
         offset += 20.0f;
     }
-
-    Game::addParticle(new Particle(Vector2f(400,400), 0, Sprites::WIND, Color::White, 5, true));
 }
 
 void WindowBox::spawnEnemy()
@@ -121,14 +124,6 @@ void WindowBox::spawnEnemy()
     if (asteroidSpawnTime <= 0) {
         Game::addEntity(Game::getRandomEntity());
         asteroidSpawnTime = FileMenager::enemiesData.asteroid_spawn_time;
-    }
-}
-
-void WindowBox::spawnWind()
-{
-    if (windSpawnTime <= 0) {
-        Game::addEntity(new Wind());
-        windSpawnTime = 0.02;
     }
 }
 

@@ -117,7 +117,7 @@ void Bullet::asteroidHit(Entity* entity) {
         if (asteroid->getEntityType() == EntityType::TYPE_ENEMY_SINGLE_ASTEROID) destroySingleAsteroid(entity);
         if (asteroid->getEntityType() == EntityType::TYPE_ENEMY_MULTI_ASTEROID) destroyMultiAsteroid(entity);
 
-        Game::removeEntity(asteroid);
+        Game::removeEntity(asteroid); // here propably vulerability
     }
 }
 
