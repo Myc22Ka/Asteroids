@@ -6,6 +6,8 @@
 #include "Entity.h"
 #include "Game.h"
 #include "Score.h"
+#include "cmath"
+#include "Game.h"
 
 class Wind : public Entity {
 public:
@@ -18,22 +20,21 @@ public:
     const EntityType getEntityType() override;
     void collisionDetection() override;
 
-    void activateWind(float duration, float speed, float direction);
+    void activateWind(const float& duration, const float& windLevel, const Vector2f& velocity);
 private:
-    void wrapQuad(Vertex& vertex1, Vertex& vertex2, Vertex& vertex3, Vertex& vertex4) const;
+    void wrapLine(Vertex& vertex1, Vertex& vertex2) const;
     void resetParticlePositions();
 
     VertexArray particles;
 
-    float windDelay;
     float windSpeed;
-    float windDirection;
     bool windActive;
-    bool wasWindActive;
     float windDuration;
-    int windLevel;
+    float fullWindDuration;
+    float windLevel;
     float lineWidth;
     float lineHeight;
+    Vector2f velocity;
 };
 
 #endif

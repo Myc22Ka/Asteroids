@@ -12,12 +12,12 @@
 using namespace std;
 
 struct ScreenData {
-    float size_height;
-    float size_width;
+    unsigned int size_height;
+    unsigned int size_width;
 };
 
 struct PlayerData {
-    float size;
+    int size;
     float start_position_x;
     float start_position_y;
     float start_position_angle;
@@ -26,7 +26,7 @@ struct PlayerData {
     float bullet_speed;
     float bullet_shoot_delay;
     float bullet_lifetime;
-    float bullet_size;
+    int bullet_size;
     float sprite_cycle_time;
 
     float dash_time_delay;

@@ -1,21 +1,19 @@
 #include "Asteroid.h"
 #include "Score.h"
 
-constexpr double M_PI = 3.14159265358979323846;
-
 Asteroid::Asteroid(double health, SpriteInfo spriteInfo) :
-	Entity(getRandomPosition(), getRandomAngle(), getRandomValue<int>(FileMenager::enemiesData.asteroid_size), Color::Red, spriteInfo),
+	Entity(getRandomPosition(), physics::getRandomAngle(), physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_size), Color::Red, spriteInfo),
 	health(health + floor(Score::score >> 9) * health),
-	healthBar(size, 5, Color::Red, Color::Black, health + floor(Score::score >> 9) * health),
-	direction(getRandomDirection()),
-	speed(getRandomValue<double>(FileMenager::enemiesData.asteroid_speed))
+	healthBar(size, 5, Color::Red, Color::Black, health + floor(Score::score >> 9) * health, position),
+	direction(physics::getRandomDirection()),
+	speed(physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_speed))
 {
 }
 
 void Asteroid::render(RenderWindow& window)
 {
 	Transform transform;
-	window.draw(spriteInfo.sprite, transform.translate(position).rotate(static_cast<float>(angle)));
+	window.draw(spriteInfo.sprite, transform.translate(position).rotate(angle));
 	if(Game::hitboxesVisibility) window.draw(shape, transform);
 	healthBar.draw(window);
 }
@@ -38,7 +36,7 @@ void Asteroid::update(float deltaTime) {
 		direction.y = -abs(direction.y);
 	}
 
-	healthBar.updateBar(Vector2f{ position.x - (float)radius, position.y + (float)radius });
+	healthBar.updateBar(Vector2f{ position.x - radius, position.y + radius });
 	healthBar.setCurrentValue(health);
 
 	setSpriteFullCycle(deltaTime);
@@ -82,42 +80,11 @@ const Vector2f Asteroid::getRandomPosition() const
 
 		do {
 			randomPosition = Vector2f(xAxis(gen), yAxis(gen));
-		} while (physics::intersects(randomPosition, radius, player->position, player->size << 1));
+		} while (physics::intersects(randomPosition, radius, player->position, player->radius));
 
 		return randomPosition;
 	}
 	else {
 		return Vector2f(); 
 	}
-}
-
-const double Asteroid::getRandomAngle()
-{
-	random_device rd;
-	mt19937 gen(rd());
-	uniform_real_distribution<double> dist(0.0, 360.0);
-
-	return dist(gen);
-}
-
-const Vector2f Asteroid::getRandomDirection()
-{
-	random_device rd;
-	mt19937 gen(rd());
-	uniform_real_distribution<double> dist(0.0, 2.0f * M_PI);
-
-	double angle = dist(gen);
-	return Vector2f(cos(angle), sin(angle));
-}
-
-template<typename T>
-inline const T Asteroid::getRandomValue(const T& base)
-{
-	const double based = base;
-		
-	random_device rd;
-	mt19937 gen(rd());
-	uniform_real_distribution<double> dist(0.75 * based, 1.25 * based);
-
-	return static_cast<T>(dist(gen));
 }

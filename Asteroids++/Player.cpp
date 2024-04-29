@@ -21,7 +21,7 @@ Player::Player() :
     invincibilityFrames(0)
 {
 
-    shield = getSprite(Sprites::SHIELD);
+    //shield = getSprite(Sprites::SHIELD);
 	drawHitboxes();
     setPlayerStats();
 }
@@ -41,11 +41,6 @@ void Player::update(float deltaTime) {
     shield.currentSpriteLifeTime -= deltaTime;
 
     spriteInfo.currentSpriteLifeTime -= deltaTime;
-
-    if (Keyboard::isKeyPressed(Keyboard::P)) {
-        Game::removeEntity(this);
-        return;
-    };
 
     if (Keyboard::isKeyPressed(Keyboard::A) && !isDashing) {
         angle -= playerStats.turnSpeed * deltaTime;
@@ -78,10 +73,10 @@ void Player::update(float deltaTime) {
         updateSprite(spriteInfo.sprite, spriteInfo.frames, spriteInfo.spriteState);
     }
 
-    position.x = min(max((double)position.x, radius), FileMenager::screenData.size_width - radius);
-    position.y = min(max((double)position.y, radius), FileMenager::screenData.size_height - radius);
+    position.x = min(max(position.x, radius), FileMenager::screenData.size_width - radius);
+    position.y = min(max(position.y, radius), FileMenager::screenData.size_height - radius);
 
-    setSpriteFullCycle(shield);
+    //setSpriteFullCycle(shield);
 
     if(invincibilityFrames < 0) collisionDetection();
 }
@@ -171,8 +166,8 @@ void Player::setPlayerStats()
     playerStats.speed = FileMenager::playerData.speed;
     playerStats.turnSpeed = FileMenager::playerData.turn_speed;
 
-    playerStats.bulletType.piercing = { false };
-    playerStats.bulletType.homing = { true };
+    playerStats.bulletType.piercing = false;
+    playerStats.bulletType.homing = false;
 }
 
 Sprites Player::getPlayerBulletSprite()

@@ -23,14 +23,9 @@ public:
 	void collisionDetection() override;
 
 	const Vector2f getRandomPosition() const;
-	const Vector2f getRandomDirection();
-	const double getRandomAngle();
-
-	template<typename T>
-	static const T getRandomValue(const T&);
 
 	Vector2f direction;
-	double speed;
+	float speed;
 	double health;
 	HealthBar healthBar;
 };

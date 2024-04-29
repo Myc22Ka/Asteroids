@@ -31,7 +31,7 @@ void WindowBox::displayWindow()
 
     Vector2u windowSize = window.getSize();
 
-    backgroundSprite.setScale(windowSize.x / (double)backgroundTexture.getSize().x, windowSize.y / (double)backgroundTexture.getSize().y);
+    backgroundSprite.setScale(static_cast<float>(windowSize.x) / backgroundTexture.getSize().x, static_cast<float>(windowSize.y) / backgroundTexture.getSize().y);
 
     Clock clock;
     init();
@@ -49,12 +49,12 @@ void WindowBox::displayWindow()
                     Game::hitboxesVisibility = !Game::hitboxesVisibility;
                 }
                 if (e.key.code == sf::Keyboard::O) {
-                    wind.activateWind(3.0f, 200.0f, 0.0f);
+                    wind.activateWind(30.0f, physics::getRandomFloatValue(3.0f), physics::getRandomDirection());
                 }
             }
         }
 
-        double deltaTime = clock.restart().asSeconds();
+        float deltaTime = clock.restart().asSeconds();
 
         wind.update(deltaTime);
 

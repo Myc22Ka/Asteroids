@@ -1,5 +1,7 @@
 #include "Physics.h"
 
+constexpr double M_PI = 3.14159265358979323846;
+
 bool physics::intersects(const Vector2f& circlePosition1, const float &radius1 ,const Vector2f& circlePosition2, const float& radius2)
 {
 	float circleRadiusSum = radius1 + radius2;
@@ -45,7 +47,7 @@ float physics::dotProduct(const Vector2f& v1, const Vector2f& v2) {
 
 float physics::distance(const Vector2f& p1, const Vector2f& p2)
 {
-	return sqrt(pow(p2.x - p1.x, 2) + pow(p2.y - p1.y, 2));
+	return static_cast<float>(sqrt(pow(p2.x - p1.x, 2) + pow(p2.y - p1.y, 2)));
 }
 
 pair<Vector2f, Vector2f> physics::bounceDirection(const Asteroid* thisAsteroid, const Asteroid* otherAsteroid,const float& separationDistance)
@@ -63,7 +65,7 @@ pair<Vector2f, Vector2f> physics::bounceDirection(const Asteroid* thisAsteroid, 
 	const float velAlongNormal = physics::dotProduct(relativeVelocity, normal);
 
 	// Calculate total mass
-	const float totalMass = thisAsteroid->size + otherAsteroid->size;
+	const int totalMass = thisAsteroid->size + otherAsteroid->size;
 
 	// Calculate the maximum change in direction allowed
 	const float maxChangeFactor = 0.7f;
@@ -71,4 +73,32 @@ pair<Vector2f, Vector2f> physics::bounceDirection(const Asteroid* thisAsteroid, 
 
 	// Calculate the change in direction based on momentum conservation, limited by the maximum change
 	return pair(min(maxChangeMagnitude, abs(velAlongNormal)) * normal, separationVector);
+}
+
+
+float physics::getRandomFloatValue(const float& base) {
+	random_device rd;
+	mt19937 gen(rd());
+	uniform_real_distribution<float> dist(0.75f * base, 1.25f * base);
+
+	return dist(gen);
+}
+
+const Vector2f physics::getRandomDirection()
+{
+	random_device rd;
+	mt19937 gen(rd());
+	uniform_real_distribution<float> dist(0.0f, 2.0f * static_cast<float>(M_PI));
+
+	float angle = dist(gen);
+	return Vector2f(cos(angle), sin(angle));
+}
+
+const float physics::getRandomAngle()
+{
+	random_device rd;
+	mt19937 gen(rd());
+	uniform_real_distribution<float> dist(0.0f, 360.0f);
+
+	return dist(gen);
 }

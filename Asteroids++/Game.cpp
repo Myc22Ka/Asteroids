@@ -38,6 +38,13 @@ void Game::removeEntity(Entity* entity) {
     });
 }
 
+void Game::replaceEntity(Entity* entity1, Entity* entity2)
+{
+    entities.remove(entity1);
+
+    entities.push_front(entity2);
+}
+
 void Game::clearEntities(){
     entities.clear();
 }
@@ -97,7 +104,7 @@ bool Game::isEnemy(Entity* entity)
         return type == entity->getEntityType();
         };
 
-    auto it = std::ranges::find_if(enemies, isEntityTypeEqual);
+    auto it = ranges::find_if(enemies, isEntityTypeEqual);
 
     return it != enemies.end();
 }

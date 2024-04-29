@@ -116,8 +116,6 @@ void Bullet::asteroidHit(Entity* entity) {
 
         if (asteroid->getEntityType() == EntityType::TYPE_ENEMY_SINGLE_ASTEROID) destroySingleAsteroid(entity);
         if (asteroid->getEntityType() == EntityType::TYPE_ENEMY_MULTI_ASTEROID) destroyMultiAsteroid(entity);
-
-        Game::removeEntity(asteroid); // here propably vulerability
     }
 }
 
@@ -162,7 +160,7 @@ void Bullet::destroySingleAsteroid(Entity* entity)
 {
     SingleAsteroid* asteroid = dynamic_cast<SingleAsteroid*>(entity);
 
-    Game::addEntity(new Explosion(asteroid->position, asteroid->size));
+    Game::replaceEntity(asteroid, new Explosion(asteroid->position, asteroid->size));
 
     spawnPickup(asteroid->position);
 
@@ -174,10 +172,10 @@ void Bullet::destroyMultiAsteroid(Entity* entity)
 {
     MultiAsteroid* asteroid = dynamic_cast<MultiAsteroid*>(entity);
 
-    Game::addEntity(new Explosion(asteroid->position, asteroid->size));
+    Game::replaceEntity(asteroid, new Explosion(asteroid->position, asteroid->size));
 
-    auto asteroid1 = new SingleAsteroid(asteroid->position, asteroid->getRandomDirection());
-    auto asteroid2 = new SingleAsteroid(Vector2f(asteroid->position.x + asteroid1->radius, asteroid->position.y + asteroid1->radius), asteroid->getRandomDirection());
+    auto asteroid1 = new SingleAsteroid(asteroid->position, physics::getRandomDirection());
+    auto asteroid2 = new SingleAsteroid(Vector2f(asteroid->position.x + asteroid1->radius, asteroid->position.y + asteroid1->radius), physics::getRandomDirection());
 
     const auto bounceDirection = physics::bounceDirection(asteroid1, asteroid2, 1.0f);
 

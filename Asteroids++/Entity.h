@@ -26,7 +26,7 @@ class Entity : public SpriteData {
     bool active = true;
 public:
     
-    Entity(Vector2f position, double angle, int size, Color hitboxColor, SpriteInfo spriteInfo);
+    Entity(Vector2f position, double angle, float size, Color hitboxColor, SpriteInfo spriteInfo);
 
     virtual void update(float deltaTime) = 0;
     virtual void render(RenderWindow& window) = 0;
@@ -46,8 +46,8 @@ public:
     Vector2f position;
     CircleShape shape;
     float angle;
-    int size;
-    double radius;
+    float size;
+    float radius;
     SpriteInfo spriteInfo;
 };
 

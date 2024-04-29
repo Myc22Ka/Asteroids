@@ -9,6 +9,7 @@
 #include <unordered_map>
 #include <iostream>
 #include "rapidjson/document.h"
+#include <regex>
 
 using namespace sf;
 using namespace std;
@@ -72,9 +73,9 @@ public:
 
     SpriteInfo getSprite(const Sprites &spriteType);
 
-    void setRotation(Sprite& sprite, const int& angle);
+    void setRotation(Sprite& sprite, const float& angle);
     void updateSprite(Sprite& sprite, const vector<IntRect>& frames, const int& spriteState);
-    void scaleSprite(Sprite& sprite, const int& spriteSize, const int& size);
+    void scaleSprite(Sprite& sprite, const int& spriteSize, const float& size);
 
     static unordered_map<Sprites, SpriteInfo> sprites;
 };

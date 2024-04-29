@@ -29,6 +29,7 @@ public:
 
 	static list<Entity*> getEntities();
 	static void clearEntities();
+	static void replaceEntity(Entity* entity1, Entity* entity2);
 	static void removeEntity(Entity* entity);
 	static void addEntity(Entity* entity);
 	static Entity* getRandomEntity();

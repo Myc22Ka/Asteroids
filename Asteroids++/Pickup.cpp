@@ -5,7 +5,7 @@ Pickup::Pickup(Vector2f position, SpriteInfo s): Entity(position, 0, 64, Color::
 lifeTime(5)
 {
 	collected = getSprite(Sprites::COLLECTED);
-	drawHitboxes(size >> 2);
+	drawHitboxes(static_cast<int>(size) >> 2);
 
 	scaleSprite(spriteInfo.sprite, spriteInfo.spriteSize, size);
 }

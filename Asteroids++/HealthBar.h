@@ -4,20 +4,22 @@
 
 #include <SFML/Graphics.hpp>
 
+using namespace sf;
+
 class HealthBar {
 private:
-    sf::RectangleShape bar;
-    sf::RectangleShape outline;
+    RectangleShape bar;
+    RectangleShape outline;
     double maxWidth;
     double currentValue;
     double maxValue;
 
 public:
-    HealthBar(double width, double height, sf::Color fillColor, sf::Color outlineColor, double maxValue);
+    HealthBar(double width, double height, Color fillColor, Color outlineColor, double maxValue, Vector2f position);
     void updateBarValue();
-    void updateBar(const sf::Vector2f& position);
+    void updateBar(const Vector2f& position);
     void setCurrentValue(double value);
-    void draw(sf::RenderWindow& window) const;
+    void draw(RenderWindow& window) const;
 };
 
 #endif

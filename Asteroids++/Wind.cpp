@@ -1,20 +1,24 @@
 #include "Wind.h"
 
-Wind::Wind() : Entity(getRandomPosition(), 0, Asteroid::getRandomValue(64), Color::Yellow, SpriteInfo()), windSpeed(200.0f), windDirection(0.0f), windActive(false), windDuration(3.0f), windDelay(0.1f), windLevel(3.0f), lineWidth(30.0f), lineHeight(4), wasWindActive(true)
+Wind::Wind() : Entity(getRandomPosition(), 0, 0, Color::Yellow, SpriteInfo()), 
+windSpeed(200.0f), 
+windActive(false), 
+windDuration(3.0f),  
+windLevel(3.0f), 
+lineWidth(30.0f), 
+lineHeight(1.0f), 
+velocity(Vector2f(1, 0))
 {
-	particles.setPrimitiveType(Quads);
-	particles.resize(800);
+	fullWindDuration = windDuration;
+	particles.setPrimitiveType(Lines);
+	particles.resize(400);
 
-	for (size_t i = 0; i < particles.getVertexCount(); i += 4) {
+	for (size_t i = 0; i < particles.getVertexCount(); i += 2) {
 		Vector2f position = getRandomPosition();
 		particles[i].position = position;
 		particles[i].color = Color::White;
-		particles[i + 1].position = position + Vector2f(lineHeight, 0);
+		particles[i + 1].position = position + velocity * lineHeight;
 		particles[i + 1].color = Color::White;
-		particles[i + 2].position = position + Vector2f(lineHeight, lineHeight);
-		particles[i + 2].color = Color::White;
-		particles[i + 3].position = position + Vector2f(0, lineHeight);
-		particles[i + 3].color = Color::White;
 	}
 }
 
@@ -22,8 +26,8 @@ const Vector2f Wind::getRandomPosition() const
 {
 	random_device rd;
 	mt19937 gen(rd());
-	uniform_real_distribution<double> xAxis(radius, -FileMenager::screenData.size_width - radius);
-	uniform_real_distribution<double> yAxis(radius, FileMenager::screenData.size_height - radius);
+	uniform_real_distribution<float> xAxis(0, FileMenager::screenData.size_width);
+	uniform_real_distribution<float> yAxis(0, FileMenager::screenData.size_height);
 
 	return Vector2f(xAxis(gen), yAxis(gen));
 }
@@ -35,89 +39,103 @@ void Wind::render(RenderWindow& window)
 
 void Wind::update(float deltaTime)
 {
+	for (size_t i = 0; i < particles.getVertexCount() - 1; i += 2)
+	{
+		particles[i].position += velocity * windSpeed * deltaTime;
+		particles[i + 1].position += velocity * windSpeed * deltaTime;
+		wrapLine(particles[i], particles[i + 1]);
+	}
+
+	if (!windActive) return;
+
 	windDuration -= deltaTime;
 
-	if (!windActive) {
-		if (!wasWindActive) {
-			windDelay -= deltaTime;
-			wasWindActive = true;
-			cout << "hi" << endl;
-			resetParticlePositions();
-		}
-		return;
-	}
-
-	if (windDuration <= 0) {
+	if (windDuration < 0) {
 		windActive = false;
-		wasWindActive = false;
-		windDelay = 0.1f;
-		cout << "Wind duration ended. Setting wasWindActive to true." << endl;
+		SoundData::stop(Sounds::WIND);
+
+		thread windThread([this]() {resetParticlePositions(); });
+
+		windThread.detach();
+
 		return;
 	}
 
-	windDelay -= deltaTime;
-
-	Vector2f velocity = Vector2f(windSpeed * cos(windDirection), windSpeed * sin(windDirection));
-
-	if (windDelay <= 0) {
-		float interpolationFactor = min(1.0f - (windDelay / 0.01f), lineWidth);
-
-		for (size_t i = 0; i < particles.getVertexCount(); i += 4) {
-			particles[i + 1].position = particles[i].position + Vector2f(interpolationFactor, 0);
-			particles[i + 2].position = particles[i].position + Vector2f(interpolationFactor, lineHeight);
-			particles[i + 3].position = particles[i].position + Vector2f(0, lineHeight);
-			wrapQuad(particles[i], particles[i + 1], particles[i + 2], particles[i + 3]);
-		}
+	for (size_t i = 0; i < particles.getVertexCount() - 1; i += 2)
+	{
+		particles[i].position += velocity * windSpeed * windLevel * deltaTime + (windDuration > fullWindDuration - 0.8f ? velocity : Vector2f(0, 0));
+		particles[i + 1].position += velocity * windSpeed * windLevel * deltaTime + (windDuration < 0.8f ? velocity : Vector2f(0, 0));
+		wrapLine(particles[i], particles[i + 1]);
 	}
 
-	for (size_t i = 0; i < particles.getVertexCount(); i += 4) {
-		particles[i].position += velocity * (deltaTime * windLevel);
-		particles[i + 1].position += velocity * (deltaTime * windLevel);
-		particles[i + 2].position += velocity * (deltaTime * windLevel);
-		particles[i + 3].position += velocity * (deltaTime * windLevel);
-		wrapQuad(particles[i], particles[i + 1], particles[i + 2], particles[i + 3]);
-	}
+	for (auto& entity : Game::getEntities())
+	{
+		if (!entity || !entity->isActive() || entity->getEntityType() != TYPE_PLAYER) continue;
 
-	wasWindActive = true;
+		if (entity->position.x < entity->radius || entity->position.x >= FileMenager::screenData.size_width - entity->radius ||
+			entity->position.y < entity->radius || entity->position.y >= FileMenager::screenData.size_height - entity->radius) continue;
+
+		entity->position += velocity * windLevel;
+	}
 }
 
 void Wind::resetParticlePositions() {
-	float interpolationFactor = min(1.0f - (windDelay / 0.01f), lineHeight);
+	for (size_t i = 0; i < particles.getVertexCount() - 1; i += 2) {
+		Vector2f diff = particles[i + 1].position - particles[i].position;
 
-	for (size_t i = 0; i < particles.getVertexCount(); i += 4) {
-		particles[i + 1].position = particles[i].position + Vector2f(interpolationFactor, 0);
-		particles[i + 2].position = particles[i].position + Vector2f(interpolationFactor, lineHeight);
-		particles[i + 3].position = particles[i].position + Vector2f(0, lineHeight);
-		wrapQuad(particles[i], particles[i + 1], particles[i + 2], particles[i + 3]);
+		float currentDistance = physics::distance(particles[i].position, particles[i + 1].position);
+
+		if (currentDistance != 0) {
+			Vector2f normalizedDiff = diff / currentDistance;
+
+			Vector2f newPosition = particles[i].position + normalizedDiff;
+
+			particles[i + 1].position = newPosition;
+		}
+		else {
+			particles[i + 1].position = particles[i].position;
+		}
+
+		wrapLine(particles[i], particles[i + 1]);
 	}
 }
 
-void Wind::wrapQuad(Vertex& vertex1, Vertex& vertex2, Vertex& vertex3, Vertex& vertex4) const {
+void Wind::wrapLine(Vertex& vertex1, Vertex& vertex2) const {
 	Vector2f windowSize(FileMenager::screenData.size_width, FileMenager::screenData.size_height);
 
-	const int offset = -(int)lineWidth << 1;
-
-	if (vertex1.position.x < offset || vertex2.position.x < offset || vertex3.position.x < offset || vertex4.position.x < offset) {
+	// Left boundary
+	if (vertex1.position.x < 0 || vertex2.position.x < 0) {
 		vertex1.position.x += windowSize.x;
 		vertex2.position.x += windowSize.x;
-		vertex3.position.x += windowSize.x;
-		vertex4.position.x += windowSize.x;
 	}
 
-	if (vertex1.position.x >= windowSize.x || vertex2.position.x >= windowSize.x || vertex3.position.x >= windowSize.x || vertex4.position.x >= windowSize.x) {
-		float wrapDistance = windowSize.x + lineWidth;
-		vertex1.position.x -= wrapDistance;
-		vertex2.position.x -= wrapDistance;
-		vertex3.position.x -= wrapDistance;
-		vertex4.position.x -= wrapDistance;
+	// Right boundary
+	if (vertex1.position.x >= windowSize.x || vertex2.position.x >= windowSize.x) {
+		vertex1.position.x -= windowSize.x;
+		vertex2.position.x -= windowSize.x;
+	}
+
+	// Top boundary
+	if (vertex1.position.y < 0 || vertex2.position.y < 0) {
+		vertex1.position.y += windowSize.y;
+		vertex2.position.y += windowSize.y;
+	}
+
+	// Bottom boundary
+	if (vertex1.position.y >= windowSize.y || vertex2.position.y >= windowSize.y) {
+		vertex1.position.y -= windowSize.y;
+		vertex2.position.y -= windowSize.y;
 	}
 }
 
-void Wind::activateWind(float duration, float speed, float direction) {
+void Wind::activateWind(const float& duration, const float& windLevel, const Vector2f& velocity) {
 	windDuration = duration;
-	windSpeed = speed;
-	windDirection = direction;
+	fullWindDuration = duration;
+	windSpeed = windLevel * 100.0f;
+	this->windLevel = windLevel;
+	this->velocity = velocity;
 	windActive = true;
+	SoundData::play(Sounds::WIND);
 }
 
 const EntityType Wind::getEntityType()

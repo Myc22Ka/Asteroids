@@ -96,8 +96,13 @@ void SpriteData::loadAllSprites()
 {
     Sprites type = {};
 
-    for (const auto& entry : fs::directory_iterator(defaultDir))
-        if (fs::is_regular_file(entry.path()) && entry.path().extension() == ".json") loadJSONData(entry.path().string());
+    regex jsonFilePattern("\\.json$");
+
+    for (const auto& entry : fs::directory_iterator(defaultDir)) {
+        string fileName = entry.path().filename().string();
+
+        if (regex_search(fileName, jsonFilePattern)) loadJSONData(entry.path().string());
+    }
 
     for (const auto& entry : fs::directory_iterator(defaultDir)) {
         if (fs::is_regular_file(entry.path()) && entry.path().extension() == ".png") {
@@ -150,7 +155,7 @@ SpriteInfo SpriteData::getSprite(const Sprites& spriteType)
     return sprites[spriteType];
 }
 
-void SpriteData::setRotation(Sprite& sprite, const int& angle)
+void SpriteData::setRotation(Sprite& sprite, const float& angle)
 {
     sprite.rotate(angle);
 }
@@ -160,9 +165,9 @@ void SpriteData::updateSprite(Sprite& sprite, const vector<IntRect>& frames, con
     sprite.setTextureRect(frames[spriteState]);
 }
 
-void SpriteData::scaleSprite(Sprite& sprite, const int& spriteSize, const int& size)
+void SpriteData::scaleSprite(Sprite& sprite, const int& spriteSize, const float& size)
 {
-    const double scale = (double)size / spriteSize;
+    const float scale = size / spriteSize;
     sprite.setScale(scale, scale);
 }
 

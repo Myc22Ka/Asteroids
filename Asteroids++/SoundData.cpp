@@ -14,7 +14,8 @@ const vector<pair<string, Sounds>> objects = {
     {"pickup2", Sounds::PICKUP_2},
     {"pickup3", Sounds::PICKUP_3},
     {"pickup4", Sounds::PICKUP_4},
-    {"heart1UP", Sounds::HEART1UP}
+    {"heart1UP", Sounds::HEART1UP},
+    {"wind", Sounds::WIND}
 };
 
 void SoundData::loadAllSounds()
@@ -45,4 +46,20 @@ void SoundData::loadAllSounds()
 void SoundData::play(Sounds name)
 {
     sounds[name].play();
+}
+
+void SoundData::stop(Sounds name){
+    thread t([name]() {
+        while (sounds[name].getStatus() == sf::Sound::Playing && sounds[name].getVolume() > 0) {
+            sounds[name].setVolume(floor(sounds[name].getVolume() - 1));
+
+            sf::sleep(sf::milliseconds(10));
+        }
+
+        sounds[name].stop();
+
+        sounds[name].setVolume(100);
+    });
+
+    t.detach();
 }

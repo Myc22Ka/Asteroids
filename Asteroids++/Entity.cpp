@@ -1,8 +1,8 @@
 #include "Entity.h"
 #include "FileMenager.h"
 
-Entity::Entity(Vector2f position, double angle, int size, Color hitboxColor, SpriteInfo spriteInfo)
-	: position(position), angle(angle), size(size), hitboxColor(hitboxColor), radius(size >> 1), spriteInfo(spriteInfo) 
+Entity::Entity(Vector2f position, double angle, float size, Color hitboxColor, SpriteInfo spriteInfo)
+	: position(position), angle(angle), size(size), hitboxColor(hitboxColor), radius(static_cast<int>(size) >> 1), spriteInfo(spriteInfo) 
 {
 }
 

@@ -21,13 +21,15 @@ enum class Sounds {
     PICKUP_2,
     PICKUP_3,
     PICKUP_4,
-    HEART1UP
+    HEART1UP,
+    WIND
 };
 
 class SoundData {
 public:
     void loadAllSounds();
-    static void play(Sounds);
+    static void play(Sounds name);
+    static void stop(Sounds name);
 
     static unordered_map <Sounds, Sound> sounds;
 
