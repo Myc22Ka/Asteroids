@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <ranges>
 #include <functional>
+#include "Effect.h"
 
 using namespace std;
 
@@ -38,11 +39,17 @@ public:
 
 	static bool isEnemy(Entity* entity);
 
+	static bool isEntityInsideGroup(Entity* entity, Groups group);
+
 	static void gameOver();
+
+	static Effect freeze;
 private:
 	static list<Entity*> entities;
 	static list<Particle*> particles;
 	static vector<EntityType> enemies;
+	
+	static unordered_map<Groups, vector<EntityType>> groups;
 };
 
 #endif

@@ -133,6 +133,10 @@ void Bullet::spawnPickup(const Vector2f& position)
         Game::addEntity(new Pickup(position, getSprite(Sprites::HEART1UP)));
         return;
     }
+    if (propability < 0.05) {
+        Game::addEntity(new Pickup(position, getSprite(Sprites::PICKUP_FREEZE)));
+        return;
+    }
     if (propability < 0.1) {
         Game::addEntity(new Pickup(position, getSprite(Sprites::PICKUP_PIERCING)));
         return;

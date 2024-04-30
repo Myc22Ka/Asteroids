@@ -75,11 +75,18 @@ pair<Vector2f, Vector2f> physics::bounceDirection(const Asteroid* thisAsteroid, 
 	return pair(min(maxChangeMagnitude, abs(velAlongNormal)) * normal, separationVector);
 }
 
-
 float physics::getRandomFloatValue(const float& base) {
 	random_device rd;
 	mt19937 gen(rd());
 	uniform_real_distribution<float> dist(0.75f * base, 1.25f * base);
+
+	return dist(gen);
+}
+
+float physics::getRandomFloatValue(const float& base, const float& range) {
+	random_device rd;
+	mt19937 gen(rd());
+	uniform_real_distribution<float> dist((1.0f - range) * base, (1.0f + range) * base);
 
 	return dist(gen);
 }
@@ -101,4 +108,12 @@ const float physics::getRandomAngle()
 	uniform_real_distribution<float> dist(0.0f, 360.0f);
 
 	return dist(gen);
+}
+
+const bool physics::rollDice(const double chance){
+	random_device rd;
+	mt19937 gen(rd());
+	uniform_real_distribution<double> dist(0.0, 1.0);
+
+	return dist(gen) < chance;
 }

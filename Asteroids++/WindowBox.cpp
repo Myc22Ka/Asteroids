@@ -48,15 +48,20 @@ void WindowBox::displayWindow()
                 if (e.key.code == sf::Keyboard::H) {
                     Game::hitboxesVisibility = !Game::hitboxesVisibility;
                 }
-                if (e.key.code == sf::Keyboard::O) {
-                    wind.activateWind(30.0f, physics::getRandomFloatValue(3.0f), physics::getRandomDirection());
-                }
             }
         }
 
         float deltaTime = clock.restart().asSeconds();
 
+        wind.activateWind(physics::getRandomFloatValue(10.0f, 0.75f), physics::getRandomFloatValue(3.0f), physics::getRandomDirection());
+
         wind.update(deltaTime);
+
+        if (Game::freeze.isEffectActive()) 
+        { 
+            Game::freeze.updateEffectDuration(deltaTime); 
+            wind.stopWind();
+        }
 
         window.clear();
         window.draw(backgroundSprite);
@@ -68,6 +73,8 @@ void WindowBox::displayWindow()
         {
             if (!particle->isActive()) continue;
             particle->render(window);
+
+            if (Game::freeze.isEffectActive()) continue;
             particle->update(deltaTime);
         }
 
@@ -75,6 +82,8 @@ void WindowBox::displayWindow()
         {
             if (!entity || !entity->isActive()) continue;
             entity->render(window);
+
+            if (Game::freeze.isEffectActive() && Game::isEntityInsideGroup(entity, FREEZE_GROUP)) continue;
             entity->update(deltaTime);
         }
 
@@ -121,7 +130,7 @@ void WindowBox::begin()
 
 void WindowBox::spawnEnemy()
 {
-    if (asteroidSpawnTime <= 0) {
+    if (asteroidSpawnTime <= 0 && !Game::freeze.isEffectActive()) {
         Game::addEntity(Game::getRandomEntity());
         asteroidSpawnTime = FileMenager::enemiesData.asteroid_spawn_time;
     }

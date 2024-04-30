@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="Asteroid.cpp" />
     <ClCompile Include="DashBar.cpp" />
+    <ClCompile Include="Effect.cpp" />
     <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="HealthBar.cpp" />
     <ClCompile Include="main.cpp" />
@@ -47,6 +48,7 @@
     <ClInclude Include="Asteroid.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="DashBar.h" />
+    <ClInclude Include="Effect.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Explosion.h" />

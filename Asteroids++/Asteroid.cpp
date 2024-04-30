@@ -4,7 +4,7 @@
 Asteroid::Asteroid(double health, SpriteInfo spriteInfo) :
 	Entity(getRandomPosition(), physics::getRandomAngle(), physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_size), Color::Red, spriteInfo),
 	health(health + floor(Score::score >> 9) * health),
-	healthBar(size, 5, Color::Red, Color::Black, health + floor(Score::score >> 9) * health, position),
+	healthBar(size, 5, Color::Red, Color::Black, health + floor(Score::score >> 9) * health, Vector2f(-100, -100)),
 	direction(physics::getRandomDirection()),
 	speed(physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_speed))
 {
@@ -19,6 +19,11 @@ void Asteroid::render(RenderWindow& window)
 }
 
 void Asteroid::update(float deltaTime) {
+	healthBar.updateBar(Vector2f{ position.x - radius, position.y + radius });
+	healthBar.setCurrentValue(health);
+
+	if (Game::freeze.isEffectActive()) return;
+
 	angle += FileMenager::enemiesData.asteroid_spin * deltaTime;
 	position += Vector2f(direction.x * speed * deltaTime, direction.y * speed * deltaTime);
 
@@ -35,9 +40,6 @@ void Asteroid::update(float deltaTime) {
 	else if (position.y > FileMenager::screenData.size_height - radius) {
 		direction.y = -abs(direction.y);
 	}
-
-	healthBar.updateBar(Vector2f{ position.x - radius, position.y + radius });
-	healthBar.setCurrentValue(health);
 
 	setSpriteFullCycle(deltaTime);
 

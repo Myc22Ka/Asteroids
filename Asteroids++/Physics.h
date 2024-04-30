@@ -18,6 +18,8 @@ namespace physics {
 	pair<Vector2f, Vector2f> bounceDirection(const Asteroid* thisAsteroid, const Asteroid* otherAsteroid, const float& separationDistance);
 
 	float getRandomFloatValue(const float& base);
+	float getRandomFloatValue(const float& base, const float& range);
 	const Vector2f getRandomDirection();
 	const float getRandomAngle();
+	const bool rollDice(const double chance);
 }

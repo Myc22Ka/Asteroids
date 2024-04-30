@@ -15,7 +15,6 @@ public:
 	void displayWindow();
 	static void init();
 	void begin();
-
 	static vector<PlayerHealthUI> playerHealthUIs;
 private:
 	void spawnEnemy();

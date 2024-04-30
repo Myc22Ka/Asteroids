@@ -21,6 +21,7 @@ enum class Sounds {
     PICKUP_2,
     PICKUP_3,
     PICKUP_4,
+    FREEZE,
     HEART1UP,
     WIND
 };

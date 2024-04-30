@@ -8,7 +8,9 @@ bool Game::hitboxesVisibility{ false };
 
 list<Entity*> Game::entities;
 list<Particle*> Game::particles;
-vector<EntityType> Game::enemies {EntityType::TYPE_ENEMY_MULTI_ASTEROID, EntityType::TYPE_ENEMY_SINGLE_ASTEROID };
+vector<EntityType> Game::enemies{ EntityType::TYPE_ENEMY_MULTI_ASTEROID, EntityType::TYPE_ENEMY_SINGLE_ASTEROID };
+
+Effect Game::freeze { 15.0f, false };
 
 Game::Game() {}
 
@@ -107,4 +109,15 @@ bool Game::isEnemy(Entity* entity)
     auto it = ranges::find_if(enemies, isEntityTypeEqual);
 
     return it != enemies.end();
+}
+
+bool Game::isEntityInsideGroup(Entity* entity, Groups group)
+{
+    auto isEntityTypeEqual = [&](EntityType type) {
+        return type == entity->getEntityType();
+        };
+
+    auto it = ranges::find_if(Effect::groups[group], isEntityTypeEqual);
+
+    return it != Effect::groups[group].end();
 }

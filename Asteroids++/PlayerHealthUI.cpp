@@ -11,6 +11,8 @@ PlayerHealthUI::PlayerHealthUI(const double& offset) : offset(offset)
 
 void PlayerHealthUI::update(float deltaTime)
 {
+	if (Game::freeze.isEffectActive()) return;
+
 	spriteInfo.currentSpriteLifeTime -= deltaTime;
 
 	if (spriteInfo.currentSpriteLifeTime < 0) {

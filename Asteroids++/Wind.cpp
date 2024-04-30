@@ -26,8 +26,8 @@ const Vector2f Wind::getRandomPosition() const
 {
 	random_device rd;
 	mt19937 gen(rd());
-	uniform_real_distribution<float> xAxis(0, FileMenager::screenData.size_width);
-	uniform_real_distribution<float> yAxis(0, FileMenager::screenData.size_height);
+	uniform_real_distribution<float> xAxis(0.0f, static_cast<float>(FileMenager::screenData.size_width));
+	uniform_real_distribution<float> yAxis(0.0f, static_cast<float>(FileMenager::screenData.size_height));
 
 	return Vector2f(xAxis(gen), yAxis(gen));
 }
@@ -39,6 +39,8 @@ void Wind::render(RenderWindow& window)
 
 void Wind::update(float deltaTime)
 {
+	if (Game::freeze.isEffectActive()) return;
+
 	for (size_t i = 0; i < particles.getVertexCount() - 1; i += 2)
 	{
 		particles[i].position += velocity * windSpeed * deltaTime;
@@ -51,13 +53,7 @@ void Wind::update(float deltaTime)
 	windDuration -= deltaTime;
 
 	if (windDuration < 0) {
-		windActive = false;
-		SoundData::stop(Sounds::WIND);
-
-		thread windThread([this]() {resetParticlePositions(); });
-
-		windThread.detach();
-
+		stopWind();
 		return;
 	}
 
@@ -77,6 +73,18 @@ void Wind::update(float deltaTime)
 
 		entity->position += velocity * windLevel;
 	}
+}
+
+void Wind::stopWind() {
+	windActive = false;
+	windSpeed = 200.0f;
+	SoundData::stop(Sounds::WIND);
+
+	thread windThread([this]() {resetParticlePositions(); });
+
+	windThread.detach();
+
+	return;
 }
 
 void Wind::resetParticlePositions() {
@@ -101,7 +109,7 @@ void Wind::resetParticlePositions() {
 }
 
 void Wind::wrapLine(Vertex& vertex1, Vertex& vertex2) const {
-	Vector2f windowSize(FileMenager::screenData.size_width, FileMenager::screenData.size_height);
+	Vector2f windowSize(static_cast<float>(FileMenager::screenData.size_width), static_cast<float>(FileMenager::screenData.size_height));
 
 	// Left boundary
 	if (vertex1.position.x < 0 || vertex2.position.x < 0) {
@@ -129,6 +137,8 @@ void Wind::wrapLine(Vertex& vertex1, Vertex& vertex2) const {
 }
 
 void Wind::activateWind(const float& duration, const float& windLevel, const Vector2f& velocity) {
+	if (physics::rollDice(0.0005) && !windActive && SoundData::sounds[Sounds::WIND].getVolume() == 100 && !Game::freeze.isEffectActive()) {
+
 	windDuration = duration;
 	fullWindDuration = duration;
 	windSpeed = windLevel * 100.0f;
@@ -136,6 +146,7 @@ void Wind::activateWind(const float& duration, const float& windLevel, const Vec
 	this->velocity = velocity;
 	windActive = true;
 	SoundData::play(Sounds::WIND);
+	}
 }
 
 const EntityType Wind::getEntityType()

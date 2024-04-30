@@ -129,10 +129,13 @@
     <ClCompile Include="PlayerHealthUI.cpp">
       <Filter>Source Files\Draws</Filter>
     </ClCompile>
-    <ClCompile Include="Particle.cpp">
+    <ClCompile Include="Wind.cpp">
       <Filter>Source Files\Objects\Events</Filter>
     </ClCompile>
-    <ClCompile Include="Wind.cpp">
+    <ClCompile Include="Particle.cpp">
+      <Filter>Source Files\Objects\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect.cpp">
       <Filter>Source Files\Objects\Events</Filter>
     </ClCompile>
   </ItemGroup>
@@ -195,6 +198,9 @@
       <Filter>Header Files\Objects\Entities</Filter>
     </ClInclude>
     <ClInclude Include="Wind.h">
+      <Filter>Header Files\Objects\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h">
       <Filter>Header Files\Objects\Events</Filter>
     </ClInclude>
   </ItemGroup>

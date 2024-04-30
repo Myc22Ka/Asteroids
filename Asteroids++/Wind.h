@@ -21,6 +21,7 @@ public:
     void collisionDetection() override;
 
     void activateWind(const float& duration, const float& windLevel, const Vector2f& velocity);
+    void stopWind();
 private:
     void wrapLine(Vertex& vertex1, Vertex& vertex2) const;
     void resetParticlePositions();

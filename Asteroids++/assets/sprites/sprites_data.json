@@ -119,6 +119,14 @@
     "currentSpriteLifeTime": 0,
     "defaultSpriteLifeTime": 0.05
   },
+  "freeze": {
+    "hitboxSize": 32,
+    "spriteSize": 32,
+    "rotation": 0,
+    "spriteState": 0,
+    "currentSpriteLifeTime": 0,
+    "defaultSpriteLifeTime": 0.05
+  },
   "heart1UP": {
     "hitboxSize": 32,
     "spriteSize": 32,
