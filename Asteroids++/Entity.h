@@ -21,7 +21,7 @@ class Entity : public SpriteData {
     bool active = true;
 public:
     
-    Entity(Vector2f position, double angle, float size, Color hitboxColor, SpriteInfo spriteInfo);
+    Entity(Vector2f position, float angle, float size, Color hitboxColor, SpriteInfo spriteInfo);
 
     virtual void update(float deltaTime) = 0;
     virtual void render(RenderWindow& window) = 0;
@@ -29,12 +29,12 @@ public:
     virtual void collisionDetection() = 0;
 
     bool isActive() const;
-    void setActive(bool active);
+    void setActive(const bool& active);
 
     void drawHitboxes();
-    void drawHitboxes(const int radius);
+    void drawHitboxes(const float& radius);
 
-    void setSpriteFullCycle(double deltaTime);
+    void setSpriteFullCycle(const double& deltaTime);
     void setSpriteFullCycle(SpriteInfo& spriteInfo);
 
     Color hitboxColor;

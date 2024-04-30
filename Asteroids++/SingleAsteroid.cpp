@@ -14,7 +14,7 @@ SingleAsteroid::SingleAsteroid(Vector2f p, Vector2f d): Asteroid(100, getSprite(
 
 	scaleSprite(spriteInfo.sprite, spriteInfo.spriteSize, size);
 
-	drawHitboxes(static_cast<int>(size) >> 1);
+	drawHitboxes(radius / 2);
 }
 
 const EntityType SingleAsteroid::getEntityType()

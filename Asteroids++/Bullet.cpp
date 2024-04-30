@@ -7,8 +7,6 @@
 #include "Pickup.h"
 #include "Particle.h"
 
-constexpr double M_PI = 3.14159265358979323846;
-
 Bullet::Bullet(Vector2f position, Vector2f direction, float& angle) :
     direction(direction), 
     Entity(position, angle, Player::playerStats.bulletSize, Color::Green, getSprite(Player::getPlayerBulletSprite())),
@@ -41,18 +39,8 @@ void Bullet::homeToEnemy(float deltaTime) {
     float distanceToEnemy = physics::distance(position, enemy->position);
     float timeToEnemy = distanceToEnemy / Player::playerStats.bulletSpeed;
 
-    float targetAngle = atan2(directionToEnemy.y, directionToEnemy.x) * 180.0f / M_PI;
-
-    float adjustedAngle = targetAngle - angle;
-
-    angle = targetAngle;
-
-    spriteInfo.rotation = targetAngle;
-
-    setRotation(spriteInfo.sprite, adjustedAngle);
-
     Vector2f normalizedDirection = physics::normalize(directionToEnemy);
-    int speed = Player::playerStats.bulletSpeed;
+    float speed = Player::playerStats.bulletSpeed;
     Vector2f movement = Vector2f(normalizedDirection.x * speed * deltaTime, normalizedDirection.y * speed * deltaTime);
 
     position += movement;
@@ -82,6 +70,8 @@ Entity* Bullet::findNearestEnemy() const
             minTimeToEnemy = timeToEnemy;
             nearestEnemy = entity;
         }
+
+        return nullptr;
     });
 
     return nearestEnemy;
@@ -142,19 +132,19 @@ void Bullet::spawnPickup(const Vector2f& position)
         return;
     }
     if (propability < 0.2) {
-        Game::addEntity(new Pickup(position, getSprite(Sprites::PICKUP_4)));
+        Game::addEntity(new Pickup(position, getSprite(Sprites::PICKUP_DRUNKMODE)));
         return;
     }
     if (propability < 0.3) {
-        Game::addEntity(new Pickup(position, getSprite(Sprites::PICKUP_3)));
+        Game::addEntity(new Pickup(position, getSprite(Sprites::PICKUP_SHIELD)));
         return;
     }
     if (propability < 0.4) {
-        Game::addEntity(new Pickup(position, getSprite(Sprites::PICKUP_2)));
+        Game::addEntity(new Pickup(position, getSprite(Sprites::PICKUP_EXTRA_SPEED)));
         return;
     }
     if (propability < 0.5) {
-        Game::addEntity(new Pickup(position, getSprite(Sprites::PICKUP_1)));
+        Game::addEntity(new Pickup(position, getSprite(Sprites::PICKUP_EXTRA_BULLET)));
         return;
     }
     

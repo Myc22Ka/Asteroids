@@ -14,17 +14,18 @@ enum Groups
 };
 
 class Effect{
-	static float duration;
-	static bool active;
+	float duration;
+	bool active;
 public:
 	Effect(float duration, bool active);
+	Effect();
 
-	static void setEffectActive(const bool& newEffectState);
-	static bool isEffectActive();
-	static void setEffectDuration(const float& newduration);
-	static void updateEffectDuration(const float& deltaduration);
-	static float getEffectDuration();
-	static void startEffect(const float& newduration);
+	void setEffectActive(const bool& newEffectState);
+	bool isEffectActive();
+	void setEffectDuration(const float& newduration);
+	void updateEffectDuration(const float& deltaduration);
+	float getEffectDuration();
+	void startEffect(const float& newduration);
 
 	static unordered_map<Groups, vector<EntityType>> groups;
 };

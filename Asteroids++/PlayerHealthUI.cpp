@@ -1,10 +1,10 @@
 #include "PlayerHealthUI.h"
 #include "WindowBox.h"
 
-PlayerHealthUI::PlayerHealthUI(const double& offset) : offset(offset)
+PlayerHealthUI::PlayerHealthUI(const float& offset) : offset(offset)
 {
     spriteInfo = getSprite(Sprites::HEART);
-	position = Vector2f(FileMenager::screenData.size_width - (spriteInfo.spriteSize >> 1) - 10 - offset, getSprite(Sprites::DASHBAR).spriteSize >> 1 - spriteInfo.spriteSize);
+	position = Vector2f(float(FileMenager::screenData.size_width - (spriteInfo.spriteSize >> 1) - 10.0f - offset), float(getSprite(Sprites::DASHBAR).spriteSize - (spriteInfo.spriteSize << 1)));
 
 	scaleSprite(spriteInfo.sprite, spriteInfo.spriteSize, spriteInfo.hitboxSize);
 }

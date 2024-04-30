@@ -13,14 +13,14 @@ private:
     Vector2f position;
     SpriteInfo spriteInfo;
 public:
-    PlayerHealthUI(const double& offset);
+    PlayerHealthUI(const float& offset);
 
     void update(float deltaTime);
     void draw(RenderWindow& window) const;
     void setSpriteState(const int& newState);
 
     bool death = false;
-    double offset;
+    float offset;
 };
 
 #endif

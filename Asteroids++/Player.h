@@ -10,6 +10,8 @@
 #include "Asteroid.h"
 #include "Physics.h"
 #include "SoundData.h"
+#include "Effect.h"
+#include "Physics.h"
 
 struct BulletType {
 	bool piercing;
@@ -17,17 +19,20 @@ struct BulletType {
 };
 
 struct PlayerStats {
-	double speed;
-	double turnSpeed;
-	double lifes;
+	float speed;
+	float turnSpeed;
+	float lifes;
 
-	double shootOffset;
-	double accurancy;
-	double bulletSize;
-	double bulletDamage;
-	double bulletSpeed;
+	float shootOffset;
+	float accurancy;
+	float bulletSize;
+	float bulletDamage;
+	float bulletSpeed;
 
 	BulletType bulletType;
+
+	Effect shield;
+	Effect drunkMode;
 };
 
 class Player : public Entity {
@@ -42,16 +47,17 @@ public:
 	static Sprites getPlayerBulletSprite();
 
 	static PlayerStats playerStats;
-	static double dashTimer;
+	static float dashTimer;
 private:
-	SpriteInfo shield;
+	SpriteInfo shieldSprite;
 
+	void updatePosition(const float& deltaTime);
 	void resetPlayerStats();
 	void setPlayerStats();
-	void dashAbility(const double&);
-	double shootTimer;
+	void dashAbility(const float&);
+	float shootTimer;
 	bool isDashing = false;
-	double invincibilityFrames;
+	float invincibilityFrames;
 };
 
 #endif

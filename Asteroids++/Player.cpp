@@ -5,9 +5,20 @@
 #include "WindowBox.h"
 #include "Particle.h"
 
-constexpr double M_PI = 3.14159265358979323846;
-double Player::dashTimer = 0.0;
-PlayerStats Player::playerStats;
+float Player::dashTimer = 0.0;
+PlayerStats Player::playerStats{ 
+    FileMenager::playerData.bullet_shoot_delay,
+    FileMenager::playerData.turn_speed,
+    3,
+    FileMenager::playerData.bullet_shoot_delay,
+    1,
+    FileMenager::playerData.bullet_size,
+    50,
+    FileMenager::playerData.bullet_speed,
+    {false, false},
+    { 10.0f, false },
+    { 10.0f, false }
+};
 
 Player::Player() :
 	Entity(
@@ -20,8 +31,7 @@ Player::Player() :
     shootTimer(),
     invincibilityFrames(0)
 {
-
-    //shield = getSprite(Sprites::SHIELD);
+    shieldSprite = getSprite(Sprites::SHIELD);
 	drawHitboxes();
     setPlayerStats();
 }
@@ -30,7 +40,7 @@ void Player::render(RenderWindow& window)
 {
 	Transform transform;
 	window.draw(spriteInfo.sprite, transform.translate(position).rotate(angle));
-    window.draw(shield.sprite, transform.rotate(-angle));
+    if(playerStats.shield.isEffectActive()) window.draw(shieldSprite.sprite, transform.rotate(-angle));
 	if(Game::hitboxesVisibility) window.draw(shape, transform);
 }
 
@@ -38,30 +48,17 @@ void Player::update(float deltaTime) {
     shootTimer -= deltaTime;
     dashTimer -= deltaTime;
     invincibilityFrames -= deltaTime;
-    shield.currentSpriteLifeTime -= deltaTime;
 
     spriteInfo.currentSpriteLifeTime -= deltaTime;
 
-    if (Keyboard::isKeyPressed(Keyboard::A) && !isDashing) {
-        angle -= playerStats.turnSpeed * deltaTime;
-    }
-    if (Keyboard::isKeyPressed(Keyboard::D) && !isDashing) {
-        angle += playerStats.turnSpeed * deltaTime;
-    }
-    if (Keyboard::isKeyPressed(Keyboard::W)) {
-        float radians = angle * (M_PI / 180.0f);
-
-        position.x += cos(radians) * playerStats.speed * deltaTime;
-        position.y += sin(radians) * playerStats.speed * deltaTime;
-    }
-
+    updatePosition(deltaTime);
     dashAbility(deltaTime);
 
     if (isDashing) Game::addParticle(new Particle(position, angle, Sprites::SHIP, Color(126, 193, 255, 100), 0.15));
 
     if (Keyboard::isKeyPressed(Keyboard::Space) && shootTimer <= 0) {
         shootTimer = Player::playerStats.shootOffset;
-        float radians = angle * (M_PI / 180.0f);
+        float radians = angle * (physics::getPI() / 180.0f);
 
         Game::addEntity(new SingleBullet(position, Vector2f(cos(radians), sin(radians)), angle));
         SoundData::play(Sounds::LASER_SHOOT);
@@ -70,15 +67,52 @@ void Player::update(float deltaTime) {
     if (!Keyboard::isKeyPressed(Keyboard::Space) && spriteInfo.currentSpriteLifeTime <= 0) {
         spriteInfo.currentSpriteLifeTime = spriteInfo.defaultSpriteLifeTime;
         spriteInfo.spriteState = (spriteInfo.spriteState + 1) % spriteInfo.frames.size();
-        updateSprite(spriteInfo.sprite, spriteInfo.frames, spriteInfo.spriteState);
+        updateSprite(spriteInfo.sprite, spriteInfo.frames, (int)spriteInfo.spriteState);
+    }
+
+    if (playerStats.shield.isEffectActive()) {
+        shieldSprite.currentSpriteLifeTime -= deltaTime;
+        playerStats.shield.updateEffectDuration(deltaTime);
+
+        setSpriteFullCycle(shieldSprite);
+    }
+
+    if(invincibilityFrames < 0 && !playerStats.shield.isEffectActive()) collisionDetection();
+}
+
+void Player::updatePosition(const float& deltaTime) {
+    if (!isDashing) {
+        float turnDirection = 0.0f;
+
+        if (playerStats.drunkMode.isEffectActive()) {
+            if (Keyboard::isKeyPressed(Keyboard::D)) {
+                turnDirection -= 1.0f;
+            }
+            if (Keyboard::isKeyPressed(Keyboard::A)) {
+                turnDirection += 1.0f;
+            }
+        }
+        else {
+            if (Keyboard::isKeyPressed(Keyboard::A)) {
+                turnDirection -= 1.0f;
+            }
+            if (Keyboard::isKeyPressed(Keyboard::D)) {
+                turnDirection += 1.0f;
+            }
+        }
+
+        angle += playerStats.turnSpeed * turnDirection * deltaTime;
+    }
+
+    if (Keyboard::isKeyPressed(Keyboard::W)) {
+        float radians = angle * (physics::getPI() / 180.0f);
+
+        position.x += cos(radians) * playerStats.speed * deltaTime;
+        position.y += sin(radians) * playerStats.speed * deltaTime;
     }
 
     position.x = min(max(position.x, radius), FileMenager::screenData.size_width - radius);
     position.y = min(max(position.y, radius), FileMenager::screenData.size_height - radius);
-
-    //setSpriteFullCycle(shield);
-
-    if(invincibilityFrames < 0) collisionDetection();
 }
 
 const EntityType Player::getEntityType()
@@ -107,7 +141,7 @@ void Player::collisionDetection()
     });
 }
 
-void Player::dashAbility(const double& deltaTime)
+void Player::dashAbility(const float& deltaTime)
 {
     const auto animationDuration = FileMenager::playerData.dash_duration;
 
@@ -116,7 +150,7 @@ void Player::dashAbility(const double& deltaTime)
         dashTimer = FileMenager::playerData.dash_time_delay;
         invincibilityFrames = 0;
 
-        double radians = angle * (M_PI / 180.0f);
+        float radians = angle * (physics::getPI() / 180.0f);
 
         Vector2f endPoint(position.x + cos(radians) * size * FileMenager::playerData.dash_length, position.y + sin(radians) * size * FileMenager::playerData.dash_length);
 
@@ -158,13 +192,15 @@ void Player::resetPlayerStats()
 void Player::setPlayerStats()
 {
     playerStats.shootOffset = FileMenager::playerData.bullet_shoot_delay;
-    playerStats.accurancy = 0; // doesnt respected yet.
+    playerStats.accurancy = 1; // doesnt respected yet.
     playerStats.bulletDamage = 50;
     playerStats.bulletSize = FileMenager::playerData.bullet_size;
     playerStats.bulletSpeed = FileMenager::playerData.bullet_speed;
     playerStats.lifes = 3;
     playerStats.speed = FileMenager::playerData.speed;
     playerStats.turnSpeed = FileMenager::playerData.turn_speed;
+    playerStats.shield = { 10.0f, false };
+    playerStats.drunkMode = { 10.0f, false };
 
     playerStats.bulletType.piercing = false;
     playerStats.bulletType.homing = false;

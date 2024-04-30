@@ -1,6 +1,6 @@
 #include "HealthBar.h"
 
-HealthBar::HealthBar(double width, double height, Color fillColor, Color outlineColor, double maxValue, Vector2f position)
+HealthBar::HealthBar(float width, float height, Color fillColor, Color outlineColor, float maxValue, Vector2f position)
     : maxWidth(width), currentValue(maxValue), maxValue(maxValue) {
     bar.setSize(Vector2f(width, height));
     bar.setFillColor(fillColor);
@@ -14,19 +14,19 @@ HealthBar::HealthBar(double width, double height, Color fillColor, Color outline
 }
 
 void HealthBar::updateBarValue() {
-    double barWidth = (currentValue / maxValue) * maxWidth;
+    float barWidth = (currentValue / maxValue) * maxWidth;
 
     bar.setSize(Vector2f(barWidth, bar.getSize().y));
 }
 
 void HealthBar::updateBar(const Vector2f& position) {
-    double barWidth = (currentValue / maxValue) * maxWidth;
+    float barWidth = (currentValue / maxValue) * maxWidth;
     bar.setSize(Vector2f(barWidth, bar.getSize().y));
     bar.setPosition(position);
     outline.setPosition(position);
 }
 
-void HealthBar::setCurrentValue(double value) {
+void HealthBar::setCurrentValue(const float& value) {
     currentValue = value;
 }
 

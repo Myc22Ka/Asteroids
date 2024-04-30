@@ -1,10 +1,10 @@
 #include "Asteroid.h"
 #include "Score.h"
 
-Asteroid::Asteroid(double health, SpriteInfo spriteInfo) :
+Asteroid::Asteroid(float health, SpriteInfo spriteInfo) :
 	Entity(getRandomPosition(), physics::getRandomAngle(), physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_size), Color::Red, spriteInfo),
-	health(health + floor(Score::score >> 9) * health),
-	healthBar(size, 5, Color::Red, Color::Black, health + floor(Score::score >> 9) * health, Vector2f(-100, -100)),
+	health(health + float(floor(Score::score >> 9)) * health),
+	healthBar(size, 5, Color::Red, Color::Black, health + float(floor(Score::score >> 9)) * health, Vector2f(-100, -100)),
 	direction(physics::getRandomDirection()),
 	speed(physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_speed))
 {
@@ -72,8 +72,8 @@ const Vector2f Asteroid::getRandomPosition() const
 {
 	random_device rd;
 	mt19937 gen(rd());
-	uniform_real_distribution<double> xAxis(radius, FileMenager::screenData.size_width - radius);
-	uniform_real_distribution<double> yAxis(radius, FileMenager::screenData.size_height - radius);
+	uniform_real_distribution<float> xAxis(radius, FileMenager::screenData.size_width - radius);
+	uniform_real_distribution<float> yAxis(radius, FileMenager::screenData.size_height - radius);
 
 	auto player = Game::doesEntityExist(EntityType::TYPE_PLAYER);
 

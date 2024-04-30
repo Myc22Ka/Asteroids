@@ -10,15 +10,15 @@ class HealthBar {
 private:
     RectangleShape bar;
     RectangleShape outline;
-    double maxWidth;
-    double currentValue;
-    double maxValue;
+    float maxWidth;
+    float currentValue;
+    float maxValue;
 
 public:
-    HealthBar(double width, double height, Color fillColor, Color outlineColor, double maxValue, Vector2f position);
+    HealthBar(float width, float height, Color fillColor, Color outlineColor, float maxValue, Vector2f position);
     void updateBarValue();
     void updateBar(const Vector2f& position);
-    void setCurrentValue(double value);
+    void setCurrentValue(const float& value);
     void draw(RenderWindow& window) const;
 };
 

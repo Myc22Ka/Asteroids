@@ -17,7 +17,7 @@ struct ScreenData {
 };
 
 struct PlayerData {
-    int size;
+    float size;
     float start_position_x;
     float start_position_y;
     float start_position_angle;
@@ -26,7 +26,7 @@ struct PlayerData {
     float bullet_speed;
     float bullet_shoot_delay;
     float bullet_lifetime;
-    int bullet_size;
+    float bullet_size;
     float sprite_cycle_time;
 
     float dash_time_delay;
@@ -38,7 +38,7 @@ struct EnemiesData {
     float asteroid_spin;
     float asteroid_speed;
     float asteroid_spawn_time;
-    int asteroid_size;
+    float asteroid_size;
 };
 
 class FileMenager {

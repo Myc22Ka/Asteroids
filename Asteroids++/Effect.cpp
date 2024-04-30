@@ -1,9 +1,6 @@
 #include "Effect.h"
 #include "Entity.h"
 
-bool Effect::active{ false };
-float Effect::duration{ 15.0f };
-
 unordered_map<Groups, vector<EntityType>> Effect::groups{ 
 	{ FREEZE_GROUP, { EntityType::TYPE_EVENT_WIND, EntityType::TYPE_PARTICLE} } 
 };
@@ -13,6 +10,8 @@ Effect::Effect(float duration, bool active)
 	this->duration = duration;
 	this->active = active;
 }
+
+Effect::Effect() : active(false), duration(15.0f) {}
 
 void Effect::setEffectActive(const bool& newEffectState)
 {

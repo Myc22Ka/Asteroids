@@ -1,6 +1,6 @@
 #include "Physics.h"
 
-constexpr double M_PI = 3.14159265358979323846;
+constexpr float M_PI = 3.14159265358979323846f;
 
 bool physics::intersects(const Vector2f& circlePosition1, const float &radius1 ,const Vector2f& circlePosition2, const float& radius2)
 {
@@ -55,21 +55,21 @@ pair<Vector2f, Vector2f> physics::bounceDirection(const Asteroid* thisAsteroid, 
 	const Vector2f normal = physics::normalize(thisAsteroid->position - otherAsteroid->position);
 
 	// Calculate overlap distance
-	const float overlap = (thisAsteroid->size + otherAsteroid->size) - physics::distance(thisAsteroid->position, otherAsteroid->position);
+	const auto overlap = (thisAsteroid->size + otherAsteroid->size) - physics::distance(thisAsteroid->position, otherAsteroid->position);
 
 	// Separate the asteroids along the collision normal to resolve overlap
 	const Vector2f separationVector = normal * overlap * separationDistance;
 
 	// Calculate relative velocity along the normal direction
 	const Vector2f relativeVelocity = static_cast<float>(thisAsteroid->speed) * physics::normalize(thisAsteroid->direction) - static_cast<float>(otherAsteroid->speed) * physics::normalize(otherAsteroid->direction);
-	const float velAlongNormal = physics::dotProduct(relativeVelocity, normal);
+	const auto velAlongNormal = physics::dotProduct(relativeVelocity, normal);
 
 	// Calculate total mass
-	const int totalMass = thisAsteroid->size + otherAsteroid->size;
+	const auto totalMass = thisAsteroid->size + otherAsteroid->size;
 
 	// Calculate the maximum change in direction allowed
-	const float maxChangeFactor = 0.7f;
-	const float maxChangeMagnitude = maxChangeFactor * velAlongNormal / totalMass;
+	const auto maxChangeFactor = 0.7f;
+	const auto maxChangeMagnitude = maxChangeFactor * velAlongNormal / totalMass;
 
 	// Calculate the change in direction based on momentum conservation, limited by the maximum change
 	return pair(min(maxChangeMagnitude, abs(velAlongNormal)) * normal, separationVector);
@@ -116,4 +116,8 @@ const bool physics::rollDice(const double chance){
 	uniform_real_distribution<double> dist(0.0, 1.0);
 
 	return dist(gen) < chance;
+}
+
+const float physics::getPI(){
+	return M_PI;
 }

@@ -87,7 +87,7 @@
     "currentSpriteLifeTime": 0,
     "defaultSpriteLifeTime": 0.15
   },
-  "pickup1": {
+  "pickupExtraBullet": {
     "hitboxSize": 32,
     "spriteSize": 32,
     "rotation": 0,
@@ -95,7 +95,7 @@
     "currentSpriteLifeTime": 0,
     "defaultSpriteLifeTime": 0.05
   },
-  "pickup2": {
+  "pickupExtraSpeed": {
     "hitboxSize": 32,
     "spriteSize": 32,
     "rotation": 0,
@@ -103,7 +103,7 @@
     "currentSpriteLifeTime": 0,
     "defaultSpriteLifeTime": 0.05
   },
-  "pickup3": {
+  "pickupShield": {
     "hitboxSize": 32,
     "spriteSize": 32,
     "rotation": 0,
@@ -111,7 +111,7 @@
     "currentSpriteLifeTime": 0,
     "defaultSpriteLifeTime": 0.05
   },
-  "pickup4": {
+  "pickupDrunkmode": {
     "hitboxSize": 32,
     "spriteSize": 32,
     "rotation": 0,

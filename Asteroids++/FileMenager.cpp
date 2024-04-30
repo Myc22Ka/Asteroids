@@ -45,7 +45,7 @@ void FileMenager::setDataFromFile() const {
 
 		if (regex_search(line, matches, reg)) {
 			string key = matches[1].str();
-			double value = stof(matches[2].str());
+			float value = stof(matches[2].str());
 			dataMap[key] = value;
 		}
 	}
@@ -55,7 +55,7 @@ void FileMenager::setDataFromFile() const {
 	FileMenager::screenData.size_height = static_cast<unsigned int>(dataMap["screen_size_height"]);
 	FileMenager::screenData.size_width = static_cast<unsigned int>(dataMap["screen_size_width"]);
 
-	FileMenager::playerData.size = static_cast<int>(dataMap["player_size"]);
+	FileMenager::playerData.size = dataMap["player_size"];
 	FileMenager::playerData.start_position_x = dataMap["player_start_position_x"];
 	FileMenager::playerData.start_position_y = dataMap["player_start_position_y"];
 	FileMenager::playerData.start_position_angle = dataMap["player_start_position_angle"];
@@ -64,7 +64,7 @@ void FileMenager::setDataFromFile() const {
 	FileMenager::playerData.bullet_speed = dataMap["player_bullet_speed"];
 	FileMenager::playerData.bullet_shoot_delay = dataMap["player_bullet_shoot_delay"];
 	FileMenager::playerData.bullet_lifetime = dataMap["player_bullet_lifetime"];
-	FileMenager::playerData.bullet_size = static_cast<int>(dataMap["player_bullet_size"]);
+	FileMenager::playerData.bullet_size = dataMap["player_bullet_size"];
 	FileMenager::playerData.sprite_cycle_time = dataMap["player_sprite_cycle_time"];
 	FileMenager::playerData.dash_duration = dataMap["player_dash_duration"];
 	FileMenager::playerData.dash_length = static_cast<int>(dataMap["player_dash_length"]);
@@ -73,7 +73,7 @@ void FileMenager::setDataFromFile() const {
 	FileMenager::enemiesData.asteroid_spin = dataMap["enemy_asteroid_spin"];
 	FileMenager::enemiesData.asteroid_speed = dataMap["enemy_asteroid_speed"];
 	FileMenager::enemiesData.asteroid_spawn_time = dataMap["enemy_asteroid_spawn_time"];
-	FileMenager::enemiesData.asteroid_size = static_cast<int>(dataMap["enemy_asteroid_size"]);
+	FileMenager::enemiesData.asteroid_size = dataMap["enemy_asteroid_size"];
 
 	return;
 }

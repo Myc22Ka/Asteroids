@@ -5,7 +5,7 @@ Pickup::Pickup(Vector2f position, SpriteInfo s): Entity(position, 0, 64, Color::
 lifeTime(5)
 {
 	collected = getSprite(Sprites::COLLECTED);
-	drawHitboxes(static_cast<int>(size) >> 2);
+	drawHitboxes(radius / 2);
 
 	scaleSprite(spriteInfo.sprite, spriteInfo.spriteSize, size);
 }
@@ -52,38 +52,46 @@ void Pickup::collisionDetection()
 
 				switch (spriteInfo.spriteType)
 				{
-				case Sprites::PICKUP_1:
-					if (Player::playerStats.shootOffset >= 0.11) Player::playerStats.shootOffset -= 0.01;
-					Score::score += 10;
-					SoundData::play(Sounds::PICKUP_1);
-					break;
-				case Sprites::PICKUP_2:
-					Player::playerStats.bulletDamage += 50;
-					Score::score += 20;
-					SoundData::play(Sounds::PICKUP_2);
-					break;
-				case Sprites::PICKUP_3:
-					if (Player::playerStats.bulletSize <= 50) Player::playerStats.bulletSize += 1;
-					Score::score += 50;
-					SoundData::play(Sounds::PICKUP_3);
-					break;
-				case Sprites::PICKUP_4:
-					if (Player::playerStats.speed < 350) {
-						Player::playerStats.speed += 10;
-						Player::playerStats.turnSpeed += 5;
+				case Sprites::PICKUP_EXTRA_BULLET:
+					if (Player::playerStats.shootOffset >= 0.11f) {
+						Player::playerStats.shootOffset -= 0.01f;
+						Player::playerStats.bulletSize += 3.0f;
 					}
+
+					Score::score += 10;
+					Player::playerStats.bulletDamage += 50.0f;
+					SoundData::play(Sounds::PICKUP_EXTRA_BULLET);
+					break;
+				case Sprites::PICKUP_EXTRA_SPEED:
+					if (Player::playerStats.speed < 500.0f) {
+						Player::playerStats.speed += 15.0f;
+						Player::playerStats.turnSpeed += 5.0f;
+						Player::playerStats.bulletSpeed += 25.0f;
+					}
+					Score::score += 20;
+					SoundData::play(Sounds::PICKUP_EXTRA_SPEED);
+					break;
+				case Sprites::PICKUP_SHIELD:
+					Score::score += 50;
+					Player::playerStats.shield.startEffect(15.0f);
+
+					SoundData::play(Sounds::PICKUP_SHIELD);
+					break;
+				case Sprites::PICKUP_DRUNKMODE:
+					Player::playerStats.drunkMode.startEffect(15.0f);
+
 					Score::score += 100;
-					SoundData::play(Sounds::PICKUP_4);
+					SoundData::play(Sounds::PICKUP_DRUNKMODE);
 					break;
 				case Sprites::PICKUP_PIERCING:
 					if (!Player::playerStats.bulletType.piercing) Player::playerStats.bulletType.piercing = true;
 					Score::score += 1000;
-					SoundData::play(Sounds::PICKUP_4);
+					SoundData::play(Sounds::PICKUP_DRUNKMODE);
 					break;
 				case Sprites::HEART1UP:
 					if (Player::playerStats.lifes <= 5) {
 						Player::playerStats.lifes += 1;
-						WindowBox::playerHealthUIs.push_back(WindowBox::playerHealthUIs.back().offset + 20.0);
+						WindowBox::playerHealthUIs.push_back(WindowBox::playerHealthUIs.back().offset + 20.0f);
 						for (auto& UI : WindowBox::playerHealthUIs)
 							UI.setSpriteState(0);
 					}

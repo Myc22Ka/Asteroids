@@ -15,7 +15,7 @@
 
 class Asteroid : public Entity {
 public:
-	Asteroid(double health, SpriteInfo spriteInfo);
+	Asteroid(float health, SpriteInfo spriteInfo);
 
 	void render(RenderWindow& window) override;
 	void update(float deltaTime) override;
@@ -26,7 +26,7 @@ public:
 
 	Vector2f direction;
 	float speed;
-	double health;
+	float health;
 	HealthBar healthBar;
 };
 

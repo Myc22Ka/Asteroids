@@ -1,8 +1,8 @@
 #include "Entity.h"
 #include "FileMenager.h"
 
-Entity::Entity(Vector2f position, double angle, float size, Color hitboxColor, SpriteInfo spriteInfo)
-	: position(position), angle(angle), size(size), hitboxColor(hitboxColor), radius(static_cast<int>(size) >> 1), spriteInfo(spriteInfo) 
+Entity::Entity(Vector2f position, float angle, float size, Color hitboxColor, SpriteInfo spriteInfo)
+	: position(position), angle(angle), size(size), hitboxColor(hitboxColor), radius(float(static_cast<int>(size) >> 1)), spriteInfo(spriteInfo) 
 {
 }
 
@@ -11,7 +11,7 @@ bool Entity::isActive() const
 	return active;
 }
 
-void Entity::setActive(bool active)
+void Entity::setActive(const bool& active)
 {
 	this->active = active;
 }
@@ -28,7 +28,7 @@ void Entity::drawHitboxes()
 	shape.setOutlineThickness(1.5f);
 }
 
-void Entity::drawHitboxes(const int radius)
+void Entity::drawHitboxes(const float& radius)
 {
 	shape.setRadius(radius);
 	Vector2f center(radius, radius);
@@ -40,7 +40,7 @@ void Entity::drawHitboxes(const int radius)
 	shape.setOutlineThickness(1.5f);
 }
 
-void Entity::setSpriteFullCycle(double deltaTime){
+void Entity::setSpriteFullCycle(const double& deltaTime){
 	spriteInfo.currentSpriteLifeTime -= deltaTime;
 
 	if (spriteInfo.currentSpriteLifeTime <= 0) {

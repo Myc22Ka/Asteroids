@@ -92,7 +92,7 @@ void WindowBox::displayWindow()
 
         DashBar dashBar;
 
-        dashBar.update(min(1 - Player::dashTimer / FileMenager::playerData.dash_time_delay, 1.0));
+        dashBar.update(min(1 - Player::dashTimer / FileMenager::playerData.dash_time_delay, 1.0f));
         dashBar.draw(window);
 
         for (size_t i = 0; i < playerHealthUIs.size(); ++i) {
@@ -119,7 +119,7 @@ void WindowBox::begin()
     asteroidSpawnTime = FileMenager::enemiesData.asteroid_spawn_time;
     playerHealthUIs.clear();
 
-    double offset = 0;
+    float offset = 0.0f;
 
     for (int i = 0; i < Player::playerStats.lifes; ++i) {
         playerHealthUIs.push_back(offset);

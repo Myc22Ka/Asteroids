@@ -29,10 +29,10 @@ enum class Sprites {
     EXPLOSION_3,
     EXPLOSION_4,
     DASHBAR,
-    PICKUP_1,
-    PICKUP_2,
-    PICKUP_3,
-    PICKUP_4,
+    PICKUP_EXTRA_BULLET,
+    PICKUP_EXTRA_SPEED,
+    PICKUP_SHIELD,
+    PICKUP_DRUNKMODE,
     PICKUP_FREEZE,
     HEART1UP,
     PICKUP_PIERCING,
@@ -51,10 +51,10 @@ struct SpriteInfo
 
     double currentSpriteLifeTime = 0;
     double defaultSpriteLifeTime = 0;
-    size_t spriteState = 0;
-    int rotation = 0;
+    int spriteState = 0;
+    float rotation = 0;
     int spriteSize = 0;
-    int hitboxSize = 0;
+    float hitboxSize = 0;
 };
 
 class SpriteData {

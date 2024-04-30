@@ -72,9 +72,9 @@ Entity* Game::getRandomEntity(){
 
     random_device rd;
     mt19937 gen(rd());
-    uniform_int_distribution<int> dist(0, enemies.size() - 1);
+    uniform_int_distribution<size_t> dist(0, enemies.size() - 1);
 
-    int randomIndex = dist(gen);
+    auto randomIndex = dist(gen);
 
     return enemies[randomIndex];
 }

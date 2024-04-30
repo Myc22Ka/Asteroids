@@ -7,7 +7,7 @@ SingleBullet::SingleBullet(Vector2f position, Vector2f direction, float& angle) 
     setRotation(spriteInfo.sprite, angle);
     drawHitboxes();
 
-    scaleSprite(spriteInfo.sprite, FileMenager::playerData.bullet_size, size);
+    scaleSprite(spriteInfo.sprite, int(FileMenager::playerData.bullet_size), size);
 }
 
 const EntityType SingleBullet::getEntityType()

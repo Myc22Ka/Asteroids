@@ -14,10 +14,10 @@ const vector<pair<string, Sprites>> objects = {
         {"explosion3", Sprites::EXPLOSION_3},
         {"explosion4", Sprites::EXPLOSION_4},
         {"dashBar", Sprites::DASHBAR},
-        {"pickup1", Sprites::PICKUP_1},
-        {"pickup2", Sprites::PICKUP_2},
-        {"pickup3", Sprites::PICKUP_3},
-        {"pickup4", Sprites::PICKUP_4},
+        {"pickupExtraBullet", Sprites::PICKUP_EXTRA_BULLET},
+        {"pickupExtraSpeed", Sprites::PICKUP_EXTRA_SPEED},
+        {"pickupShield", Sprites::PICKUP_SHIELD},
+        {"pickupDrunkmode", Sprites::PICKUP_DRUNKMODE},
         {"heart1UP", Sprites::HEART1UP},
         {"freeze", Sprites::PICKUP_FREEZE},
         {"pickupPiercing", Sprites::PICKUP_PIERCING},
@@ -36,13 +36,13 @@ void SpriteData::populateSpriteInfo(const string& objectKey, const Sprites& spri
         sprites[spriteType].spriteType = spriteType;
     
         if (object.HasMember("hitboxSize") && object["hitboxSize"].IsNumber()) {
-            sprites[spriteType].hitboxSize = object["hitboxSize"].GetInt();
+            sprites[spriteType].hitboxSize = object["hitboxSize"].GetFloat();
         }
         if (object.HasMember("spriteSize") && object["spriteSize"].IsNumber()) {
             sprites[spriteType].spriteSize = object["spriteSize"].GetInt();
         }
         if (object.HasMember("rotation") && object["rotation"].IsNumber()) {
-            sprites[spriteType].rotation = object["rotation"].GetInt();
+            sprites[spriteType].rotation = object["rotation"].GetFloat();
         }
         if (object.HasMember("spriteState") && object["spriteState"].IsNumber()) {
             sprites[spriteType].spriteState = object["spriteState"].GetInt();
@@ -146,7 +146,7 @@ void SpriteData::loadAllSprites()
             sprites[type].sprite.rotate(sprites[type].rotation);
 
             const Rect center = sprites[type].sprite.getLocalBounds();
-            sprites[type].sprite.setOrigin((int)center.width >> 1, (int)center.height >> 1);
+            sprites[type].sprite.setOrigin(center.width / 2, center.height / 2);
         }
     }
 }
