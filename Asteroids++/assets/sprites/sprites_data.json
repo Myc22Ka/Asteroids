@@ -103,6 +103,14 @@
     "currentSpriteLifeTime": 0,
     "defaultSpriteLifeTime": 0.05
   },
+  "pickupExtraTime": {
+    "hitboxSize": 32,
+    "spriteSize": 32,
+    "rotation": 0,
+    "spriteState": 0,
+    "currentSpriteLifeTime": 0,
+    "defaultSpriteLifeTime": 0.05
+  },
   "pickupShield": {
     "hitboxSize": 32,
     "spriteSize": 32,

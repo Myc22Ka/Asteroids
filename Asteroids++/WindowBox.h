@@ -20,5 +20,4 @@ private:
 	void spawnEnemy();
 
 	RenderWindow window;
-	static double asteroidSpawnTime;
 };

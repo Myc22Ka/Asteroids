@@ -5,20 +5,18 @@ unordered_map<Groups, vector<EntityType>> Effect::groups{
 	{ FREEZE_GROUP, { EntityType::TYPE_EVENT_WIND, EntityType::TYPE_PARTICLE} } 
 };
 
-Effect::Effect(float duration, bool active)
-{
-	this->duration = duration;
-	this->active = active;
-}
+Effect::Effect(float duration, bool active, Bar* bar) : duration(duration), active(active), bar(bar) {}
 
-Effect::Effect() : active(false), duration(15.0f) {}
+Effect::Effect(float duration, bool active) : duration(duration), active(active), bar(new Bar()) {}
+
+Effect::Effect() : active(false), duration(15.0f), bar(new Bar()) {}
 
 void Effect::setEffectActive(const bool& newEffectState)
 {
 	active = newEffectState;
 }
 
-bool Effect::isEffectActive()
+bool Effect::isEffectActive() const
 {
 	return active;
 }
@@ -35,7 +33,7 @@ void Effect::updateEffectDuration(const float& deltaDuration)
 	if (duration < 0) active = false;
 }
 
-float Effect::getEffectDuration()
+float Effect::getEffectDuration() const
 {
 	return duration;
 }
@@ -43,4 +41,12 @@ float Effect::getEffectDuration()
 void Effect::startEffect(const float& newDuration){
 	duration = newDuration;
 	active = true;
+}
+
+Bar* Effect::getBar(){
+	return bar;
+}
+
+void Effect::setBar(Bar* bar){
+	this->bar = bar;
 }

@@ -6,7 +6,7 @@
 #include "Entity.h"
 #include "Game.h"
 #include "FileMenager.h"
-#include "HealthBar.h"
+#include "Bar.h"
 #include "Bullet.h"
 #include <iostream>
 #include <random>
@@ -14,6 +14,8 @@
 #include "Physics.h"
 
 class Asteroid : public Entity {
+	Bar healthBar;
+
 public:
 	Asteroid(float health, SpriteInfo spriteInfo);
 
@@ -27,7 +29,6 @@ public:
 	Vector2f direction;
 	float speed;
 	float health;
-	HealthBar healthBar;
 };
 
 #endif

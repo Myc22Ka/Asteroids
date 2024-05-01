@@ -127,6 +127,10 @@ void Bullet::spawnPickup(const Vector2f& position)
         Game::addEntity(new Pickup(position, getSprite(Sprites::PICKUP_FREEZE)));
         return;
     }
+    if (propability < 0.075) {
+        Game::addEntity(new Pickup(position, getSprite(Sprites::PICKUP_EXTRA_TIME)));
+        return;
+    }
     if (propability < 0.1) {
         Game::addEntity(new Pickup(position, getSprite(Sprites::PICKUP_PIERCING)));
         return;

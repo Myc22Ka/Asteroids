@@ -1,15 +1,14 @@
 #include "Wind.h"
 
 Wind::Wind() : Entity(getRandomPosition(), 0, 0, Color::Yellow, SpriteInfo()), 
-windSpeed(200.0f), 
-windActive(false), 
-windDuration(3.0f),  
+windSpeed(200.0f),
+wind(3.0f, false),  
 windLevel(3.0f), 
 lineWidth(30.0f), 
-lineHeight(1.0f), 
-velocity(Vector2f(1, 0))
+lineHeight(0.8f), 
+velocity(physics::getRandomDirection())
 {
-	fullWindDuration = windDuration;
+	fullWindDuration = wind.getEffectDuration();
 	particles.setPrimitiveType(Lines);
 	particles.resize(400);
 
@@ -48,19 +47,19 @@ void Wind::update(float deltaTime)
 		wrapLine(particles[i], particles[i + 1]);
 	}
 
-	if (!windActive) return;
+	if (!wind.isEffectActive()) return;
 
-	windDuration -= deltaTime;
+	wind.updateEffectDuration(deltaTime);
 
-	if (windDuration < 0) {
+	if (wind.getEffectDuration() < 0) {
 		stopWind();
 		return;
 	}
 
 	for (size_t i = 0; i < particles.getVertexCount() - 1; i += 2)
 	{
-		particles[i].position += velocity * windSpeed * windLevel * deltaTime + (windDuration > fullWindDuration - 0.8f ? velocity : Vector2f(0, 0));
-		particles[i + 1].position += velocity * windSpeed * windLevel * deltaTime + (windDuration < 0.8f ? velocity : Vector2f(0, 0));
+		particles[i].position += velocity * windSpeed * windLevel * deltaTime + (wind.getEffectDuration() > fullWindDuration - lineHeight ? velocity : Vector2f(0, 0));
+		particles[i + 1].position += velocity * windSpeed * windLevel * deltaTime + (wind.getEffectDuration() < lineHeight ? velocity : Vector2f(0, 0));
 		wrapLine(particles[i], particles[i + 1]);
 	}
 
@@ -76,7 +75,7 @@ void Wind::update(float deltaTime)
 }
 
 void Wind::stopWind() {
-	windActive = false;
+	wind.setEffectActive(false);
 	windSpeed = 200.0f;
 	SoundData::stop(Sounds::WIND);
 
@@ -137,14 +136,14 @@ void Wind::wrapLine(Vertex& vertex1, Vertex& vertex2) const {
 }
 
 void Wind::activateWind(const float& duration, const float& windLevel, const Vector2f& velocity) {
-	if (physics::rollDice(0.0005) && !windActive && SoundData::sounds[Sounds::WIND].getVolume() == 100 && !Game::freeze.isEffectActive()) {
+	if (physics::rollDice(0.0005) && !wind.isEffectActive() && SoundData::sounds[Sounds::WIND].getVolume() == 100 && !Game::freeze.isEffectActive()) {
 
-	windDuration = duration;
+	wind.startEffect(duration);
 	fullWindDuration = duration;
 	windSpeed = windLevel * 100.0f;
 	this->windLevel = windLevel;
 	this->velocity = velocity;
-	windActive = true;
+
 	SoundData::play(Sounds::WIND);
 	}
 }

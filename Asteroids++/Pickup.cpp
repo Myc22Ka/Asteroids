@@ -73,12 +73,14 @@ void Pickup::collisionDetection()
 					break;
 				case Sprites::PICKUP_SHIELD:
 					Score::score += 50;
-					Player::playerStats.shield.startEffect(15.0f);
+					Player::playerStats.shield.startEffect(15.0f + Player::playerStats.time);
+					Player::playerStats.shield.getBar()->setMaxValue(Player::playerStats.shield.getEffectDuration());
 
 					SoundData::play(Sounds::PICKUP_SHIELD);
 					break;
 				case Sprites::PICKUP_DRUNKMODE:
-					Player::playerStats.drunkMode.startEffect(15.0f);
+					Player::playerStats.drunkMode.startEffect(2.0f + Player::playerStats.time);
+					Player::playerStats.drunkMode.getBar()->setMaxValue(Player::playerStats.drunkMode.getEffectDuration());
 
 					Score::score += 100;
 					SoundData::play(Sounds::PICKUP_DRUNKMODE);
@@ -100,7 +102,11 @@ void Pickup::collisionDetection()
 					break;
 				case Sprites::PICKUP_FREEZE:
 					SoundData::play(Sounds::FREEZE);
-					Game::freeze.startEffect(physics::getRandomFloatValue(10.0f, 0.5f));
+					Game::freeze.startEffect(physics::getRandomFloatValue(10.0f, 0.5f) + Player::playerStats.time);
+					break;
+				case Sprites::PICKUP_EXTRA_TIME:
+					SoundData::play(Sounds::PICKUP_EXTRA_TIME);
+					if (Player::playerStats.time < 10.0f) Player::playerStats.time += 10.0f;
 					break;
 				}
 				Game::addEntity(new Explosion(this->position, this->size, collected));

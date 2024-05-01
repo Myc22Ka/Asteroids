@@ -4,13 +4,11 @@
 #include "Score.h"
 #include "Physics.h"
 #include "DashBar.h"
-#include "HealthBar.h"
 #include "WindowBox.h"
 #include "PlayerHealthUI.h"
 #include "SingleAsteroid.h"
 #include "Wind.h"
 
-double WindowBox::asteroidSpawnTime = FileMenager::enemiesData.asteroid_spawn_time;
 vector<PlayerHealthUI> WindowBox::playerHealthUIs;
 
 WindowBox::WindowBox() {}
@@ -47,13 +45,20 @@ void WindowBox::displayWindow()
                 }
                 if (e.key.code == sf::Keyboard::H) {
                     Game::hitboxesVisibility = !Game::hitboxesVisibility;
+                    float lastTime = 0;
+
+                    float currentTime = clock.restart().asSeconds();
+                    float fps = 1.f / (currentTime - lastTime);
+                    lastTime = currentTime;
+
+                    cout << fps << endl;
                 }
             }
         }
 
         float deltaTime = clock.restart().asSeconds();
 
-        wind.activateWind(physics::getRandomFloatValue(10.0f, 0.75f), physics::getRandomFloatValue(3.0f), physics::getRandomDirection());
+        wind.activateWind(physics::getRandomFloatValue(10.0f, 0.75f) + Player::playerStats.time, physics::getRandomFloatValue(3.0f), physics::getRandomDirection());
 
         wind.update(deltaTime);
 
@@ -67,7 +72,7 @@ void WindowBox::displayWindow()
         window.draw(backgroundSprite);
         wind.render(window);
 
-        asteroidSpawnTime -= deltaTime;
+        Game::enemySpawn.updateEffectDuration(deltaTime);
 
         for (auto& particle : Game::getParticles())
         {
@@ -116,7 +121,7 @@ void WindowBox::begin()
 {
     Game::isGameOver = false;
     Game::addEntity(new Player());
-    asteroidSpawnTime = FileMenager::enemiesData.asteroid_spawn_time;
+    Game::enemySpawn.setEffectDuration(FileMenager::enemiesData.asteroid_spawn_time);
     playerHealthUIs.clear();
 
     float offset = 0.0f;
@@ -130,9 +135,9 @@ void WindowBox::begin()
 
 void WindowBox::spawnEnemy()
 {
-    if (asteroidSpawnTime <= 0 && !Game::freeze.isEffectActive()) {
+    if (Game::enemySpawn.getEffectDuration() <= 0 && !Game::freeze.isEffectActive()) {
         Game::addEntity(Game::getRandomEntity());
-        asteroidSpawnTime = FileMenager::enemiesData.asteroid_spawn_time;
+        Game::enemySpawn.setEffectDuration(FileMenager::enemiesData.asteroid_spawn_time + Player::playerStats.time * 0.1f);
     }
 }
 

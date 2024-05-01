@@ -16,6 +16,7 @@ const vector<pair<string, Sprites>> objects = {
         {"dashBar", Sprites::DASHBAR},
         {"pickupExtraBullet", Sprites::PICKUP_EXTRA_BULLET},
         {"pickupExtraSpeed", Sprites::PICKUP_EXTRA_SPEED},
+        {"pickupExtraTime", Sprites::PICKUP_EXTRA_TIME},
         {"pickupShield", Sprites::PICKUP_SHIELD},
         {"pickupDrunkmode", Sprites::PICKUP_DRUNKMODE},
         {"heart1UP", Sprites::HEART1UP},

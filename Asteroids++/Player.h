@@ -6,6 +6,7 @@
 #include "Entity.h"
 #include "Game.h"
 #include "FileMenager.h"
+#include "Bar.h"
 #include "Bullet.h"
 #include "Asteroid.h"
 #include "Physics.h"
@@ -22,6 +23,8 @@ struct PlayerStats {
 	float speed;
 	float turnSpeed;
 	float lifes;
+
+	float time;
 
 	float shootOffset;
 	float accurancy;

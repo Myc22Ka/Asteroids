@@ -27,10 +27,9 @@ private:
     void resetParticlePositions();
 
     VertexArray particles;
+    Effect wind;
 
     float windSpeed;
-    bool windActive;
-    float windDuration;
     float fullWindDuration;
     float windLevel;
     float lineWidth;

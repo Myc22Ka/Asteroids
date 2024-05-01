@@ -11,6 +11,7 @@ list<Particle*> Game::particles;
 vector<EntityType> Game::enemies{ EntityType::TYPE_ENEMY_MULTI_ASTEROID, EntityType::TYPE_ENEMY_SINGLE_ASTEROID };
 
 Effect Game::freeze { 15.0f, false };
+Effect Game::enemySpawn { 1.0f, false };
 
 Game::Game() {}
 

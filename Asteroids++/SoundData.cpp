@@ -12,6 +12,7 @@ const vector<pair<string, Sounds>> objects = {
     {"regainDash", Sounds::DASH_ABILITY_RESTORE},
     {"extrabullet", Sounds::PICKUP_EXTRA_BULLET},
     {"extraspeed", Sounds::PICKUP_EXTRA_SPEED},
+    {"extratime", Sounds::PICKUP_EXTRA_TIME},
     {"shield", Sounds::PICKUP_SHIELD},
     {"drunkmode", Sounds::PICKUP_DRUNKMODE},
     {"heart1UP", Sounds::HEART1UP},

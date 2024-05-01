@@ -5,19 +5,20 @@
 #include "WindowBox.h"
 #include "Particle.h"
 
-float Player::dashTimer = 0.0;
+float Player::dashTimer = 0.0f;
 PlayerStats Player::playerStats{ 
     FileMenager::playerData.bullet_shoot_delay,
     FileMenager::playerData.turn_speed,
-    3,
+    3.0f,
+    0.0f,
     FileMenager::playerData.bullet_shoot_delay,
-    1,
+    1.0f,
     FileMenager::playerData.bullet_size,
-    50,
+    50.0f,
     FileMenager::playerData.bullet_speed,
     {false, false},
-    { 10.0f, false },
-    { 10.0f, false }
+    { 5.0f, false },
+    { 200.0f, false }
 };
 
 Player::Player() :
@@ -29,7 +30,7 @@ Player::Player() :
         getSprite(Sprites::SHIP)
     ), 
     shootTimer(),
-    invincibilityFrames(0)
+    invincibilityFrames(0.0f)
 {
     shieldSprite = getSprite(Sprites::SHIELD);
 	drawHitboxes();
@@ -40,8 +41,12 @@ void Player::render(RenderWindow& window)
 {
 	Transform transform;
 	window.draw(spriteInfo.sprite, transform.translate(position).rotate(angle));
-    if(playerStats.shield.isEffectActive()) window.draw(shieldSprite.sprite, transform.rotate(-angle));
+    if (playerStats.shield.isEffectActive()) {
+        window.draw(shieldSprite.sprite, transform.rotate(-angle));
+        playerStats.shield.getBar()->draw(window);
+    }
 	if(Game::hitboxesVisibility) window.draw(shape, transform);
+    if (playerStats.drunkMode.isEffectActive()) playerStats.drunkMode.getBar()->draw(window);
 }
 
 void Player::update(float deltaTime) {
@@ -56,7 +61,7 @@ void Player::update(float deltaTime) {
 
     if (isDashing) Game::addParticle(new Particle(position, angle, Sprites::SHIP, Color(126, 193, 255, 100), 0.15));
 
-    if (Keyboard::isKeyPressed(Keyboard::Space) && shootTimer <= 0) {
+    if (Keyboard::isKeyPressed(Keyboard::Space) && shootTimer <= 0.0f) {
         shootTimer = Player::playerStats.shootOffset;
         float radians = angle * (physics::getPI() / 180.0f);
 
@@ -113,6 +118,20 @@ void Player::updatePosition(const float& deltaTime) {
 
     position.x = min(max(position.x, radius), FileMenager::screenData.size_width - radius);
     position.y = min(max(position.y, radius), FileMenager::screenData.size_height - radius);
+
+    if (playerStats.drunkMode.isEffectActive()) {
+        playerStats.drunkMode.updateEffectDuration(deltaTime);
+
+        playerStats.drunkMode.getBar()->updateValue(playerStats.drunkMode.getEffectDuration());
+        playerStats.drunkMode.getBar()->updatePosition(Vector2f{ position.x - ((int)radius >> 1), position.y + radius });
+    }
+
+    if (playerStats.shield.isEffectActive()) {
+        playerStats.shield.updateEffectDuration(deltaTime);
+
+        playerStats.shield.getBar()->updateValue(playerStats.shield.getEffectDuration());
+        playerStats.shield.getBar()->updatePosition(Vector2f{ position.x - ((int)radius >> 1), position.y + radius + 10.0f });
+    }
 }
 
 const EntityType Player::getEntityType()
@@ -199,8 +218,8 @@ void Player::setPlayerStats()
     playerStats.lifes = 3;
     playerStats.speed = FileMenager::playerData.speed;
     playerStats.turnSpeed = FileMenager::playerData.turn_speed;
-    playerStats.shield = { 10.0f, false };
-    playerStats.drunkMode = { 10.0f, false };
+    playerStats.shield = { 10.0f, false, new Bar(radius, 2.0f, Color::Blue, Color::Black, playerStats.drunkMode.getEffectDuration(), position, Sprites::PICKUP_SHIELD) };
+    playerStats.drunkMode = { 2.0f, false, new Bar(radius, 2.0f, Color::Color(242, 142, 28, 255), Color::Black, playerStats.drunkMode.getEffectDuration(), position, Sprites::PICKUP_DRUNKMODE)};
 
     playerStats.bulletType.piercing = false;
     playerStats.bulletType.homing = false;

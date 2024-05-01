@@ -43,6 +43,7 @@ public:
 
 	static void gameOver();
 
+	static Effect enemySpawn;
 	static Effect freeze;
 private:
 	static list<Entity*> entities;
