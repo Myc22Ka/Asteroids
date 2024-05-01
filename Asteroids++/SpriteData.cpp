@@ -19,6 +19,8 @@ const vector<pair<string, Sprites>> objects = {
         {"pickupExtraTime", Sprites::PICKUP_EXTRA_TIME},
         {"pickupShield", Sprites::PICKUP_SHIELD},
         {"pickupDrunkmode", Sprites::PICKUP_DRUNKMODE},
+        {"pickupTimes2", Sprites::PICKUP_TIMES_2},
+        {"pickupTimes5", Sprites::PICKUP_TIMES_5 },
         {"heart1UP", Sprites::HEART1UP},
         {"freeze", Sprites::PICKUP_FREEZE},
         {"pickupPiercing", Sprites::PICKUP_PIERCING},

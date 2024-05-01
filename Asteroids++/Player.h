@@ -34,6 +34,8 @@ struct PlayerStats {
 
 	BulletType bulletType;
 
+	Effect scoreTimes5;
+	Effect scoreTimes2;
 	Effect shield;
 	Effect drunkMode;
 };

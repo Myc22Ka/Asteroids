@@ -58,9 +58,10 @@ void Pickup::collisionDetection()
 						Player::playerStats.bulletSize += 3.0f;
 					}
 
-					Score::score += 10;
+					Score::addScore(10);
 					Player::playerStats.bulletDamage += 50.0f;
 					SoundData::play(Sounds::PICKUP_EXTRA_BULLET);
+
 					break;
 				case Sprites::PICKUP_EXTRA_SPEED:
 					if (Player::playerStats.speed < 500.0f) {
@@ -68,27 +69,31 @@ void Pickup::collisionDetection()
 						Player::playerStats.turnSpeed += 5.0f;
 						Player::playerStats.bulletSpeed += 25.0f;
 					}
-					Score::score += 20;
+					Score::addScore(20);
 					SoundData::play(Sounds::PICKUP_EXTRA_SPEED);
+
 					break;
 				case Sprites::PICKUP_SHIELD:
-					Score::score += 50;
+					Score::addScore(50);
 					Player::playerStats.shield.startEffect(15.0f + Player::playerStats.time);
 					Player::playerStats.shield.getBar()->setMaxValue(Player::playerStats.shield.getEffectDuration());
 
 					SoundData::play(Sounds::PICKUP_SHIELD);
+
 					break;
 				case Sprites::PICKUP_DRUNKMODE:
 					Player::playerStats.drunkMode.startEffect(2.0f + Player::playerStats.time);
 					Player::playerStats.drunkMode.getBar()->setMaxValue(Player::playerStats.drunkMode.getEffectDuration());
 
-					Score::score += 100;
+					Score::addScore(100);
 					SoundData::play(Sounds::PICKUP_DRUNKMODE);
+
 					break;
 				case Sprites::PICKUP_PIERCING:
 					if (!Player::playerStats.bulletType.piercing) Player::playerStats.bulletType.piercing = true;
-					Score::score += 1000;
+					Score::addScore(1000);
 					SoundData::play(Sounds::PICKUP_DRUNKMODE);
+
 					break;
 				case Sprites::HEART1UP:
 					if (Player::playerStats.lifes <= 5) {
@@ -98,15 +103,32 @@ void Pickup::collisionDetection()
 							UI.setSpriteState(0);
 					}
 					SoundData::play(Sounds::HEART1UP);
-					Score::score += 200;
+					Score::addScore(200);
+
 					break;
 				case Sprites::PICKUP_FREEZE:
 					SoundData::play(Sounds::FREEZE);
 					Game::freeze.startEffect(physics::getRandomFloatValue(10.0f, 0.5f) + Player::playerStats.time);
+
 					break;
 				case Sprites::PICKUP_EXTRA_TIME:
 					SoundData::play(Sounds::PICKUP_EXTRA_TIME);
 					if (Player::playerStats.time < 10.0f) Player::playerStats.time += 10.0f;
+
+					break;
+				case Sprites::PICKUP_TIMES_2:
+					SoundData::play(Sounds::PICKUP_TIMES_2);
+					if (Player::playerStats.scoreTimes5.isEffectActive()) Player::playerStats.scoreTimes5.setEffectActive(false);
+					Player::playerStats.scoreTimes2.startEffect(physics::getRandomFloatValue(10.0f, 0.5f) + Player::playerStats.time);
+					Player::playerStats.scoreTimes2.getBar()->setMaxValue(Player::playerStats.scoreTimes2.getEffectDuration());
+
+					break;
+				case Sprites::PICKUP_TIMES_5:
+					SoundData::play(Sounds::PICKUP_TIMES_5);
+					if (Player::playerStats.scoreTimes2.isEffectActive()) Player::playerStats.scoreTimes2.setEffectActive(false);
+					Player::playerStats.scoreTimes5.startEffect(physics::getRandomFloatValue(10.0f, 0.5f) + Player::playerStats.time);
+					Player::playerStats.scoreTimes5.getBar()->setMaxValue(Player::playerStats.scoreTimes5.getEffectDuration());
+
 					break;
 				}
 				Game::addEntity(new Explosion(this->position, this->size, collected));

@@ -7,6 +7,19 @@
 #include "Pickup.h"
 #include "Particle.h"
 
+const map<double, Sprites> pickupProbabilities = {
+        { 0.01, Sprites::HEART1UP },
+        { 0.05, Sprites::PICKUP_FREEZE },
+        { 0.075, Sprites::PICKUP_EXTRA_TIME },
+        { 0.1, Sprites::PICKUP_PIERCING },
+        { 0.25, Sprites::PICKUP_TIMES_5 },
+        { 0.2, Sprites::PICKUP_DRUNKMODE },
+        { 0.3, Sprites::PICKUP_SHIELD },
+        { 0.4, Sprites::PICKUP_EXTRA_SPEED },
+        { 0.35, Sprites::PICKUP_TIMES_2 },
+        { 0.5, Sprites::PICKUP_EXTRA_BULLET }
+};
+
 Bullet::Bullet(Vector2f position, Vector2f direction, float& angle) :
     direction(direction), 
     Entity(position, angle, Player::playerStats.bulletSize, Color::Green, getSprite(Player::getPlayerBulletSprite())),
@@ -58,7 +71,7 @@ void Bullet::homeToEnemy(float deltaTime) {
 Entity* Bullet::findNearestEnemy() const
 {
     Entity* nearestEnemy = nullptr;
-    double minTimeToEnemy = 1.3;
+    double minTimeToEnemy = 0.5;
 
     Game::foreachEntity([&](Entity* entity) {
         if (Game::isEnemy(entity))
@@ -111,47 +124,16 @@ void Bullet::asteroidHit(Entity* entity) {
 
 void Bullet::spawnPickup(const Vector2f& position)
 {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<double> dist(0, 1);
+    const auto dice = physics::rollDice();
 
-    auto propability = dist(gen);
+    cout << dice << endl;
 
-    if (propability > 0.5) return;
-
-    if (propability < 0.01) {
-        Game::addEntity(new Pickup(position, getSprite(Sprites::HEART1UP)));
-        return;
+    for (const auto& [prob, spriteType] : pickupProbabilities) {
+        if (dice < prob) {
+            if (dice <= 0.5) Game::addEntity(new Pickup(position, getSprite(spriteType)));
+            return;
+        }
     }
-    if (propability < 0.05) {
-        Game::addEntity(new Pickup(position, getSprite(Sprites::PICKUP_FREEZE)));
-        return;
-    }
-    if (propability < 0.075) {
-        Game::addEntity(new Pickup(position, getSprite(Sprites::PICKUP_EXTRA_TIME)));
-        return;
-    }
-    if (propability < 0.1) {
-        Game::addEntity(new Pickup(position, getSprite(Sprites::PICKUP_PIERCING)));
-        return;
-    }
-    if (propability < 0.2) {
-        Game::addEntity(new Pickup(position, getSprite(Sprites::PICKUP_DRUNKMODE)));
-        return;
-    }
-    if (propability < 0.3) {
-        Game::addEntity(new Pickup(position, getSprite(Sprites::PICKUP_SHIELD)));
-        return;
-    }
-    if (propability < 0.4) {
-        Game::addEntity(new Pickup(position, getSprite(Sprites::PICKUP_EXTRA_SPEED)));
-        return;
-    }
-    if (propability < 0.5) {
-        Game::addEntity(new Pickup(position, getSprite(Sprites::PICKUP_EXTRA_BULLET)));
-        return;
-    }
-    
 }
 
 void Bullet::destroySingleAsteroid(Entity* entity)
@@ -162,7 +144,7 @@ void Bullet::destroySingleAsteroid(Entity* entity)
 
     spawnPickup(asteroid->position);
 
-    Score::score += 10;
+    Score::addScore(10);
     SoundData::play(Sounds::EXPLOSION);
 }
 
@@ -186,6 +168,6 @@ void Bullet::destroyMultiAsteroid(Entity* entity)
     Game::addEntity(new SingleAsteroid(asteroid1->position, asteroid1->direction));
     Game::addEntity(new SingleAsteroid(asteroid2->position, asteroid2->direction));
 
-    Score::score += 20;
+    Score::addScore(20);
     SoundData::play(Sounds::EXPLOSION);
 }

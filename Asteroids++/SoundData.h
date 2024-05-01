@@ -22,6 +22,8 @@ enum class Sounds {
     PICKUP_EXTRA_TIME,
     PICKUP_SHIELD,
     PICKUP_DRUNKMODE,
+    PICKUP_TIMES_2,
+    PICKUP_TIMES_5,
     FREEZE,
     HEART1UP,
     WIND

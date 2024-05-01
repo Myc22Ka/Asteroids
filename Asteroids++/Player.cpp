@@ -17,8 +17,10 @@ PlayerStats Player::playerStats{
     50.0f,
     FileMenager::playerData.bullet_speed,
     {false, false},
-    { 5.0f, false },
-    { 200.0f, false }
+    { 10.0f, false },
+    { 10.0f, false },
+    { 10.0f, false },
+    { 10.0f, false }
 };
 
 Player::Player() :
@@ -47,6 +49,8 @@ void Player::render(RenderWindow& window)
     }
 	if(Game::hitboxesVisibility) window.draw(shape, transform);
     if (playerStats.drunkMode.isEffectActive()) playerStats.drunkMode.getBar()->draw(window);
+    if (playerStats.scoreTimes2.isEffectActive()) playerStats.scoreTimes2.getBar()->draw(window);
+    if (playerStats.scoreTimes5.isEffectActive()) playerStats.scoreTimes5.getBar()->draw(window);
 }
 
 void Player::update(float deltaTime) {
@@ -82,7 +86,7 @@ void Player::update(float deltaTime) {
         setSpriteFullCycle(shieldSprite);
     }
 
-    if(invincibilityFrames < 0 && !playerStats.shield.isEffectActive()) collisionDetection();
+    //if(invincibilityFrames < 0 && !playerStats.shield.isEffectActive()) collisionDetection();
 }
 
 void Player::updatePosition(const float& deltaTime) {
@@ -132,6 +136,20 @@ void Player::updatePosition(const float& deltaTime) {
         playerStats.shield.getBar()->updateValue(playerStats.shield.getEffectDuration());
         playerStats.shield.getBar()->updatePosition(Vector2f{ position.x - ((int)radius >> 1), position.y + radius + 10.0f });
     }
+
+    if (playerStats.scoreTimes2.isEffectActive()) {
+        playerStats.scoreTimes2.updateEffectDuration(deltaTime);
+
+        playerStats.scoreTimes2.getBar()->updateValue(playerStats.scoreTimes2.getEffectDuration());
+        playerStats.scoreTimes2.getBar()->updatePosition(Vector2f{ position.x - ((int)radius >> 1), position.y + radius + 20.0f });
+    }
+
+    if (playerStats.scoreTimes5.isEffectActive()) {
+        playerStats.scoreTimes5.updateEffectDuration(deltaTime);
+
+        playerStats.scoreTimes5.getBar()->updateValue(playerStats.scoreTimes5.getEffectDuration());
+        playerStats.scoreTimes5.getBar()->updatePosition(Vector2f{ position.x - ((int)radius >> 1), position.y + radius + 20.0f });
+    }
 }
 
 const EntityType Player::getEntityType()
@@ -148,11 +166,11 @@ void Player::collisionDetection()
                 return;
 
             SoundData::play(Sounds::EXPLOSION);
+            invincibilityFrames = 5;
             resetPlayerStats();
             playerStats.lifes -= 1;
             WindowBox::playerHealthUIs.back().death = true;
             WindowBox::playerHealthUIs.back().setSpriteState(16);
-            invincibilityFrames = 5;
 
             if (playerStats.lifes == 0)
                 Game::gameOver();
@@ -219,7 +237,9 @@ void Player::setPlayerStats()
     playerStats.speed = FileMenager::playerData.speed;
     playerStats.turnSpeed = FileMenager::playerData.turn_speed;
     playerStats.shield = { 10.0f, false, new Bar(radius, 2.0f, Color::Blue, Color::Black, playerStats.drunkMode.getEffectDuration(), position, Sprites::PICKUP_SHIELD) };
-    playerStats.drunkMode = { 2.0f, false, new Bar(radius, 2.0f, Color::Color(242, 142, 28, 255), Color::Black, playerStats.drunkMode.getEffectDuration(), position, Sprites::PICKUP_DRUNKMODE)};
+    playerStats.drunkMode = { 10.0f, false, new Bar(radius, 2.0f, Color::Color(242, 142, 28, 255), Color::Black, playerStats.drunkMode.getEffectDuration(), position, Sprites::PICKUP_DRUNKMODE) };
+    playerStats.scoreTimes2 = { 10.0f, false, new Bar(radius, 2.0f, Color::Color(144, 238, 144, 255), Color::Black, playerStats.drunkMode.getEffectDuration(), position, Sprites::PICKUP_TIMES_2) };
+    playerStats.scoreTimes5 = { 10.0f, false, new Bar(radius, 2.0f, Color::Color(93, 213, 93, 255), Color::Black, playerStats.drunkMode.getEffectDuration(), position, Sprites::PICKUP_TIMES_5) };
 
     playerStats.bulletType.piercing = false;
     playerStats.bulletType.homing = false;

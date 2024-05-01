@@ -48,7 +48,7 @@ void WindowBox::displayWindow()
                     float lastTime = 0;
 
                     float currentTime = clock.restart().asSeconds();
-                    float fps = 1.f / (currentTime - lastTime);
+                    float fps = 1.0f / (currentTime - lastTime);
                     lastTime = currentTime;
 
                     cout << fps << endl;

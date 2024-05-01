@@ -3,6 +3,7 @@
 #define SCORE_H
 
 #include <SFML/Graphics.hpp>
+#include "Player.h"
 
 using namespace sf;
 using namespace std;
@@ -15,6 +16,7 @@ public:
 	static Font font;
 
 	static void init();
+	static void addScore(const size_t& value);
 };
 
 #endif 

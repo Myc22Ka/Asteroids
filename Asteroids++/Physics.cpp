@@ -117,6 +117,13 @@ const bool physics::rollDice(const double chance){
 
 	return dist(gen) < chance;
 }
+const double physics::rollDice() {
+	random_device rd;
+	mt19937 gen(rd());
+	uniform_real_distribution<double> dist(0.0, 1.0);
+
+	return dist(gen);
+}
 
 const float physics::getPI(){
 	return M_PI;

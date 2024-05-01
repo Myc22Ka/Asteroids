@@ -21,6 +21,9 @@ namespace physics {
 	float getRandomFloatValue(const float& base, const float& range);
 	const Vector2f getRandomDirection();
 	const float getRandomAngle();
+
 	const bool rollDice(const double chance);
+	const double rollDice();
+
 	const float getPI();
 }
