@@ -2,10 +2,11 @@
 #include "FileMenager.h"
 #include "SoundData.h"
 #include "Player.h"
+#include "WindowBox.h"
 
 DashBar::DashBar() {
 	spriteInfo = getSprite(Sprites::DASHBAR);
-    position = Vector2f(static_cast<float>(FileMenager::screenData.size_width - (spriteInfo.spriteSize >> 1) - 10.0f), static_cast<float>(spriteInfo.spriteSize >> 2));
+	position = Vector2f(float(WindowBox::getVideoMode().width - (spriteInfo.spriteSize >> 1) - FileMenager::screenData.padding), float(spriteInfo.spriteSize >> 2));
 }
 
 void DashBar::update(double newCurrentValue)

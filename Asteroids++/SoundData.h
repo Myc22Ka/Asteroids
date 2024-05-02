@@ -26,7 +26,9 @@ enum class Sounds {
     PICKUP_TIMES_5,
     FREEZE,
     HEART1UP,
-    WIND
+    WIND,
+    GOODBYE,
+    PING
 };
 
 class SoundData {

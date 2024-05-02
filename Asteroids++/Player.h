@@ -56,6 +56,7 @@ public:
 private:
 	SpriteInfo shieldSprite;
 
+	void updateStatsbars(const float& deltaTime);
 	void updatePosition(const float& deltaTime);
 	void resetPlayerStats();
 	void setPlayerStats();

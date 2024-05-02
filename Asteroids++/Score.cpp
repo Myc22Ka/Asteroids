@@ -1,20 +1,21 @@
 #include "Score.h"
-#include <iostream>
+#include "WindowBox.h"
 
-size_t Score::score{0};
-Text Score::scoreText{};
-Font Score::font{};
+size_t Score::score{ 0 };
+TextField Score::scoreText{ 24 };
 
-void Score::init()
+void Score::init() {
+	scoreText.setTextCenterX(FileMenager::screenData.padding);
+	scoreText.setText(getScoreString());
+}
+
+size_t Score::getScore() {
+	return score;
+}
+
+string Score::getScoreString()
 {
-	if (!font.loadFromFile("./assets/font.ttf")) {
-		cout << "Error: Could not open file: font.ttf\n";
-		return;
-	}
-
-	scoreText.setFont(font);
-	scoreText.setPosition(Vector2f(30, 20));
-	scoreText.setCharacterSize(48);
+	return to_string(score);
 }
 
 void Score::addScore(const size_t& value)

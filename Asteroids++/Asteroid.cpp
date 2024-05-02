@@ -1,10 +1,11 @@
 #include "Asteroid.h"
 #include "Score.h"
+#include "WindowBox.h"
 
 Asteroid::Asteroid(float health, SpriteInfo spriteInfo) :
 	Entity(getRandomPosition(), physics::getRandomAngle(), physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_size), Color::Red, spriteInfo),
-	health(health + float(floor(Score::score >> 9)) * health),
-	healthBar(size, 3.0f, Color::Red, Color::Black, health + float(floor(Score::score >> 9)) * health, Vector2f(-100.0f, -100.0f)),
+	health(health),
+	healthBar(size, 3.0f, Color::Red, Color::Black, health, Vector2f(-100.0f, -100.0f)),
 	direction(physics::getRandomDirection()),
 	speed(physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_speed))
 {
@@ -30,14 +31,14 @@ void Asteroid::update(float deltaTime) {
 	if (position.x < radius) {
 		direction.x = abs(direction.x);
 	}
-	else if (position.x > FileMenager::screenData.size_width - radius) {
+	else if (position.x > WindowBox::getVideoMode().width - radius) {
 		direction.x = -abs(direction.x);
 	}
 
 	if (position.y < radius) {
 		direction.y = abs(direction.y);
 	}
-	else if (position.y > FileMenager::screenData.size_height - radius) {
+	else if (position.y > WindowBox::getVideoMode().height - radius) {
 		direction.y = -abs(direction.y);
 	}
 
@@ -72,21 +73,18 @@ const Vector2f Asteroid::getRandomPosition() const
 {
 	random_device rd;
 	mt19937 gen(rd());
-	uniform_real_distribution<float> xAxis(radius, FileMenager::screenData.size_width - radius);
-	uniform_real_distribution<float> yAxis(radius, FileMenager::screenData.size_height - radius);
+	uniform_real_distribution<float> xAxis(size, WindowBox::getVideoMode().width - size);
+	uniform_real_distribution<float> yAxis(size, WindowBox::getVideoMode().height - size);
 
 	auto player = Game::doesEntityExist(EntityType::TYPE_PLAYER);
 
-	if (player) {
-		Vector2f randomPosition;
+	if (!player) return Vector2f();
 
-		do {
-			randomPosition = Vector2f(xAxis(gen), yAxis(gen));
-		} while (physics::intersects(randomPosition, radius, player->position, player->radius));
-
-		return randomPosition;
-	}
-	else {
-		return Vector2f(); 
-	}
+	Vector2f randomPosition;
+	
+	do {
+		randomPosition = Vector2f(xAxis(gen), yAxis(gen));
+	} while (physics::intersects(randomPosition, radius, player->position, player->radius * 6.0f));
+	
+	return randomPosition;
 }

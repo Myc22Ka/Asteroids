@@ -17,12 +17,18 @@ using namespace std;
 class Entity;
 class Particle;
 
+enum GameState {
+	MENU, 
+	MENU_LOADING,
+	PLAYING, 
+	GAME_OVER
+};
+
 class Game {
 public:
 	Game();
 
 	static bool hitboxesVisibility;
-	static bool isGameOver;
 
 	static list<Particle*> getParticles();
 	static void addParticle(Particle* particle);
@@ -42,6 +48,8 @@ public:
 	static bool isEntityInsideGroup(Entity* entity, Groups group);
 
 	static void gameOver();
+	static GameState getGameState();
+	static void setGameState(const GameState& newGameState);
 
 	static Effect enemySpawn;
 	static Effect freeze;
@@ -51,6 +59,8 @@ private:
 	static vector<EntityType> enemies;
 	
 	static unordered_map<Groups, vector<EntityType>> groups;
+
+	static GameState gameState;
 };
 
 #endif

@@ -64,25 +64,19 @@
     <Filter Include="Header Files\Objects\Events">
       <UniqueIdentifier>{bd0b5078-a0a5-4086-9cdc-c5efe9ed61aa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Game">
+      <UniqueIdentifier>{2459b2bd-8ba6-47e3-90c0-546efc962404}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game">
+      <UniqueIdentifier>{b648257b-1fed-4b6a-b06c-e85924303dba}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WindowBox.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="WindowBox.h">
-      <Filter>Header Files</Filter>
-    </ClCompile>
     <ClCompile Include="Physics.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Score.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Source Files\Objects</Filter>
     </ClCompile>
     <ClCompile Include="Entity.cpp">
       <Filter>Source Files\Objects\Entities</Filter>
@@ -138,16 +132,31 @@
     <ClCompile Include="Effect.cpp">
       <Filter>Source Files\Objects\Events</Filter>
     </ClCompile>
+    <ClCompile Include="TextField.cpp">
+      <Filter>Source Files\Draws</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowBox.h">
+      <Filter>Header Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="GameOver.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowBox.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Score.cpp">
+      <Filter>Source Files\Draws</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Physics.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Score.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>Header Files\Objects</Filter>
     </ClInclude>
     <ClInclude Include="Entity.h">
       <Filter>Header Files\Objects\Entities</Filter>
@@ -202,6 +211,21 @@
     </ClInclude>
     <ClInclude Include="Effect.h">
       <Filter>Header Files\Objects\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="TextField.h">
+      <Filter>Header Files\Draws</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="GameOver.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Score.h">
+      <Filter>Header Files\Draws</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

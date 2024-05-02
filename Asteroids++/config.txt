@@ -1,7 +1,6 @@
 # screen data
 
-screen_size_height: 900
-screen_size_width: 1200
+screen_padding: 10
 
 # player data
 
@@ -25,5 +24,14 @@ player_dash_length: 3 # dash length in player sizes
 
 enemy_asteroid_spin: 25
 enemy_asteroid_speed: 120
-enemy_asteroid_spawn_time: 1
 enemy_asteroid_size: 64
+
+# draws data
+
+outline_thickness: 2
+outline_fill_background_opacity: 150 # value beetween [0 - 255]
+
+# timings data
+
+default_freeze_time: 15
+default_enemy_spawn_time: 1

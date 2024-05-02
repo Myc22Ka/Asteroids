@@ -47,10 +47,10 @@ void Bar::render()
 
     outline.setSize(Vector2f(maxWidth, height));
 
-    outline.setOutlineThickness(2.0f);
+    outline.setOutlineThickness(FileMenager::drawsData.outline_thickness);
     outline.setOutlineColor(outlineColor);
 
-    outlineColor.a = 150;
+    outlineColor.a = FileMenager::drawsData.outline_fill_background_opacity;
     outline.setFillColor(outlineColor);
 
     bar.setSize(Vector2f(width, height));

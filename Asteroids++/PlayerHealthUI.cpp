@@ -4,7 +4,7 @@
 PlayerHealthUI::PlayerHealthUI(const float& offset) : offset(offset)
 {
     spriteInfo = getSprite(Sprites::HEART);
-	position = Vector2f(float(FileMenager::screenData.size_width - (spriteInfo.spriteSize >> 1) - 10.0f - offset), float(getSprite(Sprites::DASHBAR).spriteSize - (spriteInfo.spriteSize << 1)));
+	position = Vector2f(WindowBox::getVideoMode().width - (spriteInfo.spriteSize >> 1) - FileMenager::screenData.padding - offset, float(getSprite(Sprites::DASHBAR).spriteSize - (spriteInfo.spriteSize << 1)));
 
 	scaleSprite(spriteInfo.sprite, spriteInfo.spriteSize, spriteInfo.hitboxSize);
 }

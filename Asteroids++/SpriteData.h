@@ -39,6 +39,7 @@ enum class Sprites {
     PICKUP_TIMES_5,
     HEART1UP,
     PICKUP_PIERCING,
+    PICKUP_HOMING,
     COLLECTED,
     HEART,
     SHIELD,

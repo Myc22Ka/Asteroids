@@ -95,6 +95,12 @@ void Pickup::collisionDetection()
 					SoundData::play(Sounds::PICKUP_DRUNKMODE);
 
 					break;
+				case Sprites::PICKUP_HOMING:
+					if (!Player::playerStats.bulletType.homing) Player::playerStats.bulletType.homing = true;
+					Score::addScore(1000);
+					SoundData::play(Sounds::PICKUP_EXTRA_BULLET);
+
+					break;
 				case Sprites::HEART1UP:
 					if (Player::playerStats.lifes <= 5) {
 						Player::playerStats.lifes += 1;

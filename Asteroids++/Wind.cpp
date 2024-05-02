@@ -1,4 +1,5 @@
 #include "Wind.h"
+#include "WindowBox.h"
 
 Wind::Wind() : Entity(getRandomPosition(), 0, 0, Color::Yellow, SpriteInfo()), 
 windSpeed(200.0f),
@@ -25,8 +26,8 @@ const Vector2f Wind::getRandomPosition() const
 {
 	random_device rd;
 	mt19937 gen(rd());
-	uniform_real_distribution<float> xAxis(0.0f, static_cast<float>(FileMenager::screenData.size_width));
-	uniform_real_distribution<float> yAxis(0.0f, static_cast<float>(FileMenager::screenData.size_height));
+	uniform_real_distribution<float> xAxis(0.0f, float(WindowBox::getVideoMode().width));
+	uniform_real_distribution<float> yAxis(0.0f, float(WindowBox::getVideoMode().height));
 
 	return Vector2f(xAxis(gen), yAxis(gen));
 }
@@ -67,8 +68,9 @@ void Wind::update(float deltaTime)
 	{
 		if (!entity || !entity->isActive() || entity->getEntityType() != TYPE_PLAYER) continue;
 
-		if (entity->position.x < entity->radius || entity->position.x >= FileMenager::screenData.size_width - entity->radius ||
-			entity->position.y < entity->radius || entity->position.y >= FileMenager::screenData.size_height - entity->radius) continue;
+		if (entity->position.x < entity->radius || entity->position.x >= WindowBox::getVideoMode().width - entity->radius ||
+			entity->position.y < entity->radius || entity->position.y >= WindowBox::getVideoMode().height - entity->radius)
+			continue;
 
 		entity->position += velocity * windLevel;
 	}
@@ -108,7 +110,7 @@ void Wind::resetParticlePositions() {
 }
 
 void Wind::wrapLine(Vertex& vertex1, Vertex& vertex2) const {
-	Vector2f windowSize(static_cast<float>(FileMenager::screenData.size_width), static_cast<float>(FileMenager::screenData.size_height));
+	Vector2f windowSize(float(WindowBox::getVideoMode().width), float(WindowBox::getVideoMode().height));
 
 	// Left boundary
 	if (vertex1.position.x < 0 || vertex2.position.x < 0) {

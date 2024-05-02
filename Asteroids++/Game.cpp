@@ -3,15 +3,15 @@
 #include "MultiAsteroid.h"
 #include "SingleAsteroid.h"
 
-bool Game::isGameOver{ false };
+GameState Game::gameState{ MENU };
 bool Game::hitboxesVisibility{ false };
 
 list<Entity*> Game::entities;
 list<Particle*> Game::particles;
 vector<EntityType> Game::enemies{ EntityType::TYPE_ENEMY_MULTI_ASTEROID, EntityType::TYPE_ENEMY_SINGLE_ASTEROID };
 
-Effect Game::freeze { 15.0f, false };
-Effect Game::enemySpawn { 1.0f, false };
+Effect Game::freeze{ FileMenager::timingsData.default_freeze_time, false };
+Effect Game::enemySpawn{ FileMenager::timingsData.default_enemy_spawn_time, false };
 
 Game::Game() {}
 
@@ -65,7 +65,7 @@ Entity* Game::doesEntityExist(EntityType type) {
 }
 
 void Game::gameOver(){
-    isGameOver = true;
+    gameState = GAME_OVER;
 }
 
 Entity* Game::getRandomEntity(){
@@ -121,4 +121,13 @@ bool Game::isEntityInsideGroup(Entity* entity, Groups group)
     auto it = ranges::find_if(Effect::groups[group], isEntityTypeEqual);
 
     return it != Effect::groups[group].end();
+}
+
+GameState Game::getGameState()
+{
+    return gameState;
+}
+
+void Game::setGameState(const GameState& newGameState){
+    gameState = newGameState;
 }

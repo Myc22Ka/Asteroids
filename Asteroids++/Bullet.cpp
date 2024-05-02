@@ -8,16 +8,8 @@
 #include "Particle.h"
 
 const map<double, Sprites> pickupProbabilities = {
-        { 0.01, Sprites::HEART1UP },
-        { 0.05, Sprites::PICKUP_FREEZE },
-        { 0.075, Sprites::PICKUP_EXTRA_TIME },
-        { 0.1, Sprites::PICKUP_PIERCING },
-        { 0.25, Sprites::PICKUP_TIMES_5 },
-        { 0.2, Sprites::PICKUP_DRUNKMODE },
-        { 0.3, Sprites::PICKUP_SHIELD },
-        { 0.4, Sprites::PICKUP_EXTRA_SPEED },
-        { 0.35, Sprites::PICKUP_TIMES_2 },
-        { 0.5, Sprites::PICKUP_EXTRA_BULLET }
+        { 0.4, Sprites::PICKUP_HOMING },
+        { 0.5, Sprites::PICKUP_PIERCING }
 };
 
 Bullet::Bullet(Vector2f position, Vector2f direction, float& angle) :
@@ -61,17 +53,17 @@ void Bullet::homeToEnemy(float deltaTime) {
     Vector2f homingDirection = physics::calculateDirection(position, enemy->position);
 
     if (position.x < enemy->position.x) {
-        position += homingDirection * float(speed) * deltaTime;
+        position += homingDirection * speed * deltaTime;
     }
     else if (position.x > enemy->position.x) {
-        position += homingDirection * float(speed) * deltaTime;
+        position += homingDirection * speed * deltaTime;
     }
 }
 
 Entity* Bullet::findNearestEnemy() const
 {
     Entity* nearestEnemy = nullptr;
-    double minTimeToEnemy = 0.5;
+    float minTimeToEnemy = 0.3f;
 
     Game::foreachEntity([&](Entity* entity) {
         if (Game::isEnemy(entity))

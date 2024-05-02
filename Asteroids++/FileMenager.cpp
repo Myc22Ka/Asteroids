@@ -4,6 +4,8 @@
 PlayerData FileMenager::playerData;
 ScreenData FileMenager::screenData;
 EnemiesData FileMenager::enemiesData;
+DrawsData FileMenager::drawsData;
+TimingsData FileMenager::timingsData;
 
 FileMenager::FileMenager(){
 	fileName = nullptr;
@@ -52,28 +54,32 @@ void FileMenager::setDataFromFile() const {
 
 	file.close();
 
-	FileMenager::screenData.size_height = static_cast<unsigned int>(dataMap["screen_size_height"]);
-	FileMenager::screenData.size_width = static_cast<unsigned int>(dataMap["screen_size_width"]);
+	screenData.padding = dataMap["screen_padding"];
 
-	FileMenager::playerData.size = dataMap["player_size"];
-	FileMenager::playerData.start_position_x = dataMap["player_start_position_x"];
-	FileMenager::playerData.start_position_y = dataMap["player_start_position_y"];
-	FileMenager::playerData.start_position_angle = dataMap["player_start_position_angle"];
-	FileMenager::playerData.speed = dataMap["player_speed"];
-	FileMenager::playerData.turn_speed = dataMap["player_turn_speed"];
-	FileMenager::playerData.bullet_speed = dataMap["player_bullet_speed"];
-	FileMenager::playerData.bullet_shoot_delay = dataMap["player_bullet_shoot_delay"];
-	FileMenager::playerData.bullet_lifetime = dataMap["player_bullet_lifetime"];
-	FileMenager::playerData.bullet_size = dataMap["player_bullet_size"];
-	FileMenager::playerData.sprite_cycle_time = dataMap["player_sprite_cycle_time"];
-	FileMenager::playerData.dash_duration = dataMap["player_dash_duration"];
-	FileMenager::playerData.dash_length = static_cast<int>(dataMap["player_dash_length"]);
-	FileMenager::playerData.dash_time_delay = dataMap["player_dash_time_delay"];
+	playerData.size = dataMap["player_size"];
+	playerData.start_position_x = dataMap["player_start_position_x"];
+	playerData.start_position_y = dataMap["player_start_position_y"];
+	playerData.start_position_angle = dataMap["player_start_position_angle"];
+	playerData.speed = dataMap["player_speed"];
+	playerData.turn_speed = dataMap["player_turn_speed"];
+	playerData.bullet_speed = dataMap["player_bullet_speed"];
+	playerData.bullet_shoot_delay = dataMap["player_bullet_shoot_delay"];
+	playerData.bullet_lifetime = dataMap["player_bullet_lifetime"];
+	playerData.bullet_size = dataMap["player_bullet_size"];
+	playerData.sprite_cycle_time = dataMap["player_sprite_cycle_time"];
+	playerData.dash_duration = dataMap["player_dash_duration"];
+	playerData.dash_length = static_cast<int>(dataMap["player_dash_length"]);
+	playerData.dash_time_delay = dataMap["player_dash_time_delay"];
 
-	FileMenager::enemiesData.asteroid_spin = dataMap["enemy_asteroid_spin"];
-	FileMenager::enemiesData.asteroid_speed = dataMap["enemy_asteroid_speed"];
-	FileMenager::enemiesData.asteroid_spawn_time = dataMap["enemy_asteroid_spawn_time"];
-	FileMenager::enemiesData.asteroid_size = dataMap["enemy_asteroid_size"];
+	enemiesData.asteroid_spin = dataMap["enemy_asteroid_spin"];
+	enemiesData.asteroid_speed = dataMap["enemy_asteroid_speed"];
+	enemiesData.asteroid_size = dataMap["enemy_asteroid_size"];
+
+	drawsData.outline_fill_background_opacity = static_cast<int>(dataMap["outline_fill_background_opacity"]);
+	drawsData.outline_thickness = dataMap["outline_thickness"];
+
+	timingsData.default_freeze_time = dataMap["default_freeze_time"];
+	timingsData.default_enemy_spawn_time = dataMap["default_enemy_spawn_time"];
 
 	return;
 }

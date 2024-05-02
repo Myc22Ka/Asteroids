@@ -19,7 +19,9 @@ const vector<pair<string, Sounds>> objects = {
     {"drunkmode", Sounds::PICKUP_DRUNKMODE},
     {"heart1UP", Sounds::HEART1UP},
     {"freeze", Sounds::FREEZE},
-    {"wind", Sounds::WIND}
+    {"wind", Sounds::WIND},
+	{"goodbye", Sounds::GOODBYE},
+	{"ping", Sounds::PING}
 };
 
 void SoundData::loadAllSounds()
@@ -57,7 +59,7 @@ void SoundData::stop(Sounds name){
         while (sounds[name].getStatus() == sf::Sound::Playing && sounds[name].getVolume() > 5) {
             sounds[name].setVolume(floor(sounds[name].getVolume() - 1));
 
-            sf::sleep(sf::milliseconds(10));
+            sleep(milliseconds(10));
         }
         sounds[name].setVolume(100);
 
