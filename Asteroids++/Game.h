@@ -21,6 +21,7 @@ enum GameState {
 	MENU, 
 	MENU_LOADING,
 	PLAYING, 
+	PAUSED,
 	GAME_OVER
 };
 
@@ -43,7 +44,7 @@ public:
 	static Entity* doesEntityExist(EntityType type);
 	static void foreachEntity(const function<void(Entity*)>& callback);
 
-	static bool isEnemy(Entity* entity);
+	static const bool isEnemy(Entity* entity);
 
 	static bool isEntityInsideGroup(Entity* entity, Groups group);
 
@@ -58,9 +59,9 @@ public:
 private:
 	static list<Entity*> entities;
 	static list<Particle*> particles;
-	static vector<EntityType> enemies;
+	static vector<Sprites> enemies;
 	
-	static unordered_map<Groups, vector<EntityType>> groups;
+	static unordered_map<Groups, vector<Sprites>> groups;
 
 	static GameState gameState;
 };

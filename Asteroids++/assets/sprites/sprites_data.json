@@ -23,6 +23,14 @@
     "currentSpriteLifeTime": 0,
     "defaultSpriteLifeTime": 0
   },
+  "comet": {
+    "hitboxSize": 64,
+    "spriteSize": 64,
+    "rotation": 0,
+    "spriteState": 0,
+    "currentSpriteLifeTime": 0,
+    "defaultSpriteLifeTime": 0
+  },
   "singleBullet": {
     "hitboxSize": 16,
     "spriteSize": 120,

@@ -6,6 +6,7 @@ const vector<pair<string, Sprites>> objects = {
         {"ship", Sprites::SHIP},
         {"multiAsteroid", Sprites::MULTI_ASTEROID},
         {"singleAsteroid", Sprites::SINGLE_ASTEROID},
+        {"comet", Sprites::COMET},
         {"singleBullet", Sprites::SINGLE_BULLET},
         {"piercingBullet", Sprites::PIERCING_BULLET},
         {"homingBullet", Sprites::HOMING_BULLET},

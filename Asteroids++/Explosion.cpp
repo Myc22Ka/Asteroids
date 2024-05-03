@@ -14,6 +14,15 @@ Explosion::Explosion(Vector2f position, float s, SpriteInfo spriteInfo) : Entity
     scaleSprite(spriteInfo.sprite, spriteInfo.spriteSize, newSize * 3 / 2);
 }
 
+Explosion::Explosion(Vector2f position, float s, SpriteInfo spriteInfo, bool reversed) : Entity(position, 0, 256, sf::Color::Cyan, spriteInfo)
+{
+    reverse(spriteInfo.frames.begin(), spriteInfo.frames.end());
+
+    const auto newSize = this->size * s / spriteInfo.hitboxSize;
+
+    scaleSprite(spriteInfo.sprite, spriteInfo.spriteSize, newSize * 3 / 2);
+}
+
 void Explosion::update(float deltaTime)
 {
     if (spriteInfo.spriteState == spriteInfo.frames.size() - 1) {

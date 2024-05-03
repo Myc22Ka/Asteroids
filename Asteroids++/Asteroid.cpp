@@ -2,55 +2,24 @@
 #include "Score.h"
 #include "WindowBox.h"
 
-Asteroid::Asteroid(float health, SpriteInfo spriteInfo) :
+Asteroid::Asteroid(float health, float speed, SpriteInfo spriteInfo) :
 	Entity(getRandomPosition(), physics::getRandomAngle(), physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_size), Color::Red, spriteInfo),
 	health(health),
 	healthBar(size, 3.0f, Color::Red, Color::Black, health, Vector2f(-100.0f, -100.0f)),
 	direction(physics::getRandomDirection()),
-	speed(physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_speed))
+	speed(speed)
 {
 }
 
-void Asteroid::render(RenderWindow& window)
+const EntityType Asteroid::getEntityType()
 {
-	Transform transform;
-	window.draw(spriteInfo.sprite, transform.translate(position).rotate(angle));
-	if(Game::hitboxesVisibility) window.draw(shape, transform);
-	healthBar.draw(window);
+	return EntityType::TYPE_ENEMY;
 }
 
-void Asteroid::update(float deltaTime) {
-	healthBar.updatePosition(Vector2f{ position.x - radius, position.y + radius });
-	healthBar.updateValue(health);
-
-	if (Game::freeze.isEffectActive()) return;
-
-	angle += FileMenager::enemiesData.asteroid_spin * deltaTime;
-	position += Vector2f(direction.x * speed * deltaTime, direction.y * speed * deltaTime);
-
-	if (position.x < radius) {
-		direction.x = abs(direction.x);
-	}
-	else if (position.x > WindowBox::getVideoMode().width - radius) {
-		direction.x = -abs(direction.x);
-	}
-
-	if (position.y < radius) {
-		direction.y = abs(direction.y);
-	}
-	else if (position.y > WindowBox::getVideoMode().height - radius) {
-		direction.y = -abs(direction.y);
-	}
-
-	setSpriteFullCycle(deltaTime);
-
-	collisionDetection();
-}
-
-void Asteroid::collisionDetection()
+void Asteroid::bounceCollisionDetection()
 {
 	Game::foreachEntity([&](Entity* entity) {
-		if ((entity->getEntityType() == EntityType::TYPE_ENEMY_MULTI_ASTEROID || entity->getEntityType() == EntityType::TYPE_ENEMY_SINGLE_ASTEROID)
+		if ((entity->getEntityType() == EntityType::TYPE_ENEMY && entity->spriteInfo.spriteType != Sprites::COMET)
 			&& entity != this) {
 			Asteroid* otherAsteroid = dynamic_cast<Asteroid*>(entity);
 
@@ -82,4 +51,25 @@ const Vector2f Asteroid::getRandomPosition() const
 	} while (physics::intersects(randomPosition, radius, player->position, player->radius * 6.0f));
 	
 	return randomPosition;
+}
+
+const Bar& Asteroid::getHealthBar() const
+{
+	return healthBar;
+}
+
+void Asteroid::updateHealthBar()
+{
+	healthBar.updatePosition(Vector2f{ position.x - radius, position.y + radius });
+	healthBar.updateValue(health);
+}
+
+const float Asteroid::getHealth()
+{
+	return health;
+}
+
+void Asteroid::updateHealth(const float& newValue)
+{
+	health -= newValue;
 }

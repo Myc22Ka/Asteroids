@@ -21,9 +21,6 @@ public:
 
 	void spawnPickup(const Vector2f& position);
 
-	void destroySingleAsteroid(Entity* entity);
-	void destroyMultiAsteroid(Entity* entity);
-
 	Vector2f direction;
 	float lifeTime;
 

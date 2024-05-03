@@ -2,13 +2,14 @@
 #include <random>
 #include "MultiAsteroid.h"
 #include "SingleAsteroid.h"
+#include "Comet.h"
 
 GameState Game::gameState{ MENU };
 bool Game::hitboxesVisibility{ false };
 
 list<Entity*> Game::entities;
 list<Particle*> Game::particles;
-vector<EntityType> Game::enemies{ EntityType::TYPE_ENEMY_MULTI_ASTEROID, EntityType::TYPE_ENEMY_SINGLE_ASTEROID };
+vector<Sprites> Game::enemies{ Sprites::MULTI_ASTEROID, Sprites::SINGLE_ASTEROID };
 
 Effect Game::freeze{ FileMenager::timingsData.default_freeze_time, false };
 Effect Game::enemySpawn{ FileMenager::timingsData.default_enemy_spawn_time, false };
@@ -69,7 +70,7 @@ void Game::gameOver(){
 }
 
 Entity* Game::getRandomEntity(){
-    vector<Entity*> enemies = { new MultiAsteroid(), new SingleAsteroid() };
+    vector<Entity*> enemies = { new MultiAsteroid(), new SingleAsteroid(), new Comet() };
 
     random_device rd;
     mt19937 gen(rd());
@@ -101,15 +102,8 @@ void Game::removeParticle(Particle* particle)
         });
 }
 
-bool Game::isEnemy(Entity* entity)
-{
-    auto isEntityTypeEqual = [&](EntityType type) {
-        return type == entity->getEntityType();
-        };
-
-    auto it = ranges::find_if(enemies, isEntityTypeEqual);
-
-    return it != enemies.end();
+const bool Game::isEnemy(Entity* entity) {
+    return entity->getEntityType() == EntityType::TYPE_ENEMY;
 }
 
 bool Game::isEntityInsideGroup(Entity* entity, Groups group)
@@ -133,6 +127,8 @@ void Game::setGameState(const GameState& newGameState){
 }
 
 void Game::spawnEnemy(const float& deltaTime) {
+	if (gameState == PAUSED) return;
+
 	enemySpawn.updateEffectDuration(deltaTime);
 
 	if (enemySpawn.getEffectDuration() <= 0 && !freeze.isEffectActive()) {

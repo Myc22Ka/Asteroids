@@ -21,6 +21,7 @@ enum class Sprites {
     ASTEROID,
     MULTI_ASTEROID,
     SINGLE_ASTEROID,
+    COMET,
     SINGLE_BULLET,
     PIERCING_BULLET,
     HOMING_BULLET,

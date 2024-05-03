@@ -10,13 +10,20 @@
 
 class Pickup : public Entity {
 public:
-    Pickup(Vector2f position, SpriteInfo spriteInfo);
+    Pickup(Vector2f position);
+    Pickup(Vector2f position, Sprites spriteType);
 
     void render(RenderWindow& window) override;
     void update(float deltaTime) override;
     const EntityType getEntityType() override;
     void collisionDetection() override;
+
+    const static Sprites getRandomDrop(const map<double, Sprites>& group);
+
+    const static map<double, Sprites> boosters;
+    const static map<double, Sprites> bulletTypes;
 private:
+
     SpriteInfo collected;
     double lifeTime;
 };

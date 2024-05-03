@@ -4,6 +4,7 @@
 #include "SingleBullet.h"
 #include "WindowBox.h"
 #include "Particle.h"
+#include "DeathScreen.h"
 
 float Player::dashTimer = 0.0f;
 PlayerStats Player::playerStats{ 
@@ -32,7 +33,8 @@ Player::Player() :
         getSprite(Sprites::SHIP)
     ), 
     shootTimer(),
-    invincibilityFrames(0.0f)
+    invincibilityFrames(0.0f),
+    dead(false)
 {
     shieldSprite = getSprite(Sprites::SHIELD);
 	drawHitboxes();
@@ -41,6 +43,8 @@ Player::Player() :
 
 void Player::render(RenderWindow& window)
 {
+    if (delay.isEffectActive() || dead) return;
+
 	Transform transform;
 	window.draw(spriteInfo.sprite, transform.translate(position).rotate(angle));
     if (playerStats.shield.isEffectActive()) {
@@ -54,6 +58,17 @@ void Player::render(RenderWindow& window)
 }
 
 void Player::update(float deltaTime) {
+    if (dead) {
+        Game::addEntity(new Explosion(position, size, getSprite(Sprites::EXPLOSION_1), true));
+        dead = false;
+        delay.startEffect(0.7f);
+        return;
+    }
+
+    delay.updateEffectDuration(deltaTime);
+
+    if (delay.isEffectActive()) return;
+
     shootTimer -= deltaTime;
     dashTimer -= deltaTime;
     invincibilityFrames -= deltaTime;
@@ -139,15 +154,24 @@ void Player::collisionDetection()
             if (!physics::intersects(position, radius, asteroid->position, asteroid->radius))
                 return;
 
-            SoundData::play(Sounds::EXPLOSION);
-            invincibilityFrames = 5;
-            resetPlayerStats();
+            invincibilityFrames = 5.0f;
             playerStats.lifes -= 1;
-            WindowBox::playerHealthUIs.back().death = true;
-            WindowBox::playerHealthUIs.back().setSpriteState(16);
+			WindowBox::playerHealthUIs.back().death = true;
+			WindowBox::playerHealthUIs.back().setSpriteState(16);
+            SoundData::play(Sounds::EXPLOSION);
 
-            if (playerStats.lifes == 0)
+            Game::addEntity(new Explosion(position, size));
+
+            if (playerStats.lifes == 0) {
                 Game::gameOver();
+			    return;
+            }
+
+            Game::setGameState(PAUSED);
+			DeathScreen::setDelay(0.7f);
+			DeathScreen::activateDeathScreen(1.75f);
+
+            dead = true;
         }
     });
 }
@@ -189,15 +213,6 @@ void Player::dashAbility(const float& deltaTime)
 
         animationThread.detach();
     }
-}
-
-void Player::resetPlayerStats()
-{
-    auto currentPlayerLifes = playerStats.lifes;
-    setPlayerStats();
-
-    playerStats.lifes = currentPlayerLifes;
-    position = Vector2f(FileMenager::playerData.start_position_x, FileMenager::playerData.start_position_y);
 }
 
 void Player::setPlayerStats()

@@ -7,8 +7,7 @@
 #include "SpriteData.h"
 
 enum EntityType {
-    TYPE_ENEMY_MULTI_ASTEROID,
-    TYPE_ENEMY_SINGLE_ASTEROID,
+    TYPE_ENEMY,
     TYPE_PLAYER,
     TYPE_BULLET_SINGLE,
     TYPE_EXPLOSION,

@@ -56,9 +56,11 @@ public:
 private:
 	SpriteInfo shieldSprite;
 
+	bool dead;
+	Effect delay;
+
 	void updateStatsbars(const float& deltaTime);
 	void updatePosition(const float& deltaTime);
-	void resetPlayerStats();
 	void setPlayerStats();
 	void dashAbility(const float&);
 	float shootTimer;

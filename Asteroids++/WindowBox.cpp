@@ -10,6 +10,7 @@
 #include "PlayerHealthUI.h"
 #include "SingleAsteroid.h"
 #include "Wind.h"
+#include "DeathScreen.h"
 
 vector<PlayerHealthUI> WindowBox::playerHealthUIs;
 VideoMode WindowBox::videoMode{};
@@ -30,6 +31,7 @@ void WindowBox::displayWindow() {
     loaderSprite = getSprite(Sprites::PICKUP_DRUNKMODE);
 
     Wind wind;
+	DeathScreen deathScreen;
 
     initSprite(background, "background", backgroundTexture);
 	initSprite(loader, "loader", loaderTexture);
@@ -70,7 +72,8 @@ void WindowBox::displayWindow() {
 
         window.clear();
 
-        engine(wind, deltaTime);
+        engine(wind, deltaTime); 
+        deathScreen.init(deltaTime, window);
 
         window.display();
     }
@@ -222,16 +225,19 @@ void WindowBox::updateWindow(const float& deltaTime)
         if (!particle->isActive()) continue;
         particle->render(window);
 
-        if (Game::freeze.isEffectActive()) continue;
+        if (Game::freeze.isEffectActive() || Game::getGameState() == PAUSED)
+			continue;
         particle->update(deltaTime);
     }
 
     for (auto& entity : Game::getEntities())
     {
-        if (!entity || !entity->isActive()) continue;
+		if (!entity || !entity->isActive() || (DeathScreen::isScreenOver() && entity->getEntityType() == TYPE_PLAYER))
+			continue;
         entity->render(window);
 
-        if (Game::freeze.isEffectActive() && Game::isEntityInsideGroup(entity, FREEZE_GROUP)) continue;
+        if ((Game::freeze.isEffectActive() && Game::isEntityInsideGroup(entity, FREEZE_GROUP)) || (Game::getGameState() == PAUSED && entity->getEntityType() != TYPE_EXPLOSION))
+			continue;
         entity->update(deltaTime);
     }
 

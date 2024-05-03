@@ -1,9 +1,46 @@
 #include "Pickup.h"
 #include "WindowBox.h"
 
-Pickup::Pickup(Vector2f position, SpriteInfo s): Entity(position, 0, 64, Color::Cyan, s),
-lifeTime(5)
+const map<double, Sprites> Pickup::boosters{
+	{ 0.01, Sprites::HEART1UP },
+	{ 0.05, Sprites::PICKUP_FREEZE },
+	{ 0.075, Sprites::PICKUP_EXTRA_TIME },
+	{ 0.1, Sprites::PICKUP_PIERCING },
+	{ 0.25, Sprites::PICKUP_TIMES_5 },
+	{ 0.2, Sprites::PICKUP_DRUNKMODE },
+	{ 0.3, Sprites::PICKUP_SHIELD },
+	{ 0.4, Sprites::PICKUP_EXTRA_SPEED },
+	{ 0.35, Sprites::PICKUP_TIMES_2 },
+	{ 0.3, Sprites::PICKUP_EXTRA_BULLET },
+};
+
+const map<double, Sprites> Pickup::bulletTypes{
+	{ 0.4, Sprites::PICKUP_HOMING },
+	{ 0.5, Sprites::PICKUP_PIERCING }
+};
+
+Pickup::Pickup(Vector2f position): Entity(position, 0, 64, Color::Cyan, SpriteInfo()),
+lifeTime(5.0f)
 {
+	const auto dice = physics::rollDice();
+
+	for (const auto& [prob, spriteType] : boosters) {
+		if (dice < prob) {
+			if (dice <= 0.5) spriteInfo = getSprite(spriteType);
+			break;
+		}
+	}
+
+	collected = getSprite(Sprites::COLLECTED);
+	drawHitboxes(radius / 2);
+
+	scaleSprite(spriteInfo.sprite, spriteInfo.spriteSize, size);
+}
+
+Pickup::Pickup(Vector2f position, Sprites spriteType) : Entity(position, 0, 64, Color::Cyan, getSprite(spriteType)),
+lifeTime(5.0f)
+{
+	spriteInfo = getSprite(spriteType);
 	collected = getSprite(Sprites::COLLECTED);
 	drawHitboxes(radius / 2);
 
@@ -14,7 +51,7 @@ void Pickup::render(RenderWindow& window)
 {
 	Transform transform;
 	window.draw(spriteInfo.sprite, transform.translate(position));
-	if (Game::hitboxesVisibility) window.draw(shape, transform);
+	if (Game::hitboxesVisibility && spriteInfo.frames.size() != 0) window.draw(shape, transform);
 }
 
 void Pickup::update(float deltaTime)
@@ -22,7 +59,7 @@ void Pickup::update(float deltaTime)
 	lifeTime -= deltaTime;
 	collected.currentSpriteLifeTime -= deltaTime;
 
-	collisionDetection();
+	if (spriteInfo.frames.size() != 0) collisionDetection();
 
 	if (lifeTime <= 0) { 
 		Game::removeEntity(this);
@@ -31,7 +68,7 @@ void Pickup::update(float deltaTime)
 
 	if (Game::freeze.isEffectActive()) return;
 
-	setSpriteFullCycle(deltaTime);
+	if(spriteInfo.frames.size() != 0) setSpriteFullCycle(deltaTime);
 }
 
 const EntityType Pickup::getEntityType()
@@ -141,4 +178,15 @@ void Pickup::collisionDetection()
 			}
 		}
 	});
+}
+
+const Sprites Pickup::getRandomDrop(const map<double, Sprites>& group)
+{
+	const auto dice = physics::rollDice();
+
+	for (const auto& [prob, spriteType] : group) {
+		if (dice < prob) {
+			if (dice <= 0.5) return spriteType;
+		}
+	}
 }

@@ -13,7 +13,11 @@ class MultiAsteroid : public Asteroid
 public:
 	MultiAsteroid();
 
-	const EntityType getEntityType() override;
+	void render(RenderWindow& window) override;
+	void update(float deltaTime) override;
+	void collisionDetection() override;
+	void destroy() override;
+
 private:
 };
 #endif

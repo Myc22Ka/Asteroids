@@ -15,20 +15,28 @@
 
 class Asteroid : public Entity {
 	Bar healthBar;
+	float health;
 
 public:
-	Asteroid(float health, SpriteInfo spriteInfo);
+	Asteroid(float health, float speed, SpriteInfo spriteInfo);
 
-	void render(RenderWindow& window) override;
-	void update(float deltaTime) override;
-	virtual const EntityType getEntityType() override = 0;
-	void collisionDetection() override;
+	virtual void render(RenderWindow& window) override = 0;
+	virtual void update(float deltaTime) override = 0;
+	virtual const EntityType getEntityType() override;
+	virtual void collisionDetection() override = 0;
+	virtual void destroy() = 0;
 
+	void bounceCollisionDetection();
 	const Vector2f getRandomPosition() const;
 
-	Vector2f direction;
+	const Bar& getHealthBar() const;
+	void updateHealthBar();
+
+	const float getHealth();
+	void updateHealth(const float& newValue);
+
 	float speed;
-	float health;
+	Vector2f direction;
 };
 
 #endif
