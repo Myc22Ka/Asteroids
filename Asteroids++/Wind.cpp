@@ -156,3 +156,16 @@ const EntityType Wind::getEntityType()
 }
 
 void Wind::collisionDetection() {}
+
+void Wind::init(const float& deltaTime, RenderWindow& window) {
+	activateWind(physics::getRandomFloatValue(10.0f, 0.75f) + Player::playerStats.time, physics::getRandomFloatValue(3.0f), physics::getRandomDirection());
+
+	update(deltaTime);
+
+	if (Game::freeze.isEffectActive()) {
+		Game::freeze.updateEffectDuration(deltaTime);
+		stopWind();
+	}
+
+	render(window);
+}

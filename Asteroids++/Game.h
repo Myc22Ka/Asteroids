@@ -51,6 +51,8 @@ public:
 	static GameState getGameState();
 	static void setGameState(const GameState& newGameState);
 
+	static void spawnEnemy(const float& deltaTime);
+
 	static Effect enemySpawn;
 	static Effect freeze;
 private:

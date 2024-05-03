@@ -21,7 +21,8 @@ const vector<pair<string, Sounds>> objects = {
     {"freeze", Sounds::FREEZE},
     {"wind", Sounds::WIND},
 	{"goodbye", Sounds::GOODBYE},
-	{"ping", Sounds::PING}
+	{"ping", Sounds::PING},
+	{"hit", Sounds::HIT}
 };
 
 void SoundData::loadAllSounds()

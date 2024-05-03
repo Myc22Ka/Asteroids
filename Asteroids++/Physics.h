@@ -19,7 +19,9 @@ namespace physics {
 
 	float getRandomFloatValue(const float& base);
 	float getRandomFloatValue(const float& base, const float& range);
+	float getRandomOpacity();
 	const Vector2f getRandomDirection();
+	const Vector2f getRandomPosition(const float& size);
 	const float getRandomAngle();
 
 	const bool rollDice(const double chance);

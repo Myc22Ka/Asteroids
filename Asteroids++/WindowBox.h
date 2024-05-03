@@ -29,8 +29,8 @@ private:
 	void displayMenu();
 	void updateWindow(const float& deltaTime);
 	void renderUI();
-	void spawnEnemy(const float& deltaTime);
-	void updateWind(Wind& wind, const float& deltaTime);
+
+	void loadParticles();
 
 	static VideoMode videoMode;
 
@@ -40,7 +40,8 @@ private:
 	SpriteInfo loaderSprite;
 	Sprite loader;
 	Texture loaderTexture;
-	vector<CircleShape> loaderParticles;
+
+	vector<pair<CircleShape, Vector2f>> loaderParticles;
 
 	Effect launch;
 

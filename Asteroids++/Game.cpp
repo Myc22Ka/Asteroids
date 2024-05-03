@@ -131,3 +131,12 @@ GameState Game::getGameState()
 void Game::setGameState(const GameState& newGameState){
     gameState = newGameState;
 }
+
+void Game::spawnEnemy(const float& deltaTime) {
+	enemySpawn.updateEffectDuration(deltaTime);
+
+	if (enemySpawn.getEffectDuration() <= 0 && !freeze.isEffectActive()) {
+		addEntity(getRandomEntity());
+		enemySpawn.setEffectDuration(FileMenager::timingsData.default_enemy_spawn_time + Player::playerStats.time * 0.1f);
+	}
+}

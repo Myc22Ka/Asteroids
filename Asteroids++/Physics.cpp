@@ -1,4 +1,5 @@
 #include "Physics.h"
+#include "WindowBox.h"
 
 constexpr float M_PI = 3.14159265358979323846f;
 
@@ -91,6 +92,14 @@ float physics::getRandomFloatValue(const float& base, const float& range) {
 	return dist(gen);
 }
 
+float physics::getRandomOpacity() {
+	random_device rd;
+	mt19937 gen(rd());
+	uniform_real_distribution<float> dist(0.0f, 255.0f);
+
+	return dist(gen);
+}
+
 const Vector2f physics::getRandomDirection()
 {
 	random_device rd;
@@ -99,6 +108,15 @@ const Vector2f physics::getRandomDirection()
 
 	float angle = dist(gen);
 	return Vector2f(cos(angle), sin(angle));
+}
+
+const Vector2f physics::getRandomPosition(const float& size) {
+	random_device rd;
+	mt19937 gen(rd());
+	uniform_real_distribution<float> xAxis(size, WindowBox::getVideoMode().width - size);
+	uniform_real_distribution<float> yAxis(size, WindowBox::getVideoMode().height - size);
+
+	return Vector2f(xAxis(gen), yAxis(gen));
 }
 
 const float physics::getRandomAngle()

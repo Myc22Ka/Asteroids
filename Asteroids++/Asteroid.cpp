@@ -71,11 +71,6 @@ void Asteroid::collisionDetection()
 
 const Vector2f Asteroid::getRandomPosition() const
 {
-	random_device rd;
-	mt19937 gen(rd());
-	uniform_real_distribution<float> xAxis(size, WindowBox::getVideoMode().width - size);
-	uniform_real_distribution<float> yAxis(size, WindowBox::getVideoMode().height - size);
-
 	auto player = Game::doesEntityExist(EntityType::TYPE_PLAYER);
 
 	if (!player) return Vector2f();
@@ -83,7 +78,7 @@ const Vector2f Asteroid::getRandomPosition() const
 	Vector2f randomPosition;
 	
 	do {
-		randomPosition = Vector2f(xAxis(gen), yAxis(gen));
+		randomPosition = physics::getRandomPosition(size);
 	} while (physics::intersects(randomPosition, radius, player->position, player->radius * 6.0f));
 	
 	return randomPosition;

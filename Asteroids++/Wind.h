@@ -22,6 +22,9 @@ public:
 
     void activateWind(const float& duration, const float& windLevel, const Vector2f& velocity);
     void stopWind();
+
+    void init(const float& deltaTime, RenderWindow& window);
+
 private:
     void wrapLine(Vertex& vertex1, Vertex& vertex2) const;
     void resetParticlePositions();

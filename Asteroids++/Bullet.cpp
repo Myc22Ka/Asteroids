@@ -106,6 +106,30 @@ void Bullet::asteroidHit(Entity* entity) {
 
         if (asteroid->health > 0) {
             hitAsteroids.insert(asteroid);
+
+            Clock clock;
+			thread t([asteroid, clock]() {
+				SoundData::play(Sounds::HIT);
+				asteroid->spriteInfo.sprite.setColor(Color::Red);
+
+				Color startColor = Color::Red;
+				Color endColor = Color::White;
+
+				while (clock.getElapsedTime().asSeconds() < 0.2f) {
+					float progress = clock.getElapsedTime().asSeconds() / 0.2f;
+					Color interpolatedColor = Color(
+						static_cast<Uint8>(startColor.r + progress * (endColor.r - startColor.r)),
+						static_cast<Uint8>(startColor.g + progress * (endColor.g - startColor.g)),
+						static_cast<Uint8>(startColor.b + progress * (endColor.b - startColor.b)),
+						static_cast<Uint8>(startColor.a + progress * (endColor.a - startColor.a)));
+					asteroid->spriteInfo.sprite.setColor(interpolatedColor);
+
+					this_thread::sleep_for(chrono::milliseconds(35));
+				}
+			});
+
+			t.detach();
+
             return;
         }
 

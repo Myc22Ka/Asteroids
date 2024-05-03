@@ -28,7 +28,8 @@ enum class Sounds {
     HEART1UP,
     WIND,
     GOODBYE,
-    PING
+    PING,
+    HIT
 };
 
 class SoundData {

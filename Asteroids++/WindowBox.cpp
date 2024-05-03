@@ -41,16 +41,7 @@ void WindowBox::displayWindow() {
     Game::setGameState(MENU_LOADING);
 	launch.startEffect(5.0f);
 
-    std::random_device rd;
-	std::mt19937 gen(rd());
-	std::uniform_real_distribution<float> disPos(0.0f, 800.0f);
-
-    for (size_t i = 0; i < 100; i++) {
-		CircleShape circle(physics::getRandomFloatValue(5.0f));
-		circle.setPosition(disPos(gen), disPos(gen));
-		circle.setFillColor(sf::Color(255, 255, 255, 150));
-		loaderParticles.push_back(circle);
-    }
+    loadParticles();
 
     while (window.isOpen()) {
         Event e{};
@@ -88,8 +79,8 @@ void WindowBox::displayWindow() {
 void WindowBox::engine(Wind& wind, const float& deltaTime)
 {
     if (Game::getGameState() == MENU_LOADING) {
-		launchGame(deltaTime);
-		//Game::setGameState(MENU);
+		//launchGame(deltaTime);
+		Game::setGameState(MENU);
 		return;
     }
 
@@ -100,8 +91,10 @@ void WindowBox::engine(Wind& wind, const float& deltaTime)
     }
 
     updateWindow(deltaTime);
-    updateWind(wind, deltaTime);
-    spawnEnemy(deltaTime);
+
+	wind.init(deltaTime, window);
+    Game::spawnEnemy(deltaTime);
+
     renderUI();
 
     if (Game::getGameState() == GAME_OVER) {
@@ -114,11 +107,12 @@ void WindowBox::engine(Wind& wind, const float& deltaTime)
 }
 
 void WindowBox::launchGame(const float& deltaTime) {
+	Color color = loader.getColor();
+
 	if (launch.isEffectActive() && loaderSprite.spriteState != loaderSprite.frames.size() - 1) {
         launch.updateEffectDuration(deltaTime);
 	    float opacity = 255.0f * (1 - launch.getEffectDuration() / 5.0f);
 
-        Color color = loader.getColor();
 	    color.a = static_cast<Uint8>(opacity);
 
 		loader.setColor(color);
@@ -142,23 +136,41 @@ void WindowBox::launchGame(const float& deltaTime) {
 		launch.updateEffectDuration(deltaTime);
 		float opacity = 255.0f * (launch.getEffectDuration() / 5.0f);
 
-		Color color = loader.getColor();
 		color.a = static_cast<Uint8>(opacity);
 
 		loader.setColor(color);
 		loaderSprite.sprite.setColor(color);
 
-        if (!launch.isEffectActive() && loaderSprite.spriteState == loaderSprite.frames.size() - 1) {
-		    Game::setGameState(MENU);
-        }
+        if (!launch.isEffectActive() && loaderSprite.spriteState == loaderSprite.frames.size() - 1) Game::setGameState(MENU);
 	}
 
     window.draw(loader);
 	window.draw(loaderSprite.sprite, Transform().translate(Vector2f(600.0f, 450.0f)).scale(10.0f, 10.0f));
 
-    for (auto& circle : loaderParticles) {
-		circle.move(physics::getRandomDirection());
-		window.draw(circle);
+    for (auto& [circle, velocity] : loaderParticles) {
+		velocity.x += sin(circle.getPosition().y / 0.5f);
+
+	    circle.move(velocity);
+
+        Color c = circle.getFillColor();
+		c.a = min(color.a, static_cast<Uint8>(150.0f));
+
+        circle.setFillColor(c);
+
+	    FloatRect bounds(-circle.getRadius(), -circle.getRadius(), window.getSize().x + circle.getRadius(), window.getSize().y + circle.getRadius());
+
+	    if (!bounds.contains(circle.getPosition())) {
+		    if (circle.getPosition().x < bounds.left)
+			    circle.setPosition(bounds.left + bounds.width, circle.getPosition().y);
+		    else if (circle.getPosition().x > bounds.left + bounds.width)
+			    circle.setPosition(bounds.left, circle.getPosition().y);
+		    if (circle.getPosition().y < bounds.top)
+			    circle.setPosition(circle.getPosition().x, bounds.top + bounds.height);
+		    else if (circle.getPosition().y > bounds.top + bounds.height)
+			    circle.setPosition(circle.getPosition().x, bounds.top);
+	    }
+
+	window.draw(circle);
 	}
 }
 
@@ -241,19 +253,14 @@ void WindowBox::renderUI()
     dashBar.draw(window);
 }
 
-void WindowBox::updateWind(Wind& wind, const float& deltaTime)
-{
-    wind.activateWind(physics::getRandomFloatValue(10.0f, 0.75f) + Player::playerStats.time, physics::getRandomFloatValue(3.0f), physics::getRandomDirection());
-
-    wind.update(deltaTime);
-
-    if (Game::freeze.isEffectActive())
-    {
-        Game::freeze.updateEffectDuration(deltaTime);
-        wind.stopWind();
-    }
-
-    wind.render(window);
+void WindowBox::loadParticles() {
+	for (size_t i = 0; i < 50; i++) {
+		CircleShape circle(physics::getRandomFloatValue(10.0f, 1.5f));
+		circle.setPosition(physics::getRandomPosition(circle.getRadius()));
+		circle.setFillColor(Color(208, 241, 255, 150));
+		const auto velocity = Vector2f(physics::getRandomFloatValue(2.5f), physics::getRandomFloatValue(physics::getPI() / 2, 0.2f));
+		loaderParticles.push_back({ circle, velocity });
+	}
 }
 
 void WindowBox::begin()
@@ -271,15 +278,5 @@ void WindowBox::begin()
         playerHealthUIs.push_back(offset);
 
         offset += 20.0f;
-    }
-}
-
-void WindowBox::spawnEnemy(const float& deltaTime)
-{
-    Game::enemySpawn.updateEffectDuration(deltaTime);
-
-    if (Game::enemySpawn.getEffectDuration() <= 0 && !Game::freeze.isEffectActive()) {
-        Game::addEntity(Game::getRandomEntity());
-		Game::enemySpawn.setEffectDuration(FileMenager::timingsData.default_enemy_spawn_time + Player::playerStats.time * 0.1f);
     }
 }
