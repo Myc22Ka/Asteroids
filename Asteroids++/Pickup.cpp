@@ -3,21 +3,18 @@
 
 const map<double, Sprites> Pickup::boosters{
 	{ 0.01, Sprites::HEART1UP },
-	{ 0.05, Sprites::PICKUP_FREEZE },
 	{ 0.075, Sprites::PICKUP_EXTRA_TIME },
-	{ 0.1, Sprites::PICKUP_PIERCING },
+	{ 0.1, Sprites::PICKUP_DRUNKMODE },
+	{ 0.2, Sprites::PICKUP_FREEZE },
 	{ 0.25, Sprites::PICKUP_TIMES_5 },
-	{ 0.2, Sprites::PICKUP_DRUNKMODE },
 	{ 0.3, Sprites::PICKUP_SHIELD },
-	{ 0.4, Sprites::PICKUP_EXTRA_SPEED },
-	{ 0.35, Sprites::PICKUP_TIMES_2 },
-	{ 0.3, Sprites::PICKUP_EXTRA_BULLET },
+	{ 0.35, Sprites::PICKUP_EXTRA_SPEED },
+	{ 0.4, Sprites::PICKUP_TIMES_2 },
+	{ 0.5, Sprites::PICKUP_EXTRA_BULLET },
 };
 
-const map<double, Sprites> Pickup::bulletTypes{
-	{ 0.4, Sprites::PICKUP_HOMING },
-	{ 0.5, Sprites::PICKUP_PIERCING }
-};
+const vector<Sprites> Pickup::modifiers{ Sprites::PICKUP_EXTRA_BULLET, Sprites::PICKUP_EXTRA_SPEED, Sprites::PICKUP_EXTRA_TIME };
+const vector<Sprites> Pickup::bulletTypes{ Sprites::PICKUP_HOMING, Sprites::PICKUP_PIERCING };
 
 Pickup::Pickup(Vector2f position): Entity(position, 0, 64, Color::Cyan, SpriteInfo()),
 lifeTime(5.0f)
@@ -189,4 +186,15 @@ const Sprites Pickup::getRandomDrop(const map<double, Sprites>& group)
 			if (dice <= 0.5) return spriteType;
 		}
 	}
+}
+
+const Sprites Pickup::getRandomFromGroup(const vector<Sprites>& group)
+{
+	random_device rd;
+	mt19937 gen(rd());
+	uniform_int_distribution<size_t> dist(0, group.size() - 1);
+
+	auto randomIndex = dist(gen);
+
+	return group[randomIndex];
 }

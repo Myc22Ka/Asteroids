@@ -61,8 +61,6 @@ public:
     ~FileMenager();
 
     void setFileName(const char*);
-
-    void test();
  
     const char* getFileName() const;
 	void setDataFromFile() const;

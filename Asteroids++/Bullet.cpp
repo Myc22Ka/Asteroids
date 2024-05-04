@@ -7,26 +7,11 @@
 #include "Pickup.h"
 #include "Particle.h"
 
-Bullet::Bullet(Vector2f position, Vector2f direction, float& angle) :
-    direction(direction), 
-    Entity(position, angle, Player::playerStats.bulletSize, Color::Green, getSprite(Player::getPlayerBulletSprite())),
+Bullet::Bullet(Vector2f position, Vector2f direction, float& angle, Sprites spriteType) :
+    direction(direction),
+    Entity(position, angle, Player::playerStats.bulletSize, Color::Green, getSprite(spriteType)),
     lifeTime(FileMenager::playerData.bullet_lifetime)
 {
-}
-
-void Bullet::update(float deltaTime)
-{
-    lifeTime -= deltaTime;
-
-    position += Vector2f(direction.x * Player::playerStats.bulletSpeed * deltaTime, direction.y * Player::playerStats.bulletSpeed * deltaTime);
-    if (lifeTime <= 0) {
-        Game::removeEntity(this);
-        return;
-    }
-
-    if (Player::playerStats.bulletType.homing && lifeTime < 0.9 * FileMenager::playerData.bullet_lifetime) homeToEnemy(deltaTime);
-
-    collisionDetection();
 }
 
 void Bullet::homeToEnemy(float deltaTime) {
@@ -120,6 +105,7 @@ void Bullet::asteroidHit(Entity* entity) {
 
 					this_thread::sleep_for(chrono::milliseconds(35));
 				}
+                asteroid->spriteInfo.sprite.setColor(Color::White);
 			});
 
 			t.detach();

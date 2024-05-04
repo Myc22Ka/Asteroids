@@ -52,20 +52,19 @@ public:
 	static Sprites getPlayerBulletSprite();
 
 	static PlayerStats playerStats;
-	static float dashTimer;
+	static Effect dash;
 private:
 	SpriteInfo shieldSprite;
 
 	bool dead;
 	Effect delay;
+	Effect invincibilityFrames;
 
 	void updateStatsbars(const float& deltaTime);
 	void updatePosition(const float& deltaTime);
 	void setPlayerStats();
 	void dashAbility(const float&);
 	float shootTimer;
-	bool isDashing = false;
-	float invincibilityFrames;
 };
 
 #endif

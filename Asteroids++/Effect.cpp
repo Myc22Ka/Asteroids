@@ -1,10 +1,6 @@
 #include "Effect.h"
 #include "Entity.h"
 
-unordered_map<Groups, vector<EntityType>> Effect::groups{ 
-	{ FREEZE_GROUP, { EntityType::TYPE_EVENT_WIND, EntityType::TYPE_PARTICLE} } 
-};
-
 Effect::Effect(float duration, bool active, Bar* bar) : duration(duration), active(active), bar(bar) {}
 
 Effect::Effect(float duration, bool active) : duration(duration), active(active), bar(new Bar()) {}

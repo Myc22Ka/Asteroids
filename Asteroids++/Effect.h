@@ -33,8 +33,6 @@ public:
 
 	Bar* getBar();
 	void setBar(Bar* bar);
-
-	static unordered_map<Groups, vector<EntityType>> groups;
 };
 
 #endif

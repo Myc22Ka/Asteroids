@@ -6,7 +6,7 @@
 #include "Particle.h"
 #include "DeathScreen.h"
 
-float Player::dashTimer = 0.0f;
+Effect Player::dash({ 0.0f, false });
 PlayerStats Player::playerStats{ 
     FileMenager::playerData.bullet_shoot_delay,
     FileMenager::playerData.turn_speed,
@@ -25,15 +25,15 @@ PlayerStats Player::playerStats{
 };
 
 Player::Player() :
-	Entity(
-        Vector2f(FileMenager::playerData.start_position_x, FileMenager::playerData.start_position_y), 
-        FileMenager::playerData.start_position_angle, 
-        FileMenager::playerData.size, 
+    Entity(
+        Vector2f(FileMenager::playerData.start_position_x, FileMenager::playerData.start_position_y),
+        FileMenager::playerData.start_position_angle,
+        FileMenager::playerData.size,
         Color::Blue,
         getSprite(Sprites::SHIP)
-    ), 
+    ),
     shootTimer(),
-    invincibilityFrames(0.0f),
+    invincibilityFrames({ 0.0f, false }),
     dead(false)
 {
     shieldSprite = getSprite(Sprites::SHIELD);
@@ -58,10 +58,12 @@ void Player::render(RenderWindow& window)
 }
 
 void Player::update(float deltaTime) {
+    invincibilityFrames.updateEffectDuration(deltaTime);
+
     if (dead) {
-        Game::addEntity(new Explosion(position, size, getSprite(Sprites::EXPLOSION_1), true));
+        Game::addEntity(new Explosion(position, size, getSprite(Sprites::APPEARING)));
         dead = false;
-        delay.startEffect(0.7f);
+        delay.startEffect(0.5f);
         return;
     }
 
@@ -69,16 +71,15 @@ void Player::update(float deltaTime) {
 
     if (delay.isEffectActive()) return;
 
-    shootTimer -= deltaTime;
-    dashTimer -= deltaTime;
-    invincibilityFrames -= deltaTime;
+    shootTimer -= deltaTime; 
+    dash.updateEffectDuration(deltaTime);
 
     spriteInfo.currentSpriteLifeTime -= deltaTime;
 
     updatePosition(deltaTime);
     dashAbility(deltaTime);
 
-    if (isDashing) Game::addParticle(new Particle(position, angle, Sprites::SHIP, Color(126, 193, 255, 100), 0.15));
+    if (dash.isEffectActive()) Game::addParticle(new Particle(position, angle, Sprites::SHIP, Color(126, 193, 255, 100), 0.15));
 
     if (Keyboard::isKeyPressed(Keyboard::Space) && shootTimer <= 0.0f) {
         shootTimer = Player::playerStats.shootOffset;
@@ -88,10 +89,29 @@ void Player::update(float deltaTime) {
         SoundData::play(Sounds::LASER_SHOOT);
     }
 
-    if (!Keyboard::isKeyPressed(Keyboard::Space) && spriteInfo.currentSpriteLifeTime <= 0) {
-        spriteInfo.currentSpriteLifeTime = spriteInfo.defaultSpriteLifeTime;
-        spriteInfo.spriteState = (spriteInfo.spriteState + 1) % spriteInfo.frames.size();
-        updateSprite(spriteInfo.sprite, spriteInfo.frames, (int)spriteInfo.spriteState);
+    if (invincibilityFrames.isEffectActive()) {
+        thread t([&]() {
+            Clock clock;
+            spriteInfo.sprite.setColor(Color::Red);
+
+            Color startColor = Color(48,218,255,255);
+            Color endColor = Color::White;
+
+                while (clock.getElapsedTime().asSeconds() < 1.0f) {
+                    float progress = clock.getElapsedTime().asSeconds() / 1.0f;
+                    Color interpolatedColor = Color(
+                        static_cast<Uint8>(startColor.r + progress * (endColor.r - startColor.r)),
+                        static_cast<Uint8>(startColor.g + progress * (endColor.g - startColor.g)),
+                        static_cast<Uint8>(startColor.b + progress * (endColor.b - startColor.b)),
+                        static_cast<Uint8>(startColor.a + progress * (endColor.a - startColor.a)));
+                    spriteInfo.sprite.setColor(interpolatedColor);
+
+                    this_thread::sleep_for(chrono::milliseconds(20));
+                }
+            spriteInfo.sprite.setColor(Color::White);
+        });
+
+        t.detach();
     }
 
     if (playerStats.shield.isEffectActive()) {
@@ -101,11 +121,11 @@ void Player::update(float deltaTime) {
         setSpriteFullCycle(shieldSprite);
     }
 
-    if(invincibilityFrames < 0 && !playerStats.shield.isEffectActive()) collisionDetection();
+    if(!invincibilityFrames.isEffectActive() && !playerStats.shield.isEffectActive()) collisionDetection();
 }
 
 void Player::updatePosition(const float& deltaTime) {
-    if (!isDashing) {
+    if (!dash.isEffectActive()) {
         float turnDirection = 0.0f;
 
         if (playerStats.drunkMode.isEffectActive()) {
@@ -135,6 +155,13 @@ void Player::updatePosition(const float& deltaTime) {
         position.y += sin(radians) * playerStats.speed * deltaTime;
     }
 
+    if (Keyboard::isKeyPressed(Keyboard::S)) {
+        float radians = angle * (physics::getPI() / 180.0f);
+
+        position.x -= cos(radians) * playerStats.speed * deltaTime;
+        position.y -= sin(radians) * playerStats.speed * deltaTime;
+    }
+
     position.x = min(max(position.x, radius), WindowBox::getVideoMode().width - radius);
 	position.y = min(max(position.y, radius), WindowBox::getVideoMode().height - radius);
 
@@ -149,18 +176,18 @@ const EntityType Player::getEntityType()
 void Player::collisionDetection()
 {
     Game::foreachEntity([this](Entity* entity) {
-        if (auto* asteroid = dynamic_cast<Asteroid*>(entity))
-        {
-            if (!physics::intersects(position, radius, asteroid->position, asteroid->radius))
+        if (!Game::getEvil(entity) || entity == this) return;
+
+            if (!physics::intersects(position, radius, entity->position, entity->radius))
                 return;
 
-            invincibilityFrames = 5.0f;
+            invincibilityFrames.startEffect(3.0f);
             playerStats.lifes -= 1;
 			WindowBox::playerHealthUIs.back().death = true;
 			WindowBox::playerHealthUIs.back().setSpriteState(16);
             SoundData::play(Sounds::EXPLOSION);
 
-            Game::addEntity(new Explosion(position, size));
+            Game::addEntity(new Explosion(position, size, getSprite(Sprites::DESAPPEARING)));
 
             if (playerStats.lifes == 0) {
                 Game::gameOver();
@@ -168,11 +195,10 @@ void Player::collisionDetection()
             }
 
             Game::setGameState(PAUSED);
-			DeathScreen::setDelay(0.7f);
+			DeathScreen::setDelay(0.6f);
 			DeathScreen::activateDeathScreen(1.75f);
 
             dead = true;
-        }
     });
 }
 
@@ -180,16 +206,15 @@ void Player::dashAbility(const float& deltaTime)
 {
     const auto animationDuration = FileMenager::playerData.dash_duration;
 
-    if (Keyboard::isKeyPressed(Keyboard::R) && !isDashing && dashTimer <= 0) {
-        isDashing = true;
-        dashTimer = FileMenager::playerData.dash_time_delay;
-        invincibilityFrames = 0;
+    if (Keyboard::isKeyPressed(Keyboard::R) && dash.getEffectDuration() < 0) {
+        dash.startEffect(FileMenager::playerData.dash_time_delay);
+        invincibilityFrames.setEffectDuration(0.0f);
 
         float radians = angle * (physics::getPI() / 180.0f);
 
         Vector2f endPoint(position.x + cos(radians) * size * FileMenager::playerData.dash_length, position.y + sin(radians) * size * FileMenager::playerData.dash_length);
 
-        if(invincibilityFrames <= 0) SoundData::play(Sounds::DASH_ABILITY);
+        if(!invincibilityFrames.isEffectActive()) SoundData::play(Sounds::DASH_ABILITY);
         thread animationThread([this, endPoint, animationDuration]() {
             this_thread::sleep_for(chrono::milliseconds(50));
             Clock clock;
@@ -202,8 +227,8 @@ void Player::dashAbility(const float& deltaTime)
                 Vector2f interpolatedPosition = position + (endPoint - position) * t;
                 position = interpolatedPosition;
 
-                if (t >= animationDuration || this->invincibilityFrames > 0) {
-                    isDashing = false;
+                if (t >= animationDuration || invincibilityFrames.isEffectActive()) {
+                    dash.setEffectActive(false);
                     break;
                 }
 
@@ -231,7 +256,7 @@ void Player::setPlayerStats()
     playerStats.scoreTimes5 = { 10.0f, false, new Bar(radius, 2.0f, Color::Color(93, 213, 93, 255), Color::Black, playerStats.drunkMode.getEffectDuration(), Vector2f(-100.0f, -100.0f), Sprites::PICKUP_TIMES_5) };
 
     playerStats.bulletType.piercing = false;
-    playerStats.bulletType.homing = true;
+    playerStats.bulletType.homing = false;
 }
 
 Sprites Player::getPlayerBulletSprite()

@@ -24,9 +24,11 @@
     <ClCompile Include="DashBar.cpp" />
     <ClCompile Include="DeathScreen.cpp" />
     <ClCompile Include="Effect.cpp" />
+    <ClCompile Include="EnemyBullet.cpp" />
     <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="Bar.cpp" />
     <ClCompile Include="GameOver.cpp" />
+    <ClCompile Include="Invader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -56,12 +58,14 @@
     <ClInclude Include="DashBar.h" />
     <ClInclude Include="DeathScreen.h" />
     <ClInclude Include="Effect.h" />
+    <ClInclude Include="EnemyBullet.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Explosion.h" />
     <ClInclude Include="FileMenager.h" />
     <ClInclude Include="Bar.h" />
     <ClInclude Include="GameOver.h" />
+    <ClInclude Include="Invader.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="MultiAsteroid.h" />
     <ClInclude Include="Particle.h" />

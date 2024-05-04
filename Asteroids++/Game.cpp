@@ -3,13 +3,14 @@
 #include "MultiAsteroid.h"
 #include "SingleAsteroid.h"
 #include "Comet.h"
+#include "Invader.h"
 
 GameState Game::gameState{ MENU };
 bool Game::hitboxesVisibility{ false };
 
 list<Entity*> Game::entities;
 list<Particle*> Game::particles;
-vector<Sprites> Game::enemies{ Sprites::MULTI_ASTEROID, Sprites::SINGLE_ASTEROID };
+vector<EntityType> Game::enemies{ EntityType::TYPE_ENEMY, EntityType::TYPE_ENEMY_BULLET };
 
 Effect Game::freeze{ FileMenager::timingsData.default_freeze_time, false };
 Effect Game::enemySpawn{ FileMenager::timingsData.default_enemy_spawn_time, false };
@@ -65,22 +66,36 @@ Entity* Game::doesEntityExist(EntityType type) {
     return nullptr;
 }
 
+Entity* Game::findEntity(Sprites spriteType) {
+    for (auto& entity : entities)
+        if (entity->spriteInfo.spriteType == spriteType) return entity;
+
+    return nullptr;
+}
+
 void Game::gameOver(){
     gameState = GAME_OVER;
 }
 
-Entity* Game::getRandomEntity(){
-    vector<Entity*> enemies = { new MultiAsteroid(), new SingleAsteroid(), new Comet() };
+Entity* Game::getRandomEntity() {
+    const vector<EnemySpawn> enemiesList = {
+        { new Invader(), 0.25, false },
+        { new Comet(), 0.4, true },
+        { new MultiAsteroid(), 0.5, false },
+        { new SingleAsteroid() , 1, false }
+    };
 
-    random_device rd;
-    mt19937 gen(rd());
-    uniform_int_distribution<size_t> dist(0, enemies.size() - 1);
+    const auto dice = physics::rollDice();
 
-    auto randomIndex = dist(gen);
+    for (const auto& [entity, chance, onlyOne] : enemiesList) {
+        if (onlyOne && findEntity(entity->spriteInfo.spriteType) == nullptr && dice < chance) return entity;
 
-    return enemies[randomIndex];
+        if (!onlyOne && dice < chance) return entity;
+    }
+
+
+    return nullptr;
 }
-
 list<Particle*> Game::getParticles()
 {
     return particles;
@@ -102,19 +117,16 @@ void Game::removeParticle(Particle* particle)
         });
 }
 
-const bool Game::isEnemy(Entity* entity) {
-    return entity->getEntityType() == EntityType::TYPE_ENEMY;
+const bool Game::getEvil(Entity* entity)
+{
+    for (auto& enemy : enemies)
+        if (entity->getEntityType() == enemy) return true;
+
+    return false;
 }
 
-bool Game::isEntityInsideGroup(Entity* entity, Groups group)
-{
-    auto isEntityTypeEqual = [&](EntityType type) {
-        return type == entity->getEntityType();
-        };
-
-    auto it = ranges::find_if(Effect::groups[group], isEntityTypeEqual);
-
-    return it != Effect::groups[group].end();
+const bool Game::isEnemy(Entity* entity) {
+    return entity->getEntityType() == EntityType::TYPE_ENEMY;
 }
 
 GameState Game::getGameState()
@@ -132,7 +144,9 @@ void Game::spawnEnemy(const float& deltaTime) {
 	enemySpawn.updateEffectDuration(deltaTime);
 
 	if (enemySpawn.getEffectDuration() <= 0 && !freeze.isEffectActive()) {
-		addEntity(getRandomEntity());
+        const auto entity = getRandomEntity();
+
+		if(entity) addEntity(entity);
 		enemySpawn.setEffectDuration(FileMenager::timingsData.default_enemy_spawn_time + Player::playerStats.time * 0.1f);
 	}
 }

@@ -21,7 +21,7 @@ void Comet::update(float deltaTime)
 {
     updateHealthBar();
 
-    Game::addParticle(new Particle(position, angle, spriteInfo.spriteType, Color(255,255,255,50), 0.2f));
+    Game::addParticle(new Particle(position, angle, spriteInfo.spriteType, Color(255,255,255,50), 0.5f));
 
     if (Game::freeze.isEffectActive()) return;
 
@@ -51,7 +51,7 @@ void Comet::destroy()
 {
     Game::replaceEntity(this, new Explosion(position, size));
 
-    Game::addEntity(new Pickup(position, Pickup::getRandomDrop(Pickup::bulletTypes)));
+    Game::addEntity(new Pickup(position, Pickup::getRandomFromGroup(Pickup::bulletTypes)));
 
     Score::addScore(10);
     SoundData::play(Sounds::EXPLOSION);

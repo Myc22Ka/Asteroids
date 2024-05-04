@@ -25,6 +25,12 @@ enum GameState {
 	GAME_OVER
 };
 
+struct EnemySpawn {
+	Entity* entity;
+	double chance;
+	bool onlyOneTheSameTime;
+};
+
 class Game {
 public:
 	Game();
@@ -32,6 +38,7 @@ public:
 	static bool hitboxesVisibility;
 
 	static list<Particle*> getParticles();
+	static Entity* findEntity(Sprites spriteType);
 	static void addParticle(Particle* particle);
 	static void removeParticle(Particle* particle);
 
@@ -45,8 +52,7 @@ public:
 	static void foreachEntity(const function<void(Entity*)>& callback);
 
 	static const bool isEnemy(Entity* entity);
-
-	static bool isEntityInsideGroup(Entity* entity, Groups group);
+	static const bool getEvil(Entity* entity);
 
 	static void gameOver();
 	static GameState getGameState();
@@ -59,7 +65,7 @@ public:
 private:
 	static list<Entity*> entities;
 	static list<Particle*> particles;
-	static vector<Sprites> enemies;
+	static vector<EntityType> enemies;
 	
 	static unordered_map<Groups, vector<Sprites>> groups;
 

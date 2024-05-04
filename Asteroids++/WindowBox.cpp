@@ -14,6 +14,7 @@
 
 vector<PlayerHealthUI> WindowBox::playerHealthUIs;
 VideoMode WindowBox::videoMode{};
+TextField WindowBox::fps{ 24 };
 
 WindowBox::WindowBox() {}
 
@@ -23,12 +24,12 @@ VideoMode WindowBox::getVideoMode() {
 
 void WindowBox::displayWindow() {
 	videoMode = VideoMode(1200, 900);
-	//videoMode = VideoMode::getDesktopMode();
+    //videoMode = VideoMode::getDesktopMode();
 
     window.create(videoMode, "Asteroids++", Style::None);
     window.setFramerateLimit(60);
 
-    loaderSprite = getSprite(Sprites::PICKUP_DRUNKMODE);
+    loaderSprite = getSprite(Sprites::LOADER);
 
     Wind wind;
 	DeathScreen deathScreen;
@@ -54,16 +55,9 @@ void WindowBox::displayWindow() {
             if (Game::getGameState() == MENU) Menu::navigator(e);
 
             else if (e.type == sf::Event::KeyPressed) {
-
-                if (e.key.code == sf::Keyboard::H) {
-                    Game::hitboxesVisibility = !Game::hitboxesVisibility;
-                    float lastTime = 0;
-
-                    float currentTime = clock.restart().asSeconds();
-                    float fps = 1.0f / (currentTime - lastTime);
-                    lastTime = currentTime;
-
-                    cout << fps << endl;
+                if (e.key.code == sf::Keyboard::H) 
+                { 
+                    Game::hitboxesVisibility = !Game::hitboxesVisibility; 
                 }
             }
         }
@@ -82,8 +76,8 @@ void WindowBox::displayWindow() {
 void WindowBox::engine(Wind& wind, const float& deltaTime)
 {
     if (Game::getGameState() == MENU_LOADING) {
-		//launchGame(deltaTime);
-		Game::setGameState(MENU);
+		launchGame(deltaTime);
+		//Game::setGameState(MENU);
 		return;
     }
 
@@ -148,7 +142,7 @@ void WindowBox::launchGame(const float& deltaTime) {
 	}
 
     window.draw(loader);
-	window.draw(loaderSprite.sprite, Transform().translate(Vector2f(600.0f, 450.0f)).scale(10.0f, 10.0f));
+	window.draw(loaderSprite.sprite, Transform().translate(Vector2f(videoMode.width >> 1, videoMode.height >> 1)));
 
     for (auto& [circle, velocity] : loaderParticles) {
 		velocity.x += sin(circle.getPosition().y / 0.5f);
@@ -181,10 +175,6 @@ void WindowBox::initSprite(Sprite& sprite, const string filename, Texture& textu
 	if (!texture.loadFromFile("./assets/" + filename + ".png")) cout << "Error: Cannot load background!" << endl;
 
     sprite.setTexture(texture);
-
-    //sprite.setScale(
-	//	static_cast<float>(FileMenager::screenData.size_width) / texture.getSize().x,
-	//	static_cast<float>(FileMenager::screenData.size_height) / texture.getSize().y);
 }
 
 void WindowBox::displayMenu() {
@@ -223,21 +213,20 @@ void WindowBox::updateWindow(const float& deltaTime)
     for (auto& particle : Game::getParticles())
     {
         if (!particle->isActive()) continue;
-        particle->render(window);
-
-        if (Game::freeze.isEffectActive() || Game::getGameState() == PAUSED)
-			continue;
-        particle->update(deltaTime);
+            particle->render(window);
+            particle->update(deltaTime);
     }
 
     for (auto& entity : Game::getEntities())
     {
-		if (!entity || !entity->isActive() || (DeathScreen::isScreenOver() && entity->getEntityType() == TYPE_PLAYER))
-			continue;
+        if (!entity || !entity->isActive() || (DeathScreen::isScreenOver() && entity->getEntityType() == TYPE_PLAYER))
+            continue;
+
         entity->render(window);
 
-        if ((Game::freeze.isEffectActive() && Game::isEntityInsideGroup(entity, FREEZE_GROUP)) || (Game::getGameState() == PAUSED && entity->getEntityType() != TYPE_EXPLOSION))
-			continue;
+        if ((Game::freeze.isEffectActive() && entity->getEntityType() == TYPE_EVENT_WIND) || (Game::getGameState() == PAUSED && entity->getEntityType() != TYPE_EXPLOSION && entity->getEntityType() != TYPE_ENEMY_BULLET && entity->getEntityType() != TYPE_BULLET_SINGLE))
+            continue;
+
         entity->update(deltaTime);
     }
 
@@ -246,6 +235,18 @@ void WindowBox::updateWindow(const float& deltaTime)
         playerHealthUIs[i].update(deltaTime);
         playerHealthUIs[i].draw(window);
     }
+
+    fpsDelay.updateEffectDuration(deltaTime);
+
+    if (!fpsDelay.isEffectActive()) {
+        fpsDelay.startEffect(0.2f);
+        float lastTime = 0;
+        fps.setText(to_string(static_cast<int>(1.0f / (deltaTime - lastTime))));
+        fps.setTextPosition(Vector2f(10.0f, 10.0f));
+        lastTime = deltaTime;
+    }
+
+    window.draw(fps.getText());
 }
 
 void WindowBox::renderUI()
@@ -255,7 +256,7 @@ void WindowBox::renderUI()
 
     DashBar dashBar;
 
-    dashBar.update(min(1 - Player::dashTimer / FileMenager::playerData.dash_time_delay, 1.0f));
+    dashBar.update(min(1 - Player::dash.getEffectDuration() / FileMenager::playerData.dash_time_delay, 1.0f));
     dashBar.draw(window);
 }
 

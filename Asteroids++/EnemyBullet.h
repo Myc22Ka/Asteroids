@@ -1,15 +1,15 @@
 #pragma once
-#ifndef SINGLEBULLET_H
-#define SINGLEBULLET_H
+#ifndef ENEMYBULLET_H
+#define ENEMYBULLET_H
 
 #include <SFML/Graphics.hpp>
 #include "Entity.h"
 #include "Bullet.h"
 #include "Score.h"
 
-class SingleBullet : public Bullet {
+class EnemyBullet : public Bullet {
 public:
-	SingleBullet(Vector2f position, Vector2f direction, float& angle);
+	EnemyBullet(Vector2f position, Vector2f direction, float& angle, Sprites spriteType);
 
 	void update(float deltaTime) override;
 	const EntityType getEntityType() override;

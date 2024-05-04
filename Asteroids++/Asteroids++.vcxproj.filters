@@ -153,6 +153,18 @@
     <ClCompile Include="Score.cpp">
       <Filter>Source Files\Draws</Filter>
     </ClCompile>
+    <ClCompile Include="Comet.cpp">
+      <Filter>Source Files\Objects\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="DeathScreen.cpp">
+      <Filter>Source Files\Objects\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="Invader.cpp">
+      <Filter>Source Files\Objects\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyBullet.cpp">
+      <Filter>Source Files\Objects\Entities\Bullets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Physics.h">
@@ -226,6 +238,18 @@
     </ClInclude>
     <ClInclude Include="Score.h">
       <Filter>Header Files\Draws</Filter>
+    </ClInclude>
+    <ClInclude Include="Comet.h">
+      <Filter>Header Files\Objects\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="DeathScreen.h">
+      <Filter>Header Files\Objects\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Invader.h">
+      <Filter>Header Files\Objects\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBullet.h">
+      <Filter>Header Files\Objects\Entities\Bullets</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -20,8 +20,11 @@ public:
 
     const static Sprites getRandomDrop(const map<double, Sprites>& group);
 
+    const static Sprites getRandomFromGroup(const vector<Sprites>& group);
+
     const static map<double, Sprites> boosters;
-    const static map<double, Sprites> bulletTypes;
+    const static vector<Sprites> modifiers;
+    const static vector<Sprites> bulletTypes;
 private:
 
     SpriteInfo collected;

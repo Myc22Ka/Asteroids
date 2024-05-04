@@ -8,6 +8,7 @@
 #include "PlayerHealthUI.h"
 #include "Wind.h"
 #include "Effect.h"
+#include "TextField.h"
 
 class WindowBox : public SpriteData
 {
@@ -33,6 +34,8 @@ private:
 	void loadParticles();
 
 	static VideoMode videoMode;
+	static TextField fps;
+	Effect fpsDelay;
 
 	Sprite background;
 	Texture backgroundTexture;

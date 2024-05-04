@@ -8,33 +8,41 @@
     "defaultSpriteLifeTime": 0.3
   },
   "singleAsteroid": {
-    "hitboxSize": 64,
-    "spriteSize": 64,
+    "hitboxSize": 512,
+    "spriteSize": 512,
     "rotation": 0,
     "spriteState": 0,
     "currentSpriteLifeTime": 0,
     "defaultSpriteLifeTime": 0.05
   },
   "multiAsteroid": {
-    "hitboxSize": 64,
-    "spriteSize": 64,
+    "hitboxSize": 128,
+    "spriteSize": 128,
     "rotation": 0,
     "spriteState": 0,
     "currentSpriteLifeTime": 0,
     "defaultSpriteLifeTime": 0
   },
   "comet": {
-    "hitboxSize": 64,
-    "spriteSize": 64,
+    "hitboxSize": 128,
+    "spriteSize": 128,
     "rotation": 0,
     "spriteState": 0,
     "currentSpriteLifeTime": 0,
-    "defaultSpriteLifeTime": 0
+    "defaultSpriteLifeTime": 0.05
+  },
+  "invader": {
+    "hitboxSize": 64,
+    "spriteSize": 64,
+    "rotation": 45,
+    "spriteState": 0,
+    "currentSpriteLifeTime": 0,
+    "defaultSpriteLifeTime": 0.05
   },
   "singleBullet": {
     "hitboxSize": 16,
-    "spriteSize": 120,
-    "rotation": 0,
+    "spriteSize": 16,
+    "rotation": 90,
     "spriteState": 0,
     "currentSpriteLifeTime": 0,
     "defaultSpriteLifeTime": 0
@@ -86,6 +94,22 @@
     "spriteState": 0,
     "currentSpriteLifeTime": 0,
     "defaultSpriteLifeTime": 0.01
+  },
+  "desappearing": {
+    "hitboxSize": 96,
+    "spriteSize": 96,
+    "rotation": 0,
+    "spriteState": 0,
+    "currentSpriteLifeTime": 0,
+    "defaultSpriteLifeTime": 0.05
+  },
+  "appearing": {
+    "hitboxSize": 96,
+    "spriteSize": 96,
+    "rotation": 0,
+    "spriteState": 0,
+    "currentSpriteLifeTime": 0,
+    "defaultSpriteLifeTime": 0.05
   },
   "dashBar": {
     "hitboxSize": 0,
@@ -210,6 +234,14 @@
   "wind": {
     "hitboxSize": 64,
     "spriteSize": 64,
+    "rotation": 0,
+    "spriteState": 0,
+    "currentSpriteLifeTime": 0,
+    "defaultSpriteLifeTime": 0.03
+  },
+  "loader": {
+    "hitboxSize": 512,
+    "spriteSize": 512,
     "rotation": 0,
     "spriteState": 0,
     "currentSpriteLifeTime": 0,
