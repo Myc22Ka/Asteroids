@@ -136,11 +136,10 @@ void Pickup::collisionDetection()
 
 					break;
 				case Sprites::HEART1UP:
-					if (Player::playerStats.lifes <= 5) {
-						Player::playerStats.lifes += 1;
-						WindowBox::playerHealthUIs.push_back(WindowBox::playerHealthUIs.back().offset + 20.0f);
-						for (auto& UI : WindowBox::playerHealthUIs)
-							UI.setSpriteState(0);
+					if (Player::playerStats.lifes.size() <= 5) {
+						Player::playerStats.lifes.push_back(Player::playerStats.lifes.back().offset + 20.0f);
+						for (auto& life : Player::playerStats.lifes)
+							life.setSpriteState(0);
 					}
 					SoundData::play(Sounds::HEART1UP);
 					Score::addScore(200);
@@ -186,6 +185,7 @@ const Sprites Pickup::getRandomDrop(const map<double, Sprites>& group)
 			if (dice <= 0.5) return spriteType;
 		}
 	}
+	return Sprites();
 }
 
 const Sprites Pickup::getRandomFromGroup(const vector<Sprites>& group)

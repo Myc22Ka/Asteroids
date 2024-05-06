@@ -10,7 +10,7 @@ Effect Player::dash({ 0.0f, false });
 PlayerStats Player::playerStats{ 
     FileMenager::playerData.bullet_shoot_delay,
     FileMenager::playerData.turn_speed,
-    3.0f,
+    vector<PlayerHealthUI>(),
     0.0f,
     FileMenager::playerData.bullet_shoot_delay,
     1.0f,
@@ -58,6 +58,7 @@ void Player::render(RenderWindow& window)
 }
 
 void Player::update(float deltaTime) {
+    cout << playerStats.lifes.size() << endl;
     invincibilityFrames.updateEffectDuration(deltaTime);
 
     if (dead) {
@@ -181,25 +182,28 @@ void Player::collisionDetection()
             if (!physics::intersects(position, radius, entity->position, entity->radius))
                 return;
 
-            invincibilityFrames.startEffect(3.0f);
-            playerStats.lifes -= 1;
-			WindowBox::playerHealthUIs.back().death = true;
-			WindowBox::playerHealthUIs.back().setSpriteState(16);
-            SoundData::play(Sounds::EXPLOSION);
-
-            Game::addEntity(new Explosion(position, size, getSprite(Sprites::DESAPPEARING)));
-
-            if (playerStats.lifes == 0) {
-                Game::gameOver();
-			    return;
-            }
-
-            Game::setGameState(PAUSED);
-			DeathScreen::setDelay(0.6f);
-			DeathScreen::activateDeathScreen(1.75f);
-
-            dead = true;
+            destroy();
     });
+}
+
+void Player::destroy() {
+    invincibilityFrames.startEffect(5.0f);
+    playerStats.lifes.back().death = true;
+    playerStats.lifes.back().setSpriteState(16);
+    SoundData::play(Sounds::EXPLOSION);
+
+    Game::addEntity(new Explosion(position, size, getSprite(Sprites::DESAPPEARING)));
+
+    if (playerStats.lifes.size() == 0) {
+        Game::gameOver();
+        return;
+    }
+
+    Game::setGameState(PAUSED);
+    DeathScreen::setDelay(0.6f);
+    DeathScreen::activateDeathScreen(1.75f);
+
+    dead = true;
 }
 
 void Player::dashAbility(const float& deltaTime)
@@ -247,7 +251,15 @@ void Player::setPlayerStats()
     playerStats.bulletDamage = 50;
     playerStats.bulletSize = FileMenager::playerData.bullet_size;
     playerStats.bulletSpeed = FileMenager::playerData.bullet_speed;
-    playerStats.lifes = 3;
+    
+    float offset = 0.0f;
+
+    for (int i = 0; i < 3; ++i) {
+        playerStats.lifes.push_back(offset);
+
+        offset += 20.0f;
+    }
+
     playerStats.speed = FileMenager::playerData.speed;
     playerStats.turnSpeed = FileMenager::playerData.turn_speed;
     playerStats.shield = { 10.0f, false, new Bar(radius, 2.0f, Color::Blue, Color::Black, playerStats.drunkMode.getEffectDuration(), Vector2f(-100.0f, -100.0f), Sprites::PICKUP_SHIELD)};

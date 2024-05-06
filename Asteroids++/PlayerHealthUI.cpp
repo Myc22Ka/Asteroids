@@ -25,7 +25,7 @@ void PlayerHealthUI::update(float deltaTime)
 void PlayerHealthUI::draw(RenderWindow& window) const
 {
 	if (death && spriteInfo.spriteState == spriteInfo.frames.size() - 1) {
-		WindowBox::playerHealthUIs.pop_back();
+		Player::playerStats.lifes.pop_back();
 		return;
 	}
 

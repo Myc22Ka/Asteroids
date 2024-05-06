@@ -13,6 +13,7 @@
 #include "SoundData.h"
 #include "Effect.h"
 #include "Physics.h"
+#include "PlayerHealthUI.h"
 
 struct BulletType {
 	bool piercing;
@@ -22,7 +23,7 @@ struct BulletType {
 struct PlayerStats {
 	float speed;
 	float turnSpeed;
-	float lifes;
+	vector<PlayerHealthUI> lifes;
 
 	float time;
 
@@ -50,6 +51,7 @@ public:
 	void collisionDetection() override;
 
 	static Sprites getPlayerBulletSprite();
+	void destroy();
 
 	static PlayerStats playerStats;
 	static Effect dash;

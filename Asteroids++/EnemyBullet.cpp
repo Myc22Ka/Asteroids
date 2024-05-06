@@ -1,4 +1,5 @@
 #include "EnemyBullet.h"
+#include "DeathScreen.h"
 
 EnemyBullet::EnemyBullet(Vector2f position, Vector2f direction, float& angle, Sprites spriteType) : Bullet(position, direction, angle, spriteType)
 {
@@ -21,7 +22,10 @@ void EnemyBullet::update(float deltaTime)
     if (Game::getEntities().back()->getEntityType() == TYPE_PLAYER) {
         auto player = dynamic_cast<Player*>(Game::getEntities().back());
 
-        if(physics::intersects(position, radius, player->position, player->radius) && lifeTime > 0) lifeTime = 0;
+        if (physics::intersects(position, radius, player->position, player->radius) && lifeTime > 0 && !Player::playerStats.shield.isEffectActive() && DeathScreen::isScreenOver()) {
+            lifeTime = 0;
+            player->destroy();
+        }
     }
 }
 const EntityType EnemyBullet::getEntityType()

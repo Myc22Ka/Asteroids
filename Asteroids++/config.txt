@@ -34,4 +34,4 @@ outline_fill_background_opacity: 150 # value beetween [0 - 255]
 # timings data
 
 default_freeze_time: 15
-default_enemy_spawn_time: 1
+default_enemy_spawn_time: 3

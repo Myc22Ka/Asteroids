@@ -12,9 +12,8 @@
 #include "Wind.h"
 #include "DeathScreen.h"
 
-vector<PlayerHealthUI> WindowBox::playerHealthUIs;
 VideoMode WindowBox::videoMode{};
-TextField WindowBox::fps{ 24 };
+TextField WindowBox::fps{ 12 };
 
 WindowBox::WindowBox() {}
 
@@ -76,8 +75,8 @@ void WindowBox::displayWindow() {
 void WindowBox::engine(Wind& wind, const float& deltaTime)
 {
     if (Game::getGameState() == MENU_LOADING) {
-		launchGame(deltaTime);
-		//Game::setGameState(MENU);
+		//launchGame(deltaTime);
+		Game::setGameState(MENU);
 		return;
     }
 
@@ -231,9 +230,9 @@ void WindowBox::updateWindow(const float& deltaTime)
     }
 
 
-    for (size_t i = 0; i < playerHealthUIs.size(); ++i) {
-        playerHealthUIs[i].update(deltaTime);
-        playerHealthUIs[i].draw(window);
+    for (auto& life : Player::playerStats.lifes) {
+        life.update(deltaTime);
+        life.draw(window);
     }
 
     fpsDelay.updateEffectDuration(deltaTime);
@@ -241,7 +240,7 @@ void WindowBox::updateWindow(const float& deltaTime)
     if (!fpsDelay.isEffectActive()) {
         fpsDelay.startEffect(0.2f);
         float lastTime = 0;
-        fps.setText(to_string(static_cast<int>(1.0f / (deltaTime - lastTime))));
+        fps.setText(to_string(static_cast<int>(1.0f / (deltaTime - lastTime))) + " FPS");
         fps.setTextPosition(Vector2f(10.0f, 10.0f));
         lastTime = deltaTime;
     }
@@ -275,15 +274,7 @@ void WindowBox::begin()
     Game::setGameState(PLAYING);
     Game::addEntity(new Player());
     Game::enemySpawn.setEffectDuration(FileMenager::timingsData.default_enemy_spawn_time);
-    playerHealthUIs.clear();
+    fps.setColorText(Color(255, 255, 255, 150));
 
     Score::init();
-
-    float offset = 0.0f;
-
-    for (int i = 0; i < Player::playerStats.lifes; ++i) {
-        playerHealthUIs.push_back(offset);
-
-        offset += 20.0f;
-    }
 }

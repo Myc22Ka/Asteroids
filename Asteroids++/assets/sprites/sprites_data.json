@@ -8,8 +8,8 @@
     "defaultSpriteLifeTime": 0.3
   },
   "singleAsteroid": {
-    "hitboxSize": 512,
-    "spriteSize": 512,
+    "hitboxSize": 128,
+    "spriteSize": 128,
     "rotation": 0,
     "spriteState": 0,
     "currentSpriteLifeTime": 0,

@@ -5,7 +5,6 @@
 #include "Score.h"
 #include "SpriteData.h"
 #include <unordered_map>
-#include "PlayerHealthUI.h"
 #include "Wind.h"
 #include "Effect.h"
 #include "TextField.h"
@@ -18,8 +17,6 @@ public:
 	static VideoMode getVideoMode();
 	void displayWindow();
 	void begin();
-
-	static vector<PlayerHealthUI> playerHealthUIs;
 private:
 
 	void engine(Wind& wind, const float& deltaTime);
