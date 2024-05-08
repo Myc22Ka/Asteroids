@@ -87,22 +87,73 @@ void Player::update(float deltaTime) {
 
         if (playerStats.bulletAmount == 1) {
             Game::addEntity(new SingleBullet(position, Vector2f(cos(radians), sin(radians)), angle));
+            SoundData::play(Sounds::LASER_SHOOT1);
         }
 
         if (playerStats.bulletAmount == 2) {
-            float bulletSpreadAngle = 0.1f;
+            float bulletSpreadAngle = 0.05f;
+            float offset = radius / 4;
 
             Vector2f leftBulletDirection(cos(radians - bulletSpreadAngle), sin(radians - bulletSpreadAngle));
             Vector2f rightBulletDirection(cos(radians + bulletSpreadAngle), sin(radians + bulletSpreadAngle));
 
-            Vector2f leftBulletPosition(position);
-            Vector2f rightBulletPosition(position);
+            Vector2f leftBulletPosition(position.x - offset * leftBulletDirection.x, position.y - offset * leftBulletDirection.y);
+            Vector2f rightBulletPosition(position.x + offset * rightBulletDirection.x, position.y + offset * rightBulletDirection.y);
 
             Game::addEntity(new SingleBullet(leftBulletPosition, leftBulletDirection, angle));
             Game::addEntity(new SingleBullet(rightBulletPosition, rightBulletDirection, angle));
+
+            SoundData::play(Sounds::LASER_SHOOT2);
         }
 
-        SoundData::play(Sounds::LASER_SHOOT);
+        if (playerStats.bulletAmount == 3) {
+            float bulletSpreadAngle = 1.0f;
+
+            float centerBulletAngle = radians;
+            float leftBulletAngle = radians - bulletSpreadAngle;
+            float rightBulletAngle = radians + bulletSpreadAngle;
+
+            Vector2f centerBulletDirection(cos(centerBulletAngle), sin(centerBulletAngle));
+            Vector2f leftBulletDirection(cos(leftBulletAngle), sin(leftBulletAngle));
+            Vector2f rightBulletDirection(cos(rightBulletAngle), sin(rightBulletAngle));
+
+            Vector2f centerBulletPosition(position.x, position.y);
+            Vector2f leftBulletPosition(position.x + (radius * 1.5f) * cos(leftBulletAngle), position.y + (radius * 1.5f) * sin(leftBulletAngle));
+            Vector2f rightBulletPosition(position.x + (radius * 1.5f) * cos(rightBulletAngle), position.y + (radius * 1.5f) * sin(rightBulletAngle));
+
+            Game::addEntity(new SingleBullet(centerBulletPosition, centerBulletDirection, angle));
+            Game::addEntity(new SingleBullet(leftBulletPosition, leftBulletDirection, angle));
+            Game::addEntity(new SingleBullet(rightBulletPosition, rightBulletDirection, angle));
+
+            SoundData::play(Sounds::LASER_SHOOT3);
+        }
+
+        if (playerStats.bulletAmount == 4) {
+            float bulletSpreadAngle = 0.05f;
+
+            float centerBulletAngle = radians;
+            float leftBulletAngle = radians - bulletSpreadAngle;
+            float rightBulletAngle = radians + bulletSpreadAngle;
+
+            Vector2f centerBulletDirection(cos(centerBulletAngle), sin(centerBulletAngle));
+            Vector2f leftBulletDirection(cos(leftBulletAngle), sin(leftBulletAngle));
+            Vector2f rightBulletDirection(cos(rightBulletAngle), sin(rightBulletAngle));
+            
+            float backBulletAngle = radians + physics::getPI(); 
+            Vector2f backBulletDirection(cos(backBulletAngle), sin(backBulletAngle));
+
+            Vector2f centerBulletPosition(position.x, position.y);
+            Vector2f leftBulletPosition(position.x + (radius * 1.5f) * cos(leftBulletAngle), position.y + (radius * 1.5f) * sin(leftBulletAngle));
+            Vector2f rightBulletPosition(position.x + (radius * 1.5f) * cos(rightBulletAngle), position.y + (radius * 1.5f) * sin(rightBulletAngle));
+            Vector2f backBulletPosition(position);
+
+            Game::addEntity(new SingleBullet(centerBulletPosition, centerBulletDirection, angle));
+            Game::addEntity(new SingleBullet(leftBulletPosition, leftBulletDirection, angle));
+            Game::addEntity(new SingleBullet(rightBulletPosition, rightBulletDirection, angle));
+            Game::addEntity(new SingleBullet(backBulletPosition, backBulletDirection, angle));
+
+            SoundData::play(Sounds::LASER_SHOOT4);
+        }
     }
 
     if (invincibilityFrames.isEffectActive()) {
@@ -205,7 +256,7 @@ void Player::destroy() {
     invincibilityFrames.startEffect(5.0f);
     playerStats.lifes.back().death = true;
     playerStats.lifes.back().setSpriteState(16);
-    SoundData::play(Sounds::EXPLOSION);
+    SoundData::play(Sounds::DESTROY);
 
     Game::addEntity(new Explosion(position, size, getSprite(Sprites::DESAPPEARING)));
 
@@ -262,7 +313,7 @@ void Player::dashAbility(const float& deltaTime)
 void Player::setPlayerStats()
 {
     playerStats.shootOffset = FileMenager::playerData.bullet_shoot_delay;
-    playerStats.bulletAmount = 2;
+    playerStats.bulletAmount = 4;
     playerStats.bulletDamage = 50;
     playerStats.bulletSize = FileMenager::playerData.bullet_size;
     playerStats.bulletSpeed = FileMenager::playerData.bullet_speed;
@@ -315,6 +366,8 @@ void Player::updateStatsbars(const float& deltaTime) {
 
         offset += 10.0f;
     }
+
+    if (!playerStats.shield.isEffectActive() && SoundData::sounds[Sounds::ACTIVE_SHIELD].getStatus() == PLAYING) SoundData::stop(Sounds::ACTIVE_SHIELD);
 
     if (playerStats.scoreTimes2.isEffectActive()) {
         playerStats.scoreTimes2.updateEffectDuration(deltaTime);

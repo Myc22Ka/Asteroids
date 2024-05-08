@@ -4,6 +4,7 @@
 #include "SingleAsteroid.h"
 #include "Comet.h"
 #include "Invader.h"
+#include "Strauner.h"
 
 GameState Game::gameState{ MENU };
 bool Game::hitboxesVisibility{ false };
@@ -11,8 +12,8 @@ bool Game::hitboxesVisibility{ false };
 list<Entity*> Game::entities;
 list<Particle*> Game::particles;
 vector<EntityType> Game::enemies{ EntityType::TYPE_ENEMY, EntityType::TYPE_ENEMY_BULLET };
-int Game::maxLevel{ 4 };
-int Game::level{ 1 };
+int Game::maxLevel{ 5 };
+int Game::level{ 5 };
 
 Effect Game::freeze{ FileMenager::timingsData.default_freeze_time, false };
 Effect Game::enemySpawn{ FileMenager::timingsData.default_enemy_spawn_time, false };
@@ -81,6 +82,7 @@ void Game::gameOver(){
 
 Entity* Game::getRandomEntity(const int& startIndex, const int& endIndex) {
     const vector<EnemySpawn> enemiesList = {
+        { new Strauner(), 0.1, true},
         { new Invader(), 0.25, false },
         { new Comet(), 0.4, true },
         { new MultiAsteroid(), 0.5, false },
@@ -153,7 +155,6 @@ void Game::spawnEnemy(const float& deltaTime) {
 
 	if (enemySpawn.getEffectDuration() <= 0 && !freeze.isEffectActive()) {
         const auto entity = getRandomEntity(maxLevel - level, maxLevel - 1);
-        cout << " Spawn! " << endl;
 
 		if(entity) addEntity(entity);
 		enemySpawn.setEffectDuration(FileMenager::timingsData.default_enemy_spawn_time + Player::playerStats.time * 0.1f);

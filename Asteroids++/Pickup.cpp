@@ -113,6 +113,7 @@ void Pickup::collisionDetection()
 					Player::playerStats.shield.getBar()->setMaxValue(Player::playerStats.shield.getEffectDuration());
 
 					SoundData::play(Sounds::PICKUP_SHIELD);
+					SoundData::play(Sounds::ACTIVE_SHIELD);
 
 					break;
 				case Sprites::PICKUP_DRUNKMODE:

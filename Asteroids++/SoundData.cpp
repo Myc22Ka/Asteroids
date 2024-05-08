@@ -6,10 +6,17 @@ unordered_map <Sounds, Sound> SoundData::sounds;
 const string defaultDir = "./assets/sounds/";
 
 const vector<pair<string, Sounds>> objects = {
-    {"laserShoot" , Sounds::LASER_SHOOT},
+    {"laserShoot1" , Sounds::LASER_SHOOT1},
+    {"laserShoot2" , Sounds::LASER_SHOOT2},
+    {"laserShoot3" , Sounds::LASER_SHOOT3},
+    {"laserShoot4" , Sounds::LASER_SHOOT4},
+    {"alienshoot1", Sounds::ALIEN_SHOOT1},
+    {"doubleshot", Sounds::PICKUP_DOUBLESHOOT},
+    {"tripleshot", Sounds::PICKUP_TRIPLESHOT},
+    {"quadshot", Sounds::PICKUP_QUADSHOT},
     {"explosion" , Sounds::EXPLOSION},
+    {"destroy", Sounds::DESTROY},
     {"dashAbility", Sounds::DASH_ABILITY},
-    {"regainDash", Sounds::DASH_ABILITY_RESTORE},
     {"extrabullet", Sounds::PICKUP_EXTRA_BULLET},
     {"extraspeed", Sounds::PICKUP_EXTRA_SPEED},
     {"extratime", Sounds::PICKUP_EXTRA_TIME},
@@ -21,6 +28,7 @@ const vector<pair<string, Sounds>> objects = {
     {"freeze", Sounds::FREEZE},
     {"wind", Sounds::WIND},
 	{"goodbye", Sounds::GOODBYE},
+    {"shieldActive", Sounds::ACTIVE_SHIELD},
 	{"ping", Sounds::PING},
 	{"hit", Sounds::HIT}
 };

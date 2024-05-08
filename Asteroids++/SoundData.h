@@ -13,7 +13,12 @@ using namespace sf;
 using namespace std;
 
 enum class Sounds {
-    LASER_SHOOT,
+    LASER_SHOOT1,
+    LASER_SHOOT2,
+    LASER_SHOOT3,
+    LASER_SHOOT4,
+    ALIEN_SHOOT1,
+    DESTROY,
     EXPLOSION,
     DASH_ABILITY,
     DASH_ABILITY_RESTORE,
@@ -24,12 +29,16 @@ enum class Sounds {
     PICKUP_DRUNKMODE,
     PICKUP_TIMES_2,
     PICKUP_TIMES_5,
+    PICKUP_DOUBLESHOOT,
+    PICKUP_TRIPLESHOT,
+    PICKUP_QUADSHOT,
     FREEZE,
     HEART1UP,
     WIND,
     GOODBYE,
     PING,
-    HIT
+    HIT,
+    ACTIVE_SHIELD
 };
 
 class SoundData {

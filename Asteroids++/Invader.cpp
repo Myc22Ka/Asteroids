@@ -52,7 +52,7 @@ void Invader::update(float deltaTime)
             shoot.startEffect(1.0f);
 
             Game::addEntity(new EnemyBullet(position, slightlyOffDirection, angle, Sprites::HOMING_BULLET));
-            SoundData::play(Sounds::LASER_SHOOT);
+            SoundData::play(Sounds::ALIEN_SHOOT1);
         }
         return;
     }

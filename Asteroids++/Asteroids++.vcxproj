@@ -47,6 +47,7 @@
     <ClCompile Include="SingleAsteroid.cpp" />
     <ClCompile Include="SoundData.cpp" />
     <ClCompile Include="SpriteData.cpp" />
+    <ClCompile Include="Strauner.cpp" />
     <ClCompile Include="TextField.cpp" />
     <ClCompile Include="Wind.cpp" />
     <ClCompile Include="WindowBox.cpp" />
@@ -80,6 +81,7 @@
     <ClInclude Include="SingleAsteroid.h" />
     <ClInclude Include="SoundData.h" />
     <ClInclude Include="SpriteData.h" />
+    <ClInclude Include="Strauner.h" />
     <ClInclude Include="TextField.h" />
     <ClInclude Include="Wind.h" />
   </ItemGroup>
