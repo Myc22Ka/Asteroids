@@ -1,7 +1,7 @@
 #include "EnemyBullet.h"
 #include "DeathScreen.h"
 
-EnemyBullet::EnemyBullet(Vector2f position, Vector2f direction, float& angle, Sprites spriteType) : Bullet(position, direction, angle, spriteType)
+EnemyBullet::EnemyBullet(Vector2f position, Vector2f direction, float& angle, Sprites spriteType) : Bullet(position, direction, angle, spriteType, Color::Red)
 {
     setRotation(spriteInfo.sprite, angle);
     drawHitboxes();

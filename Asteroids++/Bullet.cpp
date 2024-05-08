@@ -7,9 +7,9 @@
 #include "Pickup.h"
 #include "Particle.h"
 
-Bullet::Bullet(Vector2f position, Vector2f direction, float& angle, Sprites spriteType) :
+Bullet::Bullet(Vector2f position, Vector2f direction, float& angle, Sprites spriteType, Color color) :
     direction(direction),
-    Entity(position, angle, Player::playerStats.bulletSize, Color::Green, getSprite(spriteType)),
+    Entity(position, angle, Player::playerStats.bulletSize, color, getSprite(spriteType)),
     lifeTime(FileMenager::playerData.bullet_lifetime)
 {
 }

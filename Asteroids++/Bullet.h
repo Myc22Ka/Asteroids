@@ -12,7 +12,7 @@
 
 class Bullet: public Entity {
 public:
-	Bullet(Vector2f position, Vector2f direction, float& angle, Sprites spriteType);
+	Bullet(Vector2f position, Vector2f direction, float& angle, Sprites spriteType, Color color);
 
 	virtual void update(float deltaTime) override = 0;
 	void render(RenderWindow&) override;

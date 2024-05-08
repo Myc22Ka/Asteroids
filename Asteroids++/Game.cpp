@@ -11,6 +11,8 @@ bool Game::hitboxesVisibility{ false };
 list<Entity*> Game::entities;
 list<Particle*> Game::particles;
 vector<EntityType> Game::enemies{ EntityType::TYPE_ENEMY, EntityType::TYPE_ENEMY_BULLET };
+int Game::maxLevel{ 4 };
+int Game::level{ 1 };
 
 Effect Game::freeze{ FileMenager::timingsData.default_freeze_time, false };
 Effect Game::enemySpawn{ FileMenager::timingsData.default_enemy_spawn_time, false };
@@ -77,7 +79,7 @@ void Game::gameOver(){
     gameState = GAME_OVER;
 }
 
-Entity* Game::getRandomEntity() {
+Entity* Game::getRandomEntity(const int& startIndex, const int& endIndex) {
     const vector<EnemySpawn> enemiesList = {
         { new Invader(), 0.25, false },
         { new Comet(), 0.4, true },
@@ -85,14 +87,20 @@ Entity* Game::getRandomEntity() {
         { new SingleAsteroid() , 1, false }
     };
 
+    if (startIndex < 0 || endIndex >= enemiesList.size() || startIndex > endIndex) return nullptr;
+
     const auto dice = physics::rollDice();
 
-    for (const auto& [entity, chance, onlyOne] : enemiesList) {
-        if (onlyOne && findEntity(entity->spriteInfo.spriteType) == nullptr && dice < chance) return entity;
+    for (int i = startIndex; i <= endIndex; ++i) {
+        const auto& [entity, chance, onlyOne] = enemiesList[i];
 
-        if (!onlyOne && dice < chance) return entity;
+        if (onlyOne && findEntity(entity->spriteInfo.spriteType) == nullptr && dice < chance) {
+            return entity;
+        }
+        if (!onlyOne && dice < chance) {
+            return entity;
+        }
     }
-
 
     return nullptr;
 }
@@ -144,7 +152,8 @@ void Game::spawnEnemy(const float& deltaTime) {
 	enemySpawn.updateEffectDuration(deltaTime);
 
 	if (enemySpawn.getEffectDuration() <= 0 && !freeze.isEffectActive()) {
-        const auto entity = getRandomEntity();
+        const auto entity = getRandomEntity(maxLevel - level, maxLevel - 1);
+        cout << " Spawn! " << endl;
 
 		if(entity) addEntity(entity);
 		enemySpawn.setEffectDuration(FileMenager::timingsData.default_enemy_spawn_time + Player::playerStats.time * 0.1f);

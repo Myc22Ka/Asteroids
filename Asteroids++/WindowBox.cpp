@@ -57,6 +57,7 @@ void WindowBox::displayWindow() {
                 if (e.key.code == sf::Keyboard::H) 
                 { 
                     Game::hitboxesVisibility = !Game::hitboxesVisibility; 
+                    cout << Game::level << endl;
                 }
             }
         }
@@ -252,6 +253,8 @@ void WindowBox::renderUI()
 {
     Score::scoreText.setText(Score::getScoreString());
     window.draw(Score::scoreText.getText());
+
+    if ((Score::getScore() >> (8 + Game::level)) > Game::level && Game::level != Game::maxLevel) Game::level += 1;
 
     DashBar dashBar;
 

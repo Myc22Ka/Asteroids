@@ -11,13 +11,13 @@ PlayerStats Player::playerStats{
     FileMenager::playerData.bullet_shoot_delay,
     FileMenager::playerData.turn_speed,
     vector<PlayerHealthUI>(),
-    0.0f,
+    1,
     FileMenager::playerData.bullet_shoot_delay,
     1.0f,
     FileMenager::playerData.bullet_size,
     50.0f,
     FileMenager::playerData.bullet_speed,
-    {false, false},
+    { false, false },
     { 10.0f, false },
     { 10.0f, false },
     { 10.0f, false },
@@ -58,9 +58,6 @@ void Player::render(RenderWindow& window)
 }
 
 void Player::update(float deltaTime) {
-    cout << playerStats.lifes.size() << endl;
-    invincibilityFrames.updateEffectDuration(deltaTime);
-
     if (dead) {
         Game::addEntity(new Explosion(position, size, getSprite(Sprites::APPEARING)));
         dead = false;
@@ -68,6 +65,7 @@ void Player::update(float deltaTime) {
         return;
     }
 
+    invincibilityFrames.updateEffectDuration(deltaTime);
     delay.updateEffectDuration(deltaTime);
 
     if (delay.isEffectActive()) return;
@@ -78,6 +76,7 @@ void Player::update(float deltaTime) {
     spriteInfo.currentSpriteLifeTime -= deltaTime;
 
     updatePosition(deltaTime);
+    updateStatsbars(deltaTime);
     dashAbility(deltaTime);
 
     if (dash.isEffectActive()) Game::addParticle(new Particle(position, angle, Sprites::SHIP, Color(126, 193, 255, 100), 0.15));
@@ -86,7 +85,23 @@ void Player::update(float deltaTime) {
         shootTimer = Player::playerStats.shootOffset;
         float radians = angle * (physics::getPI() / 180.0f);
 
-        Game::addEntity(new SingleBullet(position, Vector2f(cos(radians), sin(radians)), angle));
+        if (playerStats.bulletAmount == 1) {
+            Game::addEntity(new SingleBullet(position, Vector2f(cos(radians), sin(radians)), angle));
+        }
+
+        if (playerStats.bulletAmount == 2) {
+            float bulletSpreadAngle = 0.1f;
+
+            Vector2f leftBulletDirection(cos(radians - bulletSpreadAngle), sin(radians - bulletSpreadAngle));
+            Vector2f rightBulletDirection(cos(radians + bulletSpreadAngle), sin(radians + bulletSpreadAngle));
+
+            Vector2f leftBulletPosition(position);
+            Vector2f rightBulletPosition(position);
+
+            Game::addEntity(new SingleBullet(leftBulletPosition, leftBulletDirection, angle));
+            Game::addEntity(new SingleBullet(rightBulletPosition, rightBulletDirection, angle));
+        }
+
         SoundData::play(Sounds::LASER_SHOOT);
     }
 
@@ -165,8 +180,6 @@ void Player::updatePosition(const float& deltaTime) {
 
     position.x = min(max(position.x, radius), WindowBox::getVideoMode().width - radius);
 	position.y = min(max(position.y, radius), WindowBox::getVideoMode().height - radius);
-
-    updateStatsbars(deltaTime);
 }
 
 const EntityType Player::getEntityType()
@@ -177,7 +190,7 @@ const EntityType Player::getEntityType()
 void Player::collisionDetection()
 {
     Game::foreachEntity([this](Entity* entity) {
-        if (!Game::getEvil(entity) || entity == this) return;
+        if (!Game::getEvil(entity) || entity == this || dead) return;
 
             if (!physics::intersects(position, radius, entity->position, entity->radius))
                 return;
@@ -187,6 +200,8 @@ void Player::collisionDetection()
 }
 
 void Player::destroy() {
+    if (invincibilityFrames.getEffectDuration() > 0) return;
+
     invincibilityFrames.startEffect(5.0f);
     playerStats.lifes.back().death = true;
     playerStats.lifes.back().setSpriteState(16);
@@ -194,7 +209,7 @@ void Player::destroy() {
 
     Game::addEntity(new Explosion(position, size, getSprite(Sprites::DESAPPEARING)));
 
-    if (playerStats.lifes.size() == 0) {
+    if (playerStats.lifes.size() == 1) {
         Game::gameOver();
         return;
     }
@@ -247,7 +262,7 @@ void Player::dashAbility(const float& deltaTime)
 void Player::setPlayerStats()
 {
     playerStats.shootOffset = FileMenager::playerData.bullet_shoot_delay;
-    playerStats.accurancy = 1; // doesnt respected yet.
+    playerStats.bulletAmount = 2;
     playerStats.bulletDamage = 50;
     playerStats.bulletSize = FileMenager::playerData.bullet_size;
     playerStats.bulletSpeed = FileMenager::playerData.bullet_speed;
@@ -262,10 +277,10 @@ void Player::setPlayerStats()
 
     playerStats.speed = FileMenager::playerData.speed;
     playerStats.turnSpeed = FileMenager::playerData.turn_speed;
-    playerStats.shield = { 10.0f, false, new Bar(radius, 2.0f, Color::Blue, Color::Black, playerStats.drunkMode.getEffectDuration(), Vector2f(-100.0f, -100.0f), Sprites::PICKUP_SHIELD)};
-    playerStats.drunkMode = { 10.0f, false, new Bar(radius, 2.0f, Color::Color(242, 142, 28, 255), Color::Black, playerStats.drunkMode.getEffectDuration(), Vector2f(-100.0f, -100.0f), Sprites::PICKUP_DRUNKMODE) };
-    playerStats.scoreTimes2 = { 10.0f, false, new Bar(radius, 2.0f, Color::Color(144, 238, 144, 255), Color::Black, playerStats.drunkMode.getEffectDuration(), Vector2f(-100.0f, -100.0f), Sprites::PICKUP_TIMES_2) };
-    playerStats.scoreTimes5 = { 10.0f, false, new Bar(radius, 2.0f, Color::Color(93, 213, 93, 255), Color::Black, playerStats.drunkMode.getEffectDuration(), Vector2f(-100.0f, -100.0f), Sprites::PICKUP_TIMES_5) };
+    playerStats.shield = { 10.0f, false, new Bar(radius, 2.0f, Color::Blue, Color::Black, playerStats.shield.getEffectDuration(), position, Sprites::PICKUP_SHIELD)};
+    playerStats.drunkMode = { 10.0f, false, new Bar(radius, 2.0f, Color::Color(242, 142, 28, 255), Color::Black, playerStats.drunkMode.getEffectDuration(), position, Sprites::PICKUP_DRUNKMODE) };
+    playerStats.scoreTimes2 = { 10.0f, false, new Bar(radius, 2.0f, Color::Color(144, 238, 144, 255), Color::Black, playerStats.scoreTimes2.getEffectDuration(), position, Sprites::PICKUP_TIMES_2) };
+    playerStats.scoreTimes5 = { 10.0f, false, new Bar(radius, 2.0f, Color::Color(93, 213, 93, 255), Color::Black, playerStats.scoreTimes5.getEffectDuration(), position, Sprites::PICKUP_TIMES_5) };
 
     playerStats.bulletType.piercing = false;
     playerStats.bulletType.homing = false;
@@ -287,7 +302,7 @@ void Player::updateStatsbars(const float& deltaTime) {
         playerStats.drunkMode.updateEffectDuration(deltaTime);
 
         playerStats.drunkMode.getBar()->updateValue(playerStats.drunkMode.getEffectDuration());
-        playerStats.drunkMode.getBar()->updatePosition(Vector2f{ position.x - ((int)radius >> 1), position.y + radius + offset });
+        playerStats.drunkMode.getBar()->updatePosition(Vector2f{ position.x - radius / 2, position.y + radius + offset });
 
         offset += 10.0f;
     }
@@ -296,7 +311,7 @@ void Player::updateStatsbars(const float& deltaTime) {
         playerStats.shield.updateEffectDuration(deltaTime);
 
         playerStats.shield.getBar()->updateValue(playerStats.shield.getEffectDuration());
-        playerStats.shield.getBar()->updatePosition(Vector2f{ position.x - ((int)radius >> 1), position.y + radius + offset });
+        playerStats.shield.getBar()->updatePosition(Vector2f{ position.x - radius / 2, position.y + radius + offset });
 
         offset += 10.0f;
     }
@@ -305,7 +320,7 @@ void Player::updateStatsbars(const float& deltaTime) {
         playerStats.scoreTimes2.updateEffectDuration(deltaTime);
 
         playerStats.scoreTimes2.getBar()->updateValue(playerStats.scoreTimes2.getEffectDuration());
-        playerStats.scoreTimes2.getBar()->updatePosition(Vector2f{ position.x - ((int)radius >> 1), position.y + radius + offset });
+        playerStats.scoreTimes2.getBar()->updatePosition(Vector2f{ position.x - radius / 2, position.y + radius + offset });
 
         offset += 10.0f;
     }
@@ -314,7 +329,7 @@ void Player::updateStatsbars(const float& deltaTime) {
         playerStats.scoreTimes5.updateEffectDuration(deltaTime);
 
         playerStats.scoreTimes5.getBar()->updateValue(playerStats.scoreTimes5.getEffectDuration());
-        playerStats.scoreTimes5.getBar()->updatePosition(Vector2f{ position.x - ((int)radius >> 1), position.y + radius + offset });
+        playerStats.scoreTimes5.getBar()->updatePosition(Vector2f{ position.x - radius / 2, position.y + radius + offset });
 
         offset += 10.0f;
     }

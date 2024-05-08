@@ -47,7 +47,7 @@ public:
 	static void replaceEntity(Entity* entity1, Entity* entity2);
 	static void removeEntity(Entity* entity);
 	static void addEntity(Entity* entity);
-	static Entity* getRandomEntity();
+	static Entity* getRandomEntity(const int& startIndex, const int& endIndex);
 	static Entity* doesEntityExist(EntityType type);
 	static void foreachEntity(const function<void(Entity*)>& callback);
 
@@ -62,10 +62,14 @@ public:
 
 	static Effect enemySpawn;
 	static Effect freeze;
+
+	static int level;
+	static int maxLevel;
 private:
 	static list<Entity*> entities;
 	static list<Particle*> particles;
 	static vector<EntityType> enemies;
+	
 	
 	static unordered_map<Groups, vector<Sprites>> groups;
 

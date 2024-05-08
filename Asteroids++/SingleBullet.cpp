@@ -2,7 +2,7 @@
 #include "MultiAsteroid.h"
 #include "SingleAsteroid.h"
 
-SingleBullet::SingleBullet(Vector2f position, Vector2f direction, float& angle) : Bullet(position, direction, angle, Player::getPlayerBulletSprite())
+SingleBullet::SingleBullet(Vector2f position, Vector2f direction, float& angle) : Bullet(position, direction, angle, Player::getPlayerBulletSprite(), Color::Green)
 {
     setRotation(spriteInfo.sprite, angle);
     drawHitboxes();
@@ -15,6 +15,7 @@ void SingleBullet::update(float deltaTime)
     lifeTime -= deltaTime;
 
     position += Vector2f(direction.x * Player::playerStats.bulletSpeed * deltaTime, direction.y * Player::playerStats.bulletSpeed * deltaTime);
+
     if (lifeTime <= 0) {
         Game::removeEntity(this);
         return;

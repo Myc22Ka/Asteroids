@@ -28,7 +28,7 @@ struct PlayerStats {
 	float time;
 
 	float shootOffset;
-	float accurancy;
+	int bulletAmount;
 	float bulletSize;
 	float bulletDamage;
 	float bulletSpeed;
