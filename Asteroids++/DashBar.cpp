@@ -1,7 +1,6 @@
 #include "DashBar.h"
 #include "FileMenager.h"
 #include "SoundData.h"
-#include "Player.h"
 #include "WindowBox.h"
 
 DashBar::DashBar() {

@@ -1,6 +1,6 @@
 #pragma once
-#ifndef ASTEROID_H
-#define ASTEROID_H
+#ifndef ENEMY_H
+#define ENEMY_H
 
 #include <SFML/Graphics.hpp>
 #include "Entity.h"
@@ -13,12 +13,12 @@
 #include <ranges>
 #include "Physics.h"
 
-class Asteroid : public Entity {
+class Enemy : public Entity {
 	Bar healthBar;
 	float health;
 
 public:
-	Asteroid(float health, float speed, SpriteInfo spriteInfo);
+	Enemy(float health, float speed, SpriteInfo spriteInfo);
 
 	virtual void render(RenderWindow& window) override = 0;
 	virtual void update(float deltaTime) override = 0;

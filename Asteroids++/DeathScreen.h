@@ -5,13 +5,16 @@
 #include <SFML/Graphics.hpp>
 #include "Entity.h"
 #include "Effect.h"
+#include "EventHandler.h"
 
-class DeathScreen {
+class DeathScreen: public EventHandler {
 public:
 	DeathScreen();
 
-	static void render(RenderWindow& window);
-	static void update(float deltaTime);
+	void update(float deltaTime) override;
+	const EntityType getEntityType() override;
+	void init(const float& deltaTime, RenderWindow& window) override;
+	void initParticles() override;
 
 	static void activateDeathScreen(const float& duration);
 
@@ -19,13 +22,13 @@ public:
 
 	static void setDelay(const float& duration);
 
-	void init(const float& deltaTime, RenderWindow& window);
 private:
-	static void resetPosition();
+	void resetPosition();
 	
 	static Effect delay;
-	static VertexArray particles;
 	static Effect death;
+
+	float velocity;
 };
 
 #endif

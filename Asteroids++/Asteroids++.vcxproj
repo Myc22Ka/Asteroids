@@ -19,12 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Asteroid.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Comet.cpp" />
     <ClCompile Include="DashBar.cpp" />
     <ClCompile Include="DeathScreen.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="EnemyBullet.cpp" />
+    <ClCompile Include="EventHandler.cpp" />
     <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="Bar.cpp" />
     <ClCompile Include="GameOver.cpp" />
@@ -52,13 +53,14 @@
     <ClCompile Include="WindowBox.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Asteroid.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Comet.h" />
     <ClInclude Include="DashBar.h" />
     <ClInclude Include="DeathScreen.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="EnemyBullet.h" />
+    <ClInclude Include="EventHandler.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Explosion.h" />

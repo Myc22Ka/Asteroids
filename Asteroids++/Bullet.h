@@ -26,9 +26,9 @@ public:
 	void homeToEnemy(float deltaTime);
 	Entity* findNearestEnemy() const;
 private:
-	unordered_set<Entity*> hitAsteroids{};
+	unordered_set<Entity*> hitEnemies{};
 
-	void asteroidHit(Entity* entity);
+	void enemyHit(Entity* entity);
 };
 
 #endif

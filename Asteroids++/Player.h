@@ -8,7 +8,7 @@
 #include "FileMenager.h"
 #include "Bar.h"
 #include "Bullet.h"
-#include "Asteroid.h"
+#include "Enemy.h"
 #include "Physics.h"
 #include "SoundData.h"
 #include "Effect.h"

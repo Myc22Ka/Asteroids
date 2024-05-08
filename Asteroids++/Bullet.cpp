@@ -72,24 +72,24 @@ void Bullet::collisionDetection()
 {
     for (auto& entity : Game::getEntities())
     {
-        if (Game::isEnemy(entity)) asteroidHit(entity);
+        if (Game::isEnemy(entity)) enemyHit(entity);
     }
 }
 
-void Bullet::asteroidHit(Entity* entity) {
-    Asteroid* asteroid = dynamic_cast<Asteroid*>(entity);
+void Bullet::enemyHit(Entity* entity) {
+    Enemy* enemy = dynamic_cast<Enemy*>(entity);
 
-    if (physics::intersects(position, radius, asteroid->position, asteroid->radius) && lifeTime > 0 && hitAsteroids.find(asteroid) == hitAsteroids.end()) {
+    if (physics::intersects(position, radius, enemy->position, enemy->radius) && lifeTime > 0 && hitEnemies.find(enemy) == hitEnemies.end()) {
         if (!Player::playerStats.bulletType.piercing) lifeTime = 0;
-        asteroid->updateHealth(Player::playerStats.bulletDamage);
+        enemy->updateHealth(Player::playerStats.bulletDamage);
 
-        if (asteroid->getHealth() > 0) {
-            hitAsteroids.insert(asteroid);
+        if (enemy->getHealth() > 0) {
+            hitEnemies.insert(enemy);
 
             Clock clock;
-			thread t([asteroid, clock]() {
+			thread t([enemy, clock]() {
 				SoundData::play(Sounds::HIT);
-				asteroid->spriteInfo.sprite.setColor(Color::Red);
+				enemy->spriteInfo.sprite.setColor(Color::Red);
 
 				Color startColor = Color::Red;
 				Color endColor = Color::White;
@@ -101,11 +101,11 @@ void Bullet::asteroidHit(Entity* entity) {
 						static_cast<Uint8>(startColor.g + progress * (endColor.g - startColor.g)),
 						static_cast<Uint8>(startColor.b + progress * (endColor.b - startColor.b)),
 						static_cast<Uint8>(startColor.a + progress * (endColor.a - startColor.a)));
-					asteroid->spriteInfo.sprite.setColor(interpolatedColor);
+					enemy->spriteInfo.sprite.setColor(interpolatedColor);
 
 					this_thread::sleep_for(chrono::milliseconds(35));
 				}
-                asteroid->spriteInfo.sprite.setColor(Color::White);
+                enemy->spriteInfo.sprite.setColor(Color::White);
 			});
 
 			t.detach();
@@ -113,6 +113,6 @@ void Bullet::asteroidHit(Entity* entity) {
             return;
         }
 
-        asteroid->destroy();
+        enemy->destroy();
     }
 }

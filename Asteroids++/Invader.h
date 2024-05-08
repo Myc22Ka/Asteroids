@@ -2,13 +2,13 @@
 #ifndef INVADER_H
 #define INVADER_H
 
-#include "Asteroid.h"
+#include "Enemy.h"
 #include "Entity.h"
 
 using namespace sf;
 using namespace std;
 
-class Invader : public Asteroid
+class Invader : public Enemy
 {
 public:
 	Invader();

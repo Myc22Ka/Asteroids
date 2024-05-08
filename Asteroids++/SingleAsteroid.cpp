@@ -3,13 +3,13 @@
 #include "Game.h"
 #include "Pickup.h"
 
-SingleAsteroid::SingleAsteroid(): Asteroid(100.0f, physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_speed) + 50.0f, getSprite(Sprites::SINGLE_ASTEROID))
+SingleAsteroid::SingleAsteroid(): Enemy(100.0f, physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_speed) + 50.0f, getSprite(Sprites::SINGLE_ASTEROID))
 {
 	scaleSprite(spriteInfo.sprite, spriteInfo.spriteSize, size);
 	drawHitboxes();
 }
 
-SingleAsteroid::SingleAsteroid(Vector2f p, Vector2f d): Asteroid(100.0f, physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_speed) + 50.0f, getSprite(Sprites::SINGLE_ASTEROID))
+SingleAsteroid::SingleAsteroid(Vector2f p, Vector2f d): Enemy(100.0f, physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_speed) + 50.0f, getSprite(Sprites::SINGLE_ASTEROID))
 {
 	position = p;
 	direction = d;

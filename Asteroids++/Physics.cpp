@@ -51,22 +51,22 @@ float physics::distance(const Vector2f& p1, const Vector2f& p2)
 	return static_cast<float>(sqrt(pow(p2.x - p1.x, 2) + pow(p2.y - p1.y, 2)));
 }
 
-pair<Vector2f, Vector2f> physics::bounceDirection(const Asteroid* thisAsteroid, const Asteroid* otherAsteroid,const float& separationDistance)
+pair<Vector2f, Vector2f> physics::bounceDirection(const Enemy* thisEnemy, const Enemy* otherEnemy,const float& separationDistance)
 {
-	const Vector2f normal = physics::normalize(thisAsteroid->position - otherAsteroid->position);
+	const Vector2f normal = physics::normalize(thisEnemy->position - otherEnemy->position);
 
 	// Calculate overlap distance
-	const auto overlap = (thisAsteroid->size + otherAsteroid->size) - physics::distance(thisAsteroid->position, otherAsteroid->position);
+	const auto overlap = (thisEnemy->size + otherEnemy->size) - physics::distance(thisEnemy->position, otherEnemy->position);
 
 	// Separate the asteroids along the collision normal to resolve overlap
 	const Vector2f separationVector = normal * overlap * separationDistance;
 
 	// Calculate relative velocity along the normal direction
-	const Vector2f relativeVelocity = static_cast<float>(thisAsteroid->speed) * physics::normalize(thisAsteroid->direction) - static_cast<float>(otherAsteroid->speed) * physics::normalize(otherAsteroid->direction);
+	const Vector2f relativeVelocity = static_cast<float>(thisEnemy->speed) * physics::normalize(thisEnemy->direction) - static_cast<float>(otherEnemy->speed) * physics::normalize(otherEnemy->direction);
 	const auto velAlongNormal = physics::dotProduct(relativeVelocity, normal);
 
 	// Calculate total mass
-	const auto totalMass = thisAsteroid->size + otherAsteroid->size;
+	const auto totalMass = thisEnemy->size + otherEnemy->size;
 
 	// Calculate the maximum change in direction allowed
 	const auto maxChangeFactor = 0.7f;

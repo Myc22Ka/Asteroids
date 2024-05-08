@@ -2,7 +2,7 @@
 #include "WindowBox.h"
 #include "SingleAsteroid.h"
 
-MultiAsteroid::MultiAsteroid(): Asteroid(20.0f, physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_speed), getSprite(Sprites::MULTI_ASTEROID))
+MultiAsteroid::MultiAsteroid(): Enemy(20.0f, physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_speed), getSprite(Sprites::MULTI_ASTEROID))
 {
 	scaleSprite(spriteInfo.sprite, spriteInfo.spriteSize, size);
 

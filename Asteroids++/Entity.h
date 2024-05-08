@@ -14,7 +14,8 @@ enum EntityType {
     TYPE_EXPLOSION,
     TYPE_PICKUP,
     TYPE_PARTICLE,
-    TYPE_EVENT_WIND
+    TYPE_EVENT_WIND,
+    TYPE_EVENT_DEATHSCREEN
 };
 
 class Entity : public SpriteData {

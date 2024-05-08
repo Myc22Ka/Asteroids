@@ -2,13 +2,13 @@
 #ifndef COMET_H
 #define COMET_H
 
-#include "Asteroid.h"
+#include "Enemy.h"
 #include "Entity.h"
 
 using namespace sf;
 using namespace std;
 
-class Comet : public Asteroid
+class Comet : public Enemy
 {
 public:
 	Comet();

@@ -102,7 +102,7 @@
     <ClCompile Include="DashBar.cpp">
       <Filter>Source Files\Draws</Filter>
     </ClCompile>
-    <ClCompile Include="Asteroid.cpp">
+    <ClCompile Include="Enemy.cpp">
       <Filter>Source Files\Objects\Entities\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="MultiAsteroid.cpp">
@@ -165,6 +165,9 @@
     <ClCompile Include="EnemyBullet.cpp">
       <Filter>Source Files\Objects\Entities\Bullets</Filter>
     </ClCompile>
+    <ClCompile Include="EventHandler.cpp">
+      <Filter>Source Files\Objects\Events</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Physics.h">
@@ -191,7 +194,7 @@
     <ClInclude Include="DashBar.h">
       <Filter>Header Files\Draws</Filter>
     </ClInclude>
-    <ClInclude Include="Asteroid.h">
+    <ClInclude Include="Enemy.h">
       <Filter>Header Files\Objects\Entities\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="MultiAsteroid.h">
@@ -250,6 +253,9 @@
     </ClInclude>
     <ClInclude Include="EnemyBullet.h">
       <Filter>Header Files\Objects\Entities\Bullets</Filter>
+    </ClInclude>
+    <ClInclude Include="EventHandler.h">
+      <Filter>Header Files\Objects\Events</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,7 +1,7 @@
 #include "Wind.h"
 #include "WindowBox.h"
 
-Wind::Wind() : Entity(getRandomPosition(), 0, 0, Color::Yellow, SpriteInfo()), 
+Wind::Wind() : EventHandler(VertexArray(Lines, 400)),
 windSpeed(200.0f),
 wind(3.0f, false),  
 windLevel(3.0f), 
@@ -10,16 +10,7 @@ lineHeight(0.8f),
 velocity(physics::getRandomDirection())
 {
 	fullWindDuration = wind.getEffectDuration();
-	particles.setPrimitiveType(Lines);
-	particles.resize(400);
-
-	for (size_t i = 0; i < particles.getVertexCount(); i += 2) {
-		Vector2f position = getRandomPosition();
-		particles[i].position = position;
-		particles[i].color = Color::White;
-		particles[i + 1].position = position + velocity * lineHeight;
-		particles[i + 1].color = Color::White;
-	}
+	initParticles();
 }
 
 const Vector2f Wind::getRandomPosition() const 
@@ -30,11 +21,6 @@ const Vector2f Wind::getRandomPosition() const
 	uniform_real_distribution<float> yAxis(0.0f, float(WindowBox::getVideoMode().height));
 
 	return Vector2f(xAxis(gen), yAxis(gen));
-}
-
-void Wind::render(RenderWindow& window)
-{
-	window.draw(particles);
 }
 
 void Wind::update(float deltaTime)
@@ -156,7 +142,16 @@ const EntityType Wind::getEntityType()
 	return EntityType::TYPE_EVENT_WIND;
 }
 
-void Wind::collisionDetection() {}
+void Wind::initParticles()
+{
+	for (size_t i = 0; i < particles.getVertexCount(); i += 2) {
+		Vector2f position = getRandomPosition();
+		particles[i].position = position;
+		particles[i].color = Color::White;
+		particles[i + 1].position = position + velocity * lineHeight;
+		particles[i + 1].color = Color::White;
+	}
+}
 
 void Wind::init(const float& deltaTime, RenderWindow& window) {
 	activateWind(physics::getRandomFloatValue(10.0f, 0.75f) + Player::playerStats.time, physics::getRandomFloatValue(3.0f), physics::getRandomDirection());

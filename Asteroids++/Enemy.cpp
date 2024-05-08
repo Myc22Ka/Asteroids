@@ -1,8 +1,8 @@
-#include "Asteroid.h"
+#include "Enemy.h"
 #include "Score.h"
 #include "WindowBox.h"
 
-Asteroid::Asteroid(float health, float speed, SpriteInfo spriteInfo) :
+Enemy::Enemy(float health, float speed, SpriteInfo spriteInfo) :
 	Entity(getRandomPosition(), physics::getRandomAngle(), physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_size), Color::Red, spriteInfo),
 	health(health),
 	healthBar(size, 3.0f, Color::Red, Color::Black, health, Vector2f(-100.0f, -100.0f)),
@@ -11,34 +11,34 @@ Asteroid::Asteroid(float health, float speed, SpriteInfo spriteInfo) :
 {
 }
 
-const EntityType Asteroid::getEntityType()
+const EntityType Enemy::getEntityType()
 {
 	return EntityType::TYPE_ENEMY;
 }
 
-void Asteroid::bounceCollisionDetection()
+void Enemy::bounceCollisionDetection()
 {
 	Game::foreachEntity([&](Entity* entity) {
 		if ((entity->getEntityType() == EntityType::TYPE_ENEMY && entity->spriteInfo.spriteType != Sprites::COMET)
 			&& entity != this) {
-			Asteroid* otherAsteroid = dynamic_cast<Asteroid*>(entity);
+			Enemy* otherEnemy = dynamic_cast<Enemy*>(entity);
 
-			if (!otherAsteroid) return;
+			if (!otherEnemy) return;
 
-			if (physics::intersects(this->position, radius, otherAsteroid->position, otherAsteroid->radius)) {
-				const auto bounceDirection = physics::bounceDirection(this, otherAsteroid, 0.01f);
+			if (physics::intersects(this->position, radius, otherEnemy->position, otherEnemy->radius)) {
+				const auto bounceDirection = physics::bounceDirection(this, otherEnemy, 0.01f);
 
 				this->position += bounceDirection.second;
-				otherAsteroid->position -= bounceDirection.second;
+				otherEnemy->position -= bounceDirection.second;
 
 				this->direction -= bounceDirection.first;
-				otherAsteroid->direction += bounceDirection.first;
+				otherEnemy->direction += bounceDirection.first;
 			}
 		}
 	});
 }
 
-const Vector2f Asteroid::getRandomPosition() const
+const Vector2f Enemy::getRandomPosition() const
 {
 	auto player = Game::doesEntityExist(EntityType::TYPE_PLAYER);
 
@@ -53,23 +53,23 @@ const Vector2f Asteroid::getRandomPosition() const
 	return randomPosition;
 }
 
-const Bar& Asteroid::getHealthBar() const
+const Bar& Enemy::getHealthBar() const
 {
 	return healthBar;
 }
 
-void Asteroid::updateHealthBar()
+void Enemy::updateHealthBar()
 {
 	healthBar.updatePosition(Vector2f{ position.x - radius, position.y + radius });
 	healthBar.updateValue(health);
 }
 
-const float Asteroid::getHealth()
+const float Enemy::getHealth()
 {
 	return health;
 }
 
-void Asteroid::updateHealth(const float& newValue)
+void Enemy::updateHealth(const float& newValue)
 {
 	health -= newValue;
 }

@@ -1,11 +1,11 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "Asteroid.h"
+#include "Enemy.h"
 #include <random>
 
 using namespace std;
 
-class Asteroid;
+class Enemy;
 
 namespace physics {
 	bool intersects(const Vector2f& point, const float& size, const Vector2f& circlePosition, const float& size2);
@@ -15,7 +15,7 @@ namespace physics {
 	float magnitude(const Vector2f& vec);
 	float dotProduct(const Vector2f& v1, const Vector2f& v2);
 	float distance(const Vector2f& p1, const Vector2f& p2);
-	pair<Vector2f, Vector2f> bounceDirection(const Asteroid* thisAsteroid, const Asteroid* otherAsteroid, const float& separationDistance);
+	pair<Vector2f, Vector2f> bounceDirection(const Enemy* thisEnemy, const Enemy* otherEnemy, const float& separationDistance);
 
 	float getRandomFloatValue(const float& base);
 	float getRandomFloatValue(const float& base, const float& range);

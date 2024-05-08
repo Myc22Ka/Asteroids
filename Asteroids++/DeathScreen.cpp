@@ -2,30 +2,20 @@
 #include "WindowBox.h"
 
 Effect DeathScreen::death{ 1.0f, false };
-VertexArray DeathScreen::particles{ VertexArray(Quads, 16) };
 Effect DeathScreen::delay{ 0.5f, false };
 
-DeathScreen::DeathScreen() {
-	resetPosition();
-
-	for (int i = 0; i < particles.getVertexCount(); i++) {
-		particles[i].color = Color::Black;
-	}
-}
-
-void DeathScreen::render(RenderWindow& window) {
-	window.draw(particles);
+DeathScreen::DeathScreen() : EventHandler(VertexArray(Quads, 16)), velocity(9000.0f) {
+	initParticles();
 }
 
 void DeathScreen::update(float deltaTime) {
-	float velocity = 9000.0f;
 	delay.updateEffectDuration(deltaTime);
 
 	if (delay.isEffectActive()) return;
 
 	death.updateEffectDuration(deltaTime);
 
-	for (int i = 0; i < 4; ++i) {
+	for (size_t i = 0; i < 4; ++i) {
 		particles[i * 4].position.x += velocity * deltaTime / 2 * death.getEffectDuration();
 		particles[i * 4 + 1].position.x += velocity * deltaTime / 2 * death.getEffectDuration();
 		particles[i * 4 + 2].position.x += velocity * deltaTime / 2 * death.getEffectDuration();
@@ -34,6 +24,11 @@ void DeathScreen::update(float deltaTime) {
 
 	if (death.getEffectDuration() < 0) resetPosition();
 
+}
+
+const EntityType DeathScreen::getEntityType()
+{
+	return EntityType::TYPE_EVENT_DEATHSCREEN;
 }
 
 void DeathScreen::activateDeathScreen(const float& duration) {
@@ -52,7 +47,7 @@ void DeathScreen::resetPosition() {
 	float rectWidth = WindowBox::getVideoMode().width;
 	float rectHeight = WindowBox::getVideoMode().height;
 
-	for (int i = 0; i < 4; ++i) {
+	for (size_t i = 0; i < 4; ++i) {
 		float xOffset = i * 300.0f;
 
 		particles[i * 4].position = sf::Vector2f(-xOffset, i * (rectHeight / 4));
@@ -71,4 +66,13 @@ void DeathScreen::init(const float& deltaTime, RenderWindow& window) {
 
 	update(deltaTime);
 	render(window);
+}
+
+void DeathScreen::initParticles()
+{
+	resetPosition();
+
+	for (int i = 0; i < particles.getVertexCount(); i++) {
+		particles[i].color = Color::Black;
+	}
 }

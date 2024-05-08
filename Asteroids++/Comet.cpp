@@ -2,7 +2,7 @@
 #include "WindowBox.h"
 #include "Pickup.h"
 
-Comet::Comet() : Asteroid(500, physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_speed) + 100.0f, getSprite(Sprites::COMET))
+Comet::Comet() : Enemy(500, physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_speed) + 100.0f, getSprite(Sprites::COMET))
 {
 	scaleSprite(spriteInfo.sprite, spriteInfo.spriteSize, size);
 

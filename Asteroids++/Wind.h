@@ -8,28 +8,26 @@
 #include "Score.h"
 #include "cmath"
 #include "Game.h"
+#include "EventHandler.h"
 
-class Wind : public Entity {
+class Wind : public EventHandler {
 public:
     Wind();
 
-    const Vector2f getRandomPosition() const;
-
-    void render(RenderWindow& window) override;
+    void init(const float& deltaTime, RenderWindow& window) override;
     void update(float deltaTime) override;
-    const EntityType getEntityType() override;
-    void collisionDetection() override;
+    const EntityType getEntityType() override;  
+    void initParticles() override;
 
+private:
     void activateWind(const float& duration, const float& windLevel, const Vector2f& velocity);
     void stopWind();
 
-    void init(const float& deltaTime, RenderWindow& window);
+    const Vector2f getRandomPosition() const;
 
-private:
     void wrapLine(Vertex& vertex1, Vertex& vertex2) const;
     void resetParticlePositions();
 
-    VertexArray particles;
     Effect wind;
 
     float windSpeed;
