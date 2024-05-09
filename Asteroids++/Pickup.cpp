@@ -14,7 +14,7 @@ const map<double, Sprites> Pickup::boosters{
 };
 
 const vector<Sprites> Pickup::modifiers{ Sprites::PICKUP_EXTRA_BULLET, Sprites::PICKUP_EXTRA_SPEED, Sprites::PICKUP_EXTRA_TIME };
-const vector<Sprites> Pickup::bulletTypes{ Sprites::PICKUP_HOMING, Sprites::PICKUP_PIERCING };
+const vector<Sprites> Pickup::bulletTypes{ Sprites::PICKUP_HOMING, Sprites::PICKUP_PIERCING, Sprites::PICKUP_DOUBLESHOOT, Sprites::PICKUP_TRIPLESHOOT, Sprites::PICKUP_QUADSHOOT };
 
 Pickup::Pickup(Vector2f position): Entity(position, 0, 64, Color::Cyan, SpriteInfo()),
 lifeTime(5.0f)
@@ -168,6 +168,27 @@ void Pickup::collisionDetection()
 					if (Player::playerStats.scoreTimes2.isEffectActive()) Player::playerStats.scoreTimes2.setEffectActive(false);
 					Player::playerStats.scoreTimes5.startEffect(physics::getRandomFloatValue(10.0f, 0.5f) + Player::playerStats.time);
 					Player::playerStats.scoreTimes5.getBar()->setMaxValue(Player::playerStats.scoreTimes5.getEffectDuration());
+
+					break;
+
+				case Sprites::PICKUP_DOUBLESHOOT:
+					SoundData::play(Sounds::PICKUP_DOUBLESHOOT);
+					Player::playerStats.bulletAmount = 2;
+					Score::addScore(10000);
+
+					break;
+
+				case Sprites::PICKUP_TRIPLESHOOT:
+					SoundData::play(Sounds::PICKUP_TRIPLESHOOT);
+					Player::playerStats.bulletAmount = 3;
+					Score::addScore(10000);
+
+					break;
+
+				case Sprites::PICKUP_QUADSHOOT:
+					SoundData::play(Sounds::PICKUP_QUADSHOOT);
+					Player::playerStats.bulletAmount = 4;
+					Score::addScore(10000);
 
 					break;
 				}
