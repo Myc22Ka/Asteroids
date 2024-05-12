@@ -19,6 +19,8 @@ public:
     const EntityType getEntityType() override;  
     void initParticles() override;
 
+    void remove();
+
 private:
     void activateWind(const float& duration, const float& windLevel, const Vector2f& velocity);
     void stopWind();

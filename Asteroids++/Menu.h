@@ -22,6 +22,8 @@ public:
 	static void navigator(const Event& event);
 	static void update(const float& deltaTime);
 
+	static void displayHighscoreTable(RenderWindow& window);
+
 private:
 	static Texture texture;
 	static Sprite background;

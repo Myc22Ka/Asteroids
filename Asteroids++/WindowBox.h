@@ -46,4 +46,6 @@ private:
 	Effect launch;
 
 	RenderWindow window;
+
+	bool keyPressed;
 };

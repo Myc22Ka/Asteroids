@@ -15,7 +15,7 @@
 VideoMode WindowBox::videoMode{};
 TextField WindowBox::fps{ 0 };
 
-WindowBox::WindowBox() {}
+WindowBox::WindowBox() : keyPressed(false) {}
 
 VideoMode WindowBox::getVideoMode() {
 	return videoMode;
@@ -50,9 +50,16 @@ void WindowBox::displayWindow() {
         Event e{};
 
         while (window.pollEvent(e)) {
+            if (e.type == Event::KeyPressed && !keyPressed) keyPressed = true;
+
+            if (e.type == Event::KeyReleased) keyPressed = false;
+
+
             if (e.type == Event::Closed || e.key.code == Keyboard::Escape) window.close();
 
-            if (Game::getGameState() == MENU) Menu::navigator(e);
+            else if (Game::getGameState() == MENU) Menu::navigator(e);
+
+            else if (Game::getGameState() == GAME_OVER) GameOver::enterPlayerName(e);
 
             else if (e.type == Event::KeyPressed) {
                 if (e.key.code == Keyboard::H) 
@@ -87,20 +94,30 @@ void WindowBox::engine(Wind& wind, const float& deltaTime)
         return;
     }
 
+    if (Game::getGameState() == MENU_HIGHSCORE) {
+        Menu::displayHighscoreTable(window);
+        return;
+    }
+
+    if (Game::getGameState() == GAME_OVER) {
+        Game::clearEntities();
+        wind.remove();
+        GameOver::draw(window);
+        GameOver::drawPlayerName(window);
+
+        GameOver::update(deltaTime);
+
+        if (Keyboard::isKeyPressed(Keyboard::Enter)) Game::setGameState(MENU_HIGHSCORE);
+
+        return;
+    }
+
     updateWindow(deltaTime);
 
 	wind.init(deltaTime, window);
     Game::spawnEnemy(deltaTime);
 
     renderUI();
-
-    if (Game::getGameState() == GAME_OVER) {
-        Game::clearEntities();
-        window.draw(GameOver::gameOverText.getText());
-        window.draw(GameOver::continueText.getText());
-
-        if (Keyboard::isKeyPressed(Keyboard::Enter)) begin();
-    }
 }
 
 void WindowBox::launchGame(const float& deltaTime) {
@@ -178,21 +195,26 @@ void WindowBox::initSprite(Sprite& sprite, const string filename, Texture& textu
 }
 
 void WindowBox::displayMenu() {
-    if (Game::getGameState() == MENU) {
-		Menu::draw(window);
+    if (Game::getGameState() != MENU) return;
 
-        if (Keyboard::isKeyPressed(Keyboard::Enter)) {
-			const auto option = Menu::getSelectedOptionIndex();
+    Menu::draw(window);
 
-           switch (option) {
-			case 0:
+    cout << keyPressed << endl;
+
+    if (Keyboard::isKeyPressed(Keyboard::Enter)) {
+	    const auto option = Menu::getSelectedOptionIndex();
+
+        switch (option) {
+		    case 0:
 			    begin();
 			    break;
-			case 1:
+		    case 1:
 			    cout << "Continue!\n"; 
+                begin();
+                Game::setGameState(GAME_OVER);
                 break;
 			case 2:
-				cout << "HighScore!\n";
+                Menu::displayHighscoreTable(window);
                 break;
 			case 3:
 				SoundData::play(Sounds::GOODBYE);
@@ -200,9 +222,7 @@ void WindowBox::displayMenu() {
 
 				window.close();
 				break;
-		    }
-        }
-        return;
+		}
     }
 }
 
@@ -218,7 +238,7 @@ void WindowBox::updateWindow(const float& deltaTime)
     }
 
     if (Game::getGameState() != PLAYING) SoundData::stop(Sounds::AMBIENT);
-    if(Game::getGameState() == PLAYING && SoundData::sounds[Sounds::AMBIENT].getStatus() != PLAYING) SoundData::play(Sounds::AMBIENT);
+    if (Game::getGameState() == PLAYING && SoundData::sounds[Sounds::AMBIENT].getStatus() != PLAYING) SoundData::play(Sounds::AMBIENT);
 
     for (auto& entity : Game::getEntities())
     {

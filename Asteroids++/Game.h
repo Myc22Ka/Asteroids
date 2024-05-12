@@ -20,6 +20,7 @@ class Particle;
 enum GameState {
 	MENU, 
 	MENU_LOADING,
+	MENU_HIGHSCORE,
 	PLAYING, 
 	WIND,
 	PAUSED,

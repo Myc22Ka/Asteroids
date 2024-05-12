@@ -33,6 +33,10 @@ void TextField::setSize(const int size) {
 	text.setCharacterSize(size);
 }
 
+void TextField::setLetterSpacing(const double spacing) {
+	text.setLetterSpacing(spacing);
+}
+
 const Text TextField::getText()
 {
 	return text;
@@ -44,8 +48,8 @@ void TextField::setColorText(const Color& color) {
 
 void TextField::loadFont()
 {
-	if (!font.loadFromFile("./assets/font.ttf")) {
-		cout << "Error: Could not open file: font.ttf\n";
+	if (!font.loadFromFile("./assets/font.otf")) {
+		cout << "Error: Could not open file: font.otf\n";
 		return;
 	}
 }

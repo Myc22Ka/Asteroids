@@ -104,3 +104,14 @@ void Menu::update(const float& deltaTime) {
 		}
 	}
 }
+
+void Menu::displayHighscoreTable(RenderWindow& window)
+{
+	TextField highscoreText{ 64 };
+	highscoreText.setText("Highscore");
+	highscoreText.setTextCenterX(FileMenager::screenData.padding);
+
+	window.draw(background);
+
+	window.draw(highscoreText.getText());
+}
