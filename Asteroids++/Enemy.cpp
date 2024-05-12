@@ -7,8 +7,39 @@ Enemy::Enemy(float health, float speed, SpriteInfo spriteInfo) :
 	health(health),
 	healthBar(size, 3.0f, Color::Red, Color::Black, health, Vector2f(-100.0f, -100.0f)),
 	direction(physics::getRandomDirection()),
-	speed(speed)
+	speed(speed),
+	crit("CRIT", 0),
+	critTimer(2.0f, false)
 {
+	crit.setColorText(Color::Red);
+	crit.setTextPosition(position);
+	crit.setSize(32);
+}
+
+void Enemy::render(RenderWindow& window)
+{
+	Transform transform;
+	window.draw(spriteInfo.sprite, transform.translate(position).rotate(angle));
+	if (Game::hitboxesVisibility) window.draw(shape, transform);
+	if (critTimer.isEffectActive()) window.draw(crit.getText());
+	getHealthBar().draw(window);
+}
+
+void Enemy::update(float deltaTime)
+{
+	updateHealthBar();
+	crit.setTextPosition(Vector2f(position.x - crit.getText().getLocalBounds().width / 2, position.y - crit.getText().getLocalBounds().height));
+
+	if (critTimer.isEffectActive()) {
+		critTimer.updateEffectDuration(deltaTime);
+
+		float opacity = 255.0f * (critTimer.getEffectDuration() / 0.4f);
+
+		Color color = crit.getText().getFillColor();
+		color.a = static_cast<Uint8>(opacity);
+
+		crit.setColorText(color);
+	}
 }
 
 const EntityType Enemy::getEntityType()

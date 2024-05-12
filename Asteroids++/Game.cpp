@@ -13,7 +13,7 @@ list<Entity*> Game::entities;
 list<Particle*> Game::particles;
 vector<EntityType> Game::enemies{ EntityType::TYPE_ENEMY, EntityType::TYPE_ENEMY_BULLET };
 int Game::maxLevel{ 5 };
-int Game::level{ 3 };
+int Game::level{ 1 };
 
 Effect Game::freeze{ FileMenager::timingsData.default_freeze_time, false };
 Effect Game::enemySpawn{ FileMenager::timingsData.default_enemy_spawn_time, false };
@@ -157,6 +157,6 @@ void Game::spawnEnemy(const float& deltaTime) {
         const auto entity = getRandomEntity(maxLevel - level, maxLevel - 1);
 
 		if(entity) addEntity(entity);
-		enemySpawn.setEffectDuration(FileMenager::timingsData.default_enemy_spawn_time + Player::playerStats.time * 0.1f);
+		enemySpawn.setEffectDuration(FileMenager::timingsData.default_enemy_spawn_time + Player::playerStats.time * 0.1f - level * 0.1f);
 	}
 }

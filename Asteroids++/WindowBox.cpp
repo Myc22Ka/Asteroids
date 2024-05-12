@@ -13,7 +13,7 @@
 #include "DeathScreen.h"
 
 VideoMode WindowBox::videoMode{};
-TextField WindowBox::fps{ 12 };
+TextField WindowBox::fps{ 0 };
 
 WindowBox::WindowBox() {}
 
@@ -22,11 +22,11 @@ VideoMode WindowBox::getVideoMode() {
 }
 
 void WindowBox::displayWindow() {
-	videoMode = VideoMode(1200, 900);
+	videoMode = VideoMode(1500, 1080);
     //videoMode = VideoMode::getDesktopMode();
 
     window.create(videoMode, "Asteroids++", Style::None);
-    window.setFramerateLimit(60);
+    window.setFramerateLimit(FileMenager::screenData.framerate);
 
     loaderSprite = getSprite(Sprites::LOADER);
 
@@ -41,7 +41,8 @@ void WindowBox::displayWindow() {
     GameOver::init();
     Menu::init();
     Game::setGameState(MENU_LOADING);
-	launch.startEffect(5.0f);
+    launch.startEffect(FileMenager::screenData.launch_time);
+    fps.setSize(FileMenager::screenData.fps_font_size);
 
     loadParticles();
 
@@ -49,15 +50,14 @@ void WindowBox::displayWindow() {
         Event e{};
 
         while (window.pollEvent(e)) {
-            if (e.type == sf::Event::Closed || e.key.code == sf::Keyboard::Escape) window.close();
+            if (e.type == Event::Closed || e.key.code == Keyboard::Escape) window.close();
 
             if (Game::getGameState() == MENU) Menu::navigator(e);
 
-            else if (e.type == sf::Event::KeyPressed) {
-                if (e.key.code == sf::Keyboard::H) 
+            else if (e.type == Event::KeyPressed) {
+                if (e.key.code == Keyboard::H) 
                 { 
                     Game::hitboxesVisibility = !Game::hitboxesVisibility; 
-                    cout << Game::level << endl;
                 }
             }
         }
@@ -77,7 +77,7 @@ void WindowBox::engine(Wind& wind, const float& deltaTime)
 {
     if (Game::getGameState() == MENU_LOADING) {
 		//launchGame(deltaTime);
-		Game::setGameState(MENU);
+        Game::setGameState(MENU);
 		return;
     }
 
@@ -108,7 +108,7 @@ void WindowBox::launchGame(const float& deltaTime) {
 
 	if (launch.isEffectActive() && loaderSprite.spriteState != loaderSprite.frames.size() - 1) {
         launch.updateEffectDuration(deltaTime);
-	    float opacity = 255.0f * (1 - launch.getEffectDuration() / 5.0f);
+	    float opacity = 255.0f * (1 - launch.getEffectDuration() / FileMenager::screenData.launch_time);
 
 	    color.a = static_cast<Uint8>(opacity);
 
@@ -120,7 +120,7 @@ void WindowBox::launchGame(const float& deltaTime) {
 		loaderSprite.currentSpriteLifeTime -= deltaTime;
 
         if (loaderSprite.spriteState == loaderSprite.frames.size() - 1)
-			launch.startEffect(5.0f);
+			launch.startEffect(FileMenager::screenData.launch_time);
 
 		if (loaderSprite.currentSpriteLifeTime <= 0) {
 			loaderSprite.currentSpriteLifeTime = loaderSprite.defaultSpriteLifeTime;
@@ -131,7 +131,7 @@ void WindowBox::launchGame(const float& deltaTime) {
 
     if (launch.isEffectActive() && loaderSprite.spriteState == loaderSprite.frames.size() - 1) {
 		launch.updateEffectDuration(deltaTime);
-		float opacity = 255.0f * (launch.getEffectDuration() / 5.0f);
+		float opacity = 255.0f * (launch.getEffectDuration() / FileMenager::screenData.launch_time);
 
 		color.a = static_cast<Uint8>(opacity);
 
@@ -150,7 +150,7 @@ void WindowBox::launchGame(const float& deltaTime) {
 	    circle.move(velocity);
 
         Color c = circle.getFillColor();
-		c.a = min(color.a, static_cast<Uint8>(150.0f));
+		c.a = min(color.a, static_cast<Uint8>(FileMenager::screenData.launch_particle_opacity));
 
         circle.setFillColor(c);
 
@@ -217,6 +217,9 @@ void WindowBox::updateWindow(const float& deltaTime)
             particle->update(deltaTime);
     }
 
+    if (Game::getGameState() != PLAYING) SoundData::stop(Sounds::AMBIENT);
+    if(Game::getGameState() == PLAYING && SoundData::sounds[Sounds::AMBIENT].getStatus() != PLAYING) SoundData::play(Sounds::AMBIENT);
+
     for (auto& entity : Game::getEntities())
     {
         if (!entity || !entity->isActive() || (DeathScreen::isScreenOver() && entity->getEntityType() == TYPE_PLAYER))
@@ -242,7 +245,7 @@ void WindowBox::updateWindow(const float& deltaTime)
         fpsDelay.startEffect(0.2f);
         float lastTime = 0;
         fps.setText(to_string(static_cast<int>(1.0f / (deltaTime - lastTime))) + " FPS");
-        fps.setTextPosition(Vector2f(10.0f, 10.0f));
+        fps.setTextPosition(Vector2f(FileMenager::screenData.fps_pos_x + FileMenager::screenData.padding, FileMenager::screenData.fps_pos_y + FileMenager::screenData.padding));
         lastTime = deltaTime;
     }
 
@@ -254,7 +257,7 @@ void WindowBox::renderUI()
     Score::scoreText.setText(Score::getScoreString());
     window.draw(Score::scoreText.getText());
 
-    if ((Score::getScore() >> (8 + Game::level)) > Game::level && Game::level != Game::maxLevel) Game::level += 1;
+    if (Score::getScore() / FileMenager::screenData.game_next_level_spike > Game::level && Game::level != Game::maxLevel) Game::level += 1;
 
     DashBar dashBar;
 
@@ -266,7 +269,7 @@ void WindowBox::loadParticles() {
 	for (size_t i = 0; i < 50; i++) {
 		CircleShape circle(physics::getRandomFloatValue(10.0f, 1.5f));
 		circle.setPosition(physics::getRandomPosition(circle.getRadius()));
-		circle.setFillColor(Color(208, 241, 255, 150));
+		circle.setFillColor(Color(208, 241, 255, FileMenager::screenData.launch_particle_opacity));
 		const auto velocity = Vector2f(physics::getRandomFloatValue(2.5f), physics::getRandomFloatValue(physics::getPI() / 2, 0.2f));
 		loaderParticles.push_back({ circle, velocity });
 	}
@@ -275,6 +278,7 @@ void WindowBox::loadParticles() {
 void WindowBox::begin()
 {
     Game::setGameState(PLAYING);
+    SoundData::play(Sounds::AMBIENT);
     Game::addEntity(new Player());
     Game::enemySpawn.setEffectDuration(FileMenager::timingsData.default_enemy_spawn_time);
     fps.setColorText(Color(255, 255, 255, 150));

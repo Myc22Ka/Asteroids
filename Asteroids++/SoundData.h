@@ -38,7 +38,9 @@ enum class Sounds {
     GOODBYE,
     PING,
     HIT,
-    ACTIVE_SHIELD
+    CRITHIT,
+    ACTIVE_SHIELD,
+    AMBIENT
 };
 
 class SoundData {

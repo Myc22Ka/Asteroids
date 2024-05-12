@@ -29,6 +29,10 @@ void TextField::setText(const string& text) {
 	this->text.setString(text);
 }
 
+void TextField::setSize(const int size) {
+	text.setCharacterSize(size);
+}
+
 const Text TextField::getText()
 {
 	return text;

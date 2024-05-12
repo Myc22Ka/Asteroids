@@ -2,7 +2,7 @@
 #include "WindowBox.h"
 #include "SingleAsteroid.h"
 
-MultiAsteroid::MultiAsteroid(): Enemy(20.0f, physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_speed), getSprite(Sprites::MULTI_ASTEROID))
+MultiAsteroid::MultiAsteroid(): Enemy(20.0f + 20.0f * floor(Score::getScore() / FileMenager::screenData.game_next_level_spike), physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_speed), getSprite(Sprites::MULTI_ASTEROID))
 {
 	scaleSprite(spriteInfo.sprite, spriteInfo.spriteSize, size);
 
@@ -11,15 +11,12 @@ MultiAsteroid::MultiAsteroid(): Enemy(20.0f, physics::getRandomFloatValue(FileMe
 
 void MultiAsteroid::render(RenderWindow& window)
 {
-	Transform transform;
-	window.draw(spriteInfo.sprite, transform.translate(position).rotate(angle));
-	if (Game::hitboxesVisibility) window.draw(shape, transform);
-	getHealthBar().draw(window);
+	Enemy::render(window);
 }
 
 void MultiAsteroid::update(float deltaTime)
 {
-	updateHealthBar();
+	Enemy::update(deltaTime);
 
 	if (Game::freeze.isEffectActive()) return;
 
@@ -68,6 +65,6 @@ void MultiAsteroid::destroy()
 	Game::addEntity(new SingleAsteroid(asteroid1->position, asteroid1->direction));
 	Game::addEntity(new SingleAsteroid(asteroid2->position, asteroid2->direction));
 
-	Score::addScore(20);
+	Score::addScore(40);
 	SoundData::play(Sounds::EXPLOSION);
 }

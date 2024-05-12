@@ -12,6 +12,8 @@
 #include <random>
 #include <ranges>
 #include "Physics.h"
+#include "TextField.h"
+#include "Effect.h"
 
 class Enemy : public Entity {
 	Bar healthBar;
@@ -20,8 +22,8 @@ class Enemy : public Entity {
 public:
 	Enemy(float health, float speed, SpriteInfo spriteInfo);
 
-	virtual void render(RenderWindow& window) override = 0;
-	virtual void update(float deltaTime) override = 0;
+	virtual void render(RenderWindow& window) override;
+	virtual void update(float deltaTime) override;
 	virtual const EntityType getEntityType() override;
 	virtual void collisionDetection() override = 0;
 	virtual void destroy() = 0;
@@ -37,6 +39,8 @@ public:
 
 	float speed;
 	Vector2f direction;
+	TextField crit;
+	Effect critTimer;
 };
 
 #endif

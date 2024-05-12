@@ -90,6 +90,7 @@ void Pickup::collisionDetection()
 					if (Player::playerStats.shootOffset >= 0.11f) {
 						Player::playerStats.shootOffset -= 0.01f;
 						Player::playerStats.bulletSize += 3.0f;
+						Player::playerStats.critChance += 0.02;
 					}
 
 					Score::addScore(10);
@@ -148,12 +149,14 @@ void Pickup::collisionDetection()
 					break;
 				case Sprites::PICKUP_FREEZE:
 					SoundData::play(Sounds::FREEZE);
-					Game::freeze.startEffect(physics::getRandomFloatValue(10.0f, 0.5f) + Player::playerStats.time);
+					Game::freeze.startEffect(physics::getRandomFloatValue(5.0f, 0.5f) + Player::playerStats.time);
+					Score::addScore(50);
 
 					break;
 				case Sprites::PICKUP_EXTRA_TIME:
 					SoundData::play(Sounds::PICKUP_EXTRA_TIME);
-					if (Player::playerStats.time < 10.0f) Player::playerStats.time += 10.0f;
+					if (Player::playerStats.time < 10.0f) Player::playerStats.time += 1.0f;
+					Score::addScore(50);
 
 					break;
 				case Sprites::PICKUP_TIMES_2:
@@ -161,6 +164,7 @@ void Pickup::collisionDetection()
 					if (Player::playerStats.scoreTimes5.isEffectActive()) Player::playerStats.scoreTimes5.setEffectActive(false);
 					Player::playerStats.scoreTimes2.startEffect(physics::getRandomFloatValue(10.0f, 0.5f) + Player::playerStats.time);
 					Player::playerStats.scoreTimes2.getBar()->setMaxValue(Player::playerStats.scoreTimes2.getEffectDuration());
+					Score::addScore(20);
 
 					break;
 				case Sprites::PICKUP_TIMES_5:
@@ -168,27 +172,28 @@ void Pickup::collisionDetection()
 					if (Player::playerStats.scoreTimes2.isEffectActive()) Player::playerStats.scoreTimes2.setEffectActive(false);
 					Player::playerStats.scoreTimes5.startEffect(physics::getRandomFloatValue(10.0f, 0.5f) + Player::playerStats.time);
 					Player::playerStats.scoreTimes5.getBar()->setMaxValue(Player::playerStats.scoreTimes5.getEffectDuration());
+					Score::addScore(100);
 
 					break;
 
 				case Sprites::PICKUP_DOUBLESHOOT:
 					SoundData::play(Sounds::PICKUP_DOUBLESHOOT);
 					Player::playerStats.bulletAmount = 2;
-					Score::addScore(10000);
+					Score::addScore(1000);
 
 					break;
 
 				case Sprites::PICKUP_TRIPLESHOOT:
 					SoundData::play(Sounds::PICKUP_TRIPLESHOOT);
 					Player::playerStats.bulletAmount = 3;
-					Score::addScore(10000);
+					Score::addScore(1000);
 
 					break;
 
 				case Sprites::PICKUP_QUADSHOOT:
 					SoundData::play(Sounds::PICKUP_QUADSHOOT);
 					Player::playerStats.bulletAmount = 4;
-					Score::addScore(10000);
+					Score::addScore(1000);
 
 					break;
 				}

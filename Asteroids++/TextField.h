@@ -20,6 +20,7 @@ public:
 	void setTextCenterY(const float& x);
 
 	void setText(const string& text);
+	void setSize(const int size);
 	const Text getText();
 
 	void setColorText(const Color& color);

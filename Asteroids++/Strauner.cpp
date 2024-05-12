@@ -3,7 +3,7 @@
 #include "EnemyBullet.h"
 #include "Pickup.h"
 
-Strauner::Strauner() : Enemy(2000, physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_speed), getSprite(Sprites::STRAUNER)),
+Strauner::Strauner() : Enemy(2000.0f + 20.0f * floor(Score::getScore() / FileMenager::screenData.game_next_level_spike), physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_speed), getSprite(Sprites::STRAUNER)),
 changePosition(5.0f, false),
 shoot(0.0f, false),
 hue(0.0f)
@@ -15,15 +15,12 @@ hue(0.0f)
 
 void Strauner::render(RenderWindow& window)
 {
-	Transform transform;
-	window.draw(spriteInfo.sprite, transform.translate(position).rotate(angle));
-	if (Game::hitboxesVisibility) window.draw(shape, transform);
-	getHealthBar().draw(window);
+	Enemy::render(window);
 }
 
 void Strauner::update(float deltaTime)
 {
-    updateHealthBar();
+	Enemy::update(deltaTime);
 
 	hue += fmod(deltaTime * 60.0f, 360.0f); // Adjust the multiplier as needed for the speed of color change
 
@@ -123,6 +120,6 @@ void Strauner::destroy()
 
 	Game::addEntity(new Pickup(position));
 
-	Score::addScore(10);
+	Score::addScore(1000);
 	SoundData::play(Sounds::EXPLOSION);
 }

@@ -72,6 +72,8 @@ void Wind::stopWind() {
 
 	windThread.detach();
 
+	Game::setGameState(PLAYING);
+
 	return;
 }
 
@@ -133,6 +135,7 @@ void Wind::activateWind(const float& duration, const float& windLevel, const Vec
 	this->windLevel = windLevel;
 	this->velocity = velocity;
 
+	Game::setGameState(WIND);
 	SoundData::play(Sounds::WIND);
 	}
 }

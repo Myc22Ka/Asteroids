@@ -13,6 +13,13 @@ using namespace std;
 
 struct ScreenData {
 	float padding;
+    int framerate;
+    float launch_time;
+    int fps_font_size;
+    int launch_particle_opacity;
+    float fps_pos_x;
+    float fps_pos_y;
+    float game_next_level_spike;
 };
 
 struct PlayerData {

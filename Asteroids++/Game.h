@@ -21,6 +21,7 @@ enum GameState {
 	MENU, 
 	MENU_LOADING,
 	PLAYING, 
+	WIND,
 	PAUSED,
 	GAME_OVER
 };

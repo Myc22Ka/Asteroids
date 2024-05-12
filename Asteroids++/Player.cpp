@@ -17,6 +17,7 @@ PlayerStats Player::playerStats{
     FileMenager::playerData.bullet_size,
     50.0f,
     FileMenager::playerData.bullet_speed,
+    0.0,
     { false, false },
     { 10.0f, false },
     { 10.0f, false },
@@ -313,7 +314,7 @@ void Player::dashAbility(const float& deltaTime)
 void Player::setPlayerStats()
 {
     playerStats.shootOffset = FileMenager::playerData.bullet_shoot_delay;
-    playerStats.bulletAmount = 4;
+    playerStats.bulletAmount = 1;
     playerStats.bulletDamage = 50;
     playerStats.bulletSize = FileMenager::playerData.bullet_size;
     playerStats.bulletSpeed = FileMenager::playerData.bullet_speed;
@@ -322,16 +323,16 @@ void Player::setPlayerStats()
 
     for (int i = 0; i < 3; ++i) {
         playerStats.lifes.push_back(offset);
-
         offset += 20.0f;
     }
 
     playerStats.speed = FileMenager::playerData.speed;
     playerStats.turnSpeed = FileMenager::playerData.turn_speed;
-    playerStats.shield = { 10.0f, false, new Bar(radius, 2.0f, Color::Blue, Color::Black, playerStats.shield.getEffectDuration(), position, Sprites::PICKUP_SHIELD)};
-    playerStats.drunkMode = { 10.0f, false, new Bar(radius, 2.0f, Color::Color(242, 142, 28, 255), Color::Black, playerStats.drunkMode.getEffectDuration(), position, Sprites::PICKUP_DRUNKMODE) };
-    playerStats.scoreTimes2 = { 10.0f, false, new Bar(radius, 2.0f, Color::Color(144, 238, 144, 255), Color::Black, playerStats.scoreTimes2.getEffectDuration(), position, Sprites::PICKUP_TIMES_2) };
-    playerStats.scoreTimes5 = { 10.0f, false, new Bar(radius, 2.0f, Color::Color(93, 213, 93, 255), Color::Black, playerStats.scoreTimes5.getEffectDuration(), position, Sprites::PICKUP_TIMES_5) };
+    playerStats.shield = { 4.0f, false, new Bar(radius, 2.0f, Color::Blue, Color::Black, playerStats.shield.getEffectDuration(), Vector2f(-100.0f, -100.0f), Sprites::PICKUP_SHIELD)};
+    playerStats.drunkMode = { 6.0f, false, new Bar(radius, 2.0f, Color::Color(242, 142, 28, 255), Color::Black, playerStats.drunkMode.getEffectDuration(), Vector2f(-100.0f, -100.0f), Sprites::PICKUP_DRUNKMODE) };
+    playerStats.scoreTimes2 = { 10.0f, false, new Bar(radius, 2.0f, Color::Color(144, 238, 144, 255), Color::Black, playerStats.scoreTimes2.getEffectDuration(), Vector2f(-100.0f, -100.0f), Sprites::PICKUP_TIMES_2) };
+    playerStats.scoreTimes5 = { 10.0f, false, new Bar(radius, 2.0f, Color::Color(93, 213, 93, 255), Color::Black, playerStats.scoreTimes5.getEffectDuration(), Vector2f(-100.0f, -100.0f), Sprites::PICKUP_TIMES_5) };
+    playerStats.critChance = 0.0;
 
     playerStats.bulletType.piercing = false;
     playerStats.bulletType.homing = false;
@@ -352,19 +353,19 @@ void Player::updateStatsbars(const float& deltaTime) {
     if (playerStats.drunkMode.isEffectActive()) {
         playerStats.drunkMode.updateEffectDuration(deltaTime);
 
-        playerStats.drunkMode.getBar()->updateValue(playerStats.drunkMode.getEffectDuration());
         playerStats.drunkMode.getBar()->updatePosition(Vector2f{ position.x - radius / 2, position.y + radius + offset });
+        playerStats.drunkMode.getBar()->updateValue(playerStats.drunkMode.getEffectDuration());
 
-        offset += 10.0f;
+        offset += 15.0f;
     }
 
     if (playerStats.shield.isEffectActive()) {
         playerStats.shield.updateEffectDuration(deltaTime);
 
-        playerStats.shield.getBar()->updateValue(playerStats.shield.getEffectDuration());
         playerStats.shield.getBar()->updatePosition(Vector2f{ position.x - radius / 2, position.y + radius + offset });
+        playerStats.shield.getBar()->updateValue(playerStats.shield.getEffectDuration());
 
-        offset += 10.0f;
+        offset += 15.0f;
     }
 
     if (!playerStats.shield.isEffectActive() && SoundData::sounds[Sounds::ACTIVE_SHIELD].getStatus() == PLAYING) SoundData::stop(Sounds::ACTIVE_SHIELD);
@@ -372,18 +373,18 @@ void Player::updateStatsbars(const float& deltaTime) {
     if (playerStats.scoreTimes2.isEffectActive()) {
         playerStats.scoreTimes2.updateEffectDuration(deltaTime);
 
-        playerStats.scoreTimes2.getBar()->updateValue(playerStats.scoreTimes2.getEffectDuration());
         playerStats.scoreTimes2.getBar()->updatePosition(Vector2f{ position.x - radius / 2, position.y + radius + offset });
+        playerStats.scoreTimes2.getBar()->updateValue(playerStats.scoreTimes2.getEffectDuration());
 
-        offset += 10.0f;
+        offset += 15.0f;
     }
 
     if (playerStats.scoreTimes5.isEffectActive()) {
         playerStats.scoreTimes5.updateEffectDuration(deltaTime);
 
-        playerStats.scoreTimes5.getBar()->updateValue(playerStats.scoreTimes5.getEffectDuration());
         playerStats.scoreTimes5.getBar()->updatePosition(Vector2f{ position.x - radius / 2, position.y + radius + offset });
+        playerStats.scoreTimes5.getBar()->updateValue(playerStats.scoreTimes5.getEffectDuration());
 
-        offset += 10.0f;
+        offset += 15.0f;
     }
 }

@@ -32,6 +32,7 @@ struct PlayerStats {
 	float bulletSize;
 	float bulletDamage;
 	float bulletSpeed;
+	double critChance;
 
 	BulletType bulletType;
 

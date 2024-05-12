@@ -2,7 +2,7 @@
 #include "WindowBox.h"
 #include "Pickup.h"
 
-Comet::Comet() : Enemy(500, physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_speed) + 100.0f, getSprite(Sprites::COMET))
+Comet::Comet() : Enemy(500.0f + 500.0f * floor(Score::getScore() / FileMenager::screenData.game_next_level_spike), physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_speed) + 100.0f, getSprite(Sprites::COMET))
 {
 	scaleSprite(spriteInfo.sprite, spriteInfo.spriteSize, size);
 
@@ -11,15 +11,12 @@ Comet::Comet() : Enemy(500, physics::getRandomFloatValue(FileMenager::enemiesDat
 
 void Comet::render(RenderWindow& window)
 {
-    Transform transform;
-    window.draw(spriteInfo.sprite, transform.translate(position).rotate(angle));
-    if (Game::hitboxesVisibility) window.draw(shape, transform);
-    getHealthBar().draw(window);
+    Enemy::render(window);
 }
 
 void Comet::update(float deltaTime)
 {
-    updateHealthBar();
+    Enemy::update(deltaTime);
 
     Game::addParticle(new Particle(position, angle, spriteInfo.spriteType, Color(255,255,255,50), 0.5f));
 
@@ -53,6 +50,6 @@ void Comet::destroy()
 
     Game::addEntity(new Pickup(position, Pickup::getRandomFromGroup(Pickup::bulletTypes)));
 
-    Score::addScore(10);
+    Score::addScore(100);
     SoundData::play(Sounds::EXPLOSION);
 }

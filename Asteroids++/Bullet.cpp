@@ -81,14 +81,21 @@ void Bullet::enemyHit(Entity* entity) {
 
     if (physics::intersects(position, radius, enemy->position, enemy->radius) && lifeTime > 0 && hitEnemies.find(enemy) == hitEnemies.end()) {
         if (!Player::playerStats.bulletType.piercing) lifeTime = 0;
-        enemy->updateHealth(Player::playerStats.bulletDamage);
+
+        auto critHit = physics::rollDice(Player::playerStats.critChance);
+
+        critHit ? enemy->updateHealth(Player::playerStats.bulletDamage * 2) : enemy->updateHealth(Player::playerStats.bulletDamage);
 
         if (enemy->getHealth() > 0) {
             hitEnemies.insert(enemy);
+            if (critHit) {
+                enemy->critTimer.startEffect(0.3f);
+                SoundData::play(Sounds::CRITHIT);
+            }
 
             Clock clock;
-			thread t([enemy, clock]() {
-				SoundData::play(Sounds::HIT);
+			thread t([enemy, clock, critHit]() {
+				if(!critHit) SoundData::play(Sounds::HIT);
 				enemy->spriteInfo.sprite.setColor(Color::Red);
 
 				Color startColor = Color::Red;

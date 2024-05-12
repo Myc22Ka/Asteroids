@@ -1,6 +1,13 @@
 # screen data
 
 screen_padding: 10
+framerate: 60					# framerate limit
+launch_time: 3					# game launching time
+fps_font_size: 12				# font size
+launch_particle_opacity: 150	# opactiy of particles while launching game
+fps_pos_x: 0					# position of display fps x
+fps_pos_y: 0					# position of display fps y
+game_next_level_spike: 2000		# frequancy of achieving new level
 
 # player data
 
@@ -12,7 +19,7 @@ player_speed: 250
 player_turn_speed: 250
 player_bullet_size: 16
 player_bullet_speed: 500
-player_bullet_shoot_delay: 0.2
+player_bullet_shoot_delay: 0.3
 player_bullet_lifetime: 3
 player_sprite_cycle_time: 0.3
 

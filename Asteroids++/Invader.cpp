@@ -3,7 +3,7 @@
 #include "EnemyBullet.h"
 #include "Pickup.h"
 
-Invader::Invader() : Enemy(300, physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_speed) + 150.0f, getSprite(Sprites::INVADER)),
+Invader::Invader() : Enemy(300.0f + 30.0f * floor(Score::getScore() / FileMenager::screenData.game_next_level_spike), physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_speed) + 150.0f, getSprite(Sprites::INVADER)),
 changePosition(5.0f, false),
 shoot(0.0f, false)
 {
@@ -14,15 +14,12 @@ shoot(0.0f, false)
 
 void Invader::render(RenderWindow& window)
 {
-	Transform transform;
-	window.draw(spriteInfo.sprite, transform.translate(position).rotate(angle));
-	if (Game::hitboxesVisibility) window.draw(shape, transform);
-	getHealthBar().draw(window);
+    Enemy::render(window);
 }
 
 void Invader::update(float deltaTime)
 {
-    updateHealthBar();
+    Enemy::update(deltaTime);
 
     if (Game::freeze.isEffectActive()) return;
 
@@ -72,6 +69,6 @@ void Invader::destroy()
         Game::addEntity(new Pickup(position + physics::getRandomDirection() * 15.0f, Pickup::getRandomFromGroup(Pickup::modifiers)));
     }
 
-    Score::addScore(10);
+    Score::addScore(200);
     SoundData::play(Sounds::EXPLOSION);
 }

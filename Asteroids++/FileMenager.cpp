@@ -55,6 +55,13 @@ void FileMenager::setDataFromFile() const {
 	file.close();
 
 	screenData.padding = dataMap["screen_padding"];
+	screenData.framerate = static_cast<int>(dataMap["framerate"]);
+	screenData.launch_time = dataMap["launch_time"];
+	screenData.fps_font_size = static_cast<int>(dataMap["fps_font_size"]);
+	screenData.launch_particle_opacity = static_cast<int>(dataMap["launch_particle_opacity"]);
+	screenData.fps_pos_x = dataMap["fps_pos_x"];
+	screenData.fps_pos_y = dataMap["fps_pos_y"];
+	screenData.game_next_level_spike = dataMap["game_next_level_spike"];
 
 	playerData.size = dataMap["player_size"];
 	playerData.start_position_x = dataMap["player_start_position_x"];
