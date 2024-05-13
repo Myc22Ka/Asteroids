@@ -16,10 +16,12 @@ public:
 
 	static VideoMode getVideoMode();
 	void displayWindow();
-	void begin();
+	static void begin();
 private:
 
 	void engine(Wind& wind, const float& deltaTime);
+
+	void handleKeyPress(Keyboard::Key keyCode);
 
 	void launchGame(const float& deltaTime);
 
@@ -46,6 +48,4 @@ private:
 	Effect launch;
 
 	RenderWindow window;
-
-	bool keyPressed;
 };

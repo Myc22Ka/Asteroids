@@ -68,4 +68,10 @@ void GameOver::draw(RenderWindow& window)
 
 void GameOver::update(const float& deltaTime)
 {
+    if (!playerNameText.getText().getString().isEmpty()) {
+        if (Keyboard::isKeyPressed(Keyboard::Enter) && Game::getGameState() == GAME_OVER) {
+            playerName.clear();
+            Game::setGameState(MENU_HIGHSCORE);
+        }
+    }
 }

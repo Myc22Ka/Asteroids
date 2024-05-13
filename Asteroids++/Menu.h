@@ -33,6 +33,7 @@ private:
 	static float defaultPositionX;
 
 	static bool isKeyPressed;
+	static bool confirm;
 };
 
 #endif

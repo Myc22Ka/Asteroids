@@ -7,6 +7,7 @@ int Menu::selectedOption{ 0 };
 Sprite Menu::background{};
 Texture Menu::texture{};
 bool Menu::isKeyPressed{ false };
+bool Menu::confirm{ false };
 float Menu::defaultPositionX{ 0.0f };
 
 void Menu::init()
@@ -36,6 +37,30 @@ void Menu::draw(RenderWindow& window) {
 
 	for (auto& option : options) {
 		window.draw(option.getText());
+	}
+
+	if (!confirm && Keyboard::isKeyPressed(Keyboard::Enter)) {
+		confirm = true;
+
+		switch (getSelectedOptionIndex()) {
+		case 0:
+			WindowBox::begin();
+			break;
+		case 1:
+			WindowBox::begin();
+			Game::setGameState(GAME_OVER);
+			break;
+		case 2:
+			displayHighscoreTable(window);
+			Game::setGameState(MENU_HIGHSCORE);
+			break;
+		case 3:
+			SoundData::play(Sounds::GOODBYE);
+			this_thread::sleep_for(chrono::milliseconds(1000));
+
+			window.close();
+			break;
+		}
 	}
 }
 
@@ -76,11 +101,13 @@ void Menu::navigator(const Event& event) {
 			moveDown();
 			SoundData::play(Sounds::PING);
 		}
+
 		isKeyPressed = true;
 	}
 
 	if (event.type == Event::KeyReleased) {
 		isKeyPressed = false;
+		confirm = false;
 	}
 }
 
@@ -114,4 +141,9 @@ void Menu::displayHighscoreTable(RenderWindow& window)
 	window.draw(background);
 
 	window.draw(highscoreText.getText());
+
+	if (Keyboard::isKeyPressed(Keyboard::Enter) && !confirm) {
+		confirm = true;
+		Game::setGameState(MENU);
+	}
 }

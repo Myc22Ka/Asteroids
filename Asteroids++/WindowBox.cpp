@@ -15,7 +15,7 @@
 VideoMode WindowBox::videoMode{};
 TextField WindowBox::fps{ 0 };
 
-WindowBox::WindowBox() : keyPressed(false) {}
+WindowBox::WindowBox() {}
 
 VideoMode WindowBox::getVideoMode() {
 	return videoMode;
@@ -50,22 +50,15 @@ void WindowBox::displayWindow() {
         Event e{};
 
         while (window.pollEvent(e)) {
-            if (e.type == Event::KeyPressed && !keyPressed) keyPressed = true;
-
-            if (e.type == Event::KeyReleased) keyPressed = false;
-
-
-            if (e.type == Event::Closed || e.key.code == Keyboard::Escape) window.close();
-
-            else if (Game::getGameState() == MENU) Menu::navigator(e);
-
-            else if (Game::getGameState() == GAME_OVER) GameOver::enterPlayerName(e);
-
-            else if (e.type == Event::KeyPressed) {
-                if (e.key.code == Keyboard::H) 
-                { 
-                    Game::hitboxesVisibility = !Game::hitboxesVisibility; 
-                }
+            switch (e.type) {
+            case Event::Closed:
+                window.close();
+                break;
+            case Event::KeyPressed:
+                handleKeyPress(e.key.code);
+                break;
+            default:
+                break;
             }
         }
 
@@ -73,10 +66,37 @@ void WindowBox::displayWindow() {
 
         window.clear();
 
+        switch (Game::getGameState()) {
+        case MENU:
+            Menu::navigator(e);
+            break;
+        case MENU_HIGHSCORE:
+            Menu::navigator(e);
+            break;
+        case GAME_OVER:
+            GameOver::enterPlayerName(e);
+            break;
+        default:
+            break;
+        }
+
         engine(wind, deltaTime); 
         deathScreen.init(deltaTime, window);
 
         window.display();
+    }
+}
+
+void WindowBox::handleKeyPress(Keyboard::Key keyCode) {
+    switch (keyCode) {
+    case Keyboard::Escape:
+        window.close();
+        break;
+    case Keyboard::H:
+        Game::hitboxesVisibility = !Game::hitboxesVisibility;
+        break;
+    default:
+        break;
     }
 }
 
@@ -95,6 +115,7 @@ void WindowBox::engine(Wind& wind, const float& deltaTime)
     }
 
     if (Game::getGameState() == MENU_HIGHSCORE) {
+        
         Menu::displayHighscoreTable(window);
         return;
     }
@@ -107,7 +128,7 @@ void WindowBox::engine(Wind& wind, const float& deltaTime)
 
         GameOver::update(deltaTime);
 
-        if (Keyboard::isKeyPressed(Keyboard::Enter)) Game::setGameState(MENU_HIGHSCORE);
+        //if (Keyboard::isKeyPressed(Keyboard::Enter)) Game::setGameState(MENU_HIGHSCORE);
 
         return;
     }
@@ -199,31 +220,7 @@ void WindowBox::displayMenu() {
 
     Menu::draw(window);
 
-    cout << keyPressed << endl;
-
-    if (Keyboard::isKeyPressed(Keyboard::Enter)) {
-	    const auto option = Menu::getSelectedOptionIndex();
-
-        switch (option) {
-		    case 0:
-			    begin();
-			    break;
-		    case 1:
-			    cout << "Continue!\n"; 
-                begin();
-                Game::setGameState(GAME_OVER);
-                break;
-			case 2:
-                Menu::displayHighscoreTable(window);
-                break;
-			case 3:
-				SoundData::play(Sounds::GOODBYE);
-				this_thread::sleep_for(chrono::milliseconds(1000));
-
-				window.close();
-				break;
-		}
-    }
+    
 }
 
 void WindowBox::updateWindow(const float& deltaTime)
@@ -237,8 +234,8 @@ void WindowBox::updateWindow(const float& deltaTime)
             particle->update(deltaTime);
     }
 
-    if (Game::getGameState() != PLAYING) SoundData::stop(Sounds::AMBIENT);
-    if (Game::getGameState() == PLAYING && SoundData::sounds[Sounds::AMBIENT].getStatus() != PLAYING) SoundData::play(Sounds::AMBIENT);
+    // if (Game::getGameState() != PLAYING) SoundData::stop(Sounds::AMBIENT);
+    // if (Game::getGameState() == PLAYING && SoundData::sounds[Sounds::AMBIENT].getStatus() != PLAYING) SoundData::play(Sounds::AMBIENT);
 
     for (auto& entity : Game::getEntities())
     {
