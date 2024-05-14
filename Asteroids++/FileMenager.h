@@ -8,6 +8,7 @@
 #include <iostream>
 #include <regex>
 #include <sstream>
+#include <map>
 
 using namespace std;
 
@@ -58,18 +59,24 @@ struct TimingsData {
 class FileMenager {
 private:
     char* fileName;
+
+    static bool sortByFloatValue(const std::pair<std::string, float>& a, const std::pair<std::string, float>& b);
 public:
     static PlayerData playerData;
     static ScreenData screenData;
     static EnemiesData enemiesData;
 	static DrawsData drawsData;
 	static TimingsData timingsData;
+    static vector<pair<string, float>> highScore;
     FileMenager();
     ~FileMenager();
 
-    void setFileName(const char*);
+    void setFileName(const char* fileName);
  
     const char* getFileName() const;
+    static vector<pair<string, float>> sortMapByFloat(const map<string, float>& inputMap);
+    static void saveData(const string& fileName, const pair<string, int>& data);
+    static map<string, float> getDataFromFile(const string& filename);
 	void setDataFromFile() const;
 };
 

@@ -62,15 +62,17 @@ void GameOver::draw(RenderWindow& window)
     window.draw(background);
 
     window.draw(gameOver.getText());
-
-    //window.draw(playerNameText.getText());
 }
 
 void GameOver::update(const float& deltaTime)
 {
     if (!playerNameText.getText().getString().isEmpty()) {
         if (Keyboard::isKeyPressed(Keyboard::Enter) && Game::getGameState() == GAME_OVER) {
+            FileMenager::saveData("highscore.txt", pair<string, size_t>(playerName, Score::getScore()));
+            FileMenager::highScore = FileMenager::sortMapByFloat(FileMenager::getDataFromFile("highscore.txt"));
+
             playerName.clear();
+            Score::clear();
             Game::setGameState(MENU_HIGHSCORE);
         }
     }

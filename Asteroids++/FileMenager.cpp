@@ -6,6 +6,7 @@ ScreenData FileMenager::screenData;
 EnemiesData FileMenager::enemiesData;
 DrawsData FileMenager::drawsData;
 TimingsData FileMenager::timingsData;
+vector<pair<string, float>> FileMenager::highScore;
 
 FileMenager::FileMenager(){
 	fileName = nullptr;
@@ -30,14 +31,57 @@ const char* FileMenager::getFileName() const
 	return fileName;
 }
 
-void FileMenager::setDataFromFile() const {
-	ifstream file(fileName);
+vector<pair<string, float>> FileMenager::sortMapByFloat(const map<string, float>& inputMap) {
+	vector<pair<string, float>> pairs;
+
+	for (const auto& pair : inputMap) {
+		pairs.push_back(pair);
+	}
+
+	// Sort the vector using the sortByFloatValue comparator function
+	sort(pairs.begin(), pairs.end(), sortByFloatValue);
+
+	return pairs;
+}
+
+bool FileMenager::sortByFloatValue(const std::pair<std::string, float>& a, const std::pair<std::string, float>& b) {
+	return a.second > b.second;
+}
+
+void FileMenager::saveData(const string& fileName, const pair<string, int>& data) {
+	ifstream checkFile(fileName);
+
+	if (!checkFile) {
+		ofstream file(fileName);
+
+		if (!file.is_open()) {
+			cerr << "Error: Could not create file: " << fileName << endl;
+			return;
+		}
+
+		file << "# HighScore" << endl;
+		file << data.first << ": " << data.second << endl;
+		file.close();
+	}
+	else {
+		ofstream file(fileName, ios::app);
+
+		if (!file.is_open()) {
+			cerr << "Error: Could not open file for appending: " << fileName << endl;
+			return;
+		}
+
+		file << data.first << ": " << data.second << endl;
+	}
+}
+map<string, float> FileMenager::getDataFromFile(const string& name){
+	ifstream file(name);
 	map<string, float> dataMap;
 	string line;
 
 	if (!file.is_open()) {
-		cerr << "Error: Could not open file: " << fileName << endl;
-		return;
+		cerr << "Error: Could not open file: " << name << endl;
+		return dataMap;
 	}
 
 	const regex reg("([a-zA-Z_]+):\\s*(-?\\d*\\.?\\d+)");
@@ -53,6 +97,12 @@ void FileMenager::setDataFromFile() const {
 	}
 
 	file.close();
+
+	return dataMap;
+}
+
+void FileMenager::setDataFromFile() const {
+	auto dataMap = getDataFromFile(fileName);
 
 	screenData.padding = dataMap["screen_padding"];
 	screenData.framerate = static_cast<int>(dataMap["framerate"]);

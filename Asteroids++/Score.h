@@ -18,6 +18,7 @@ public:
 
 	static size_t getScore();
 	static string getScoreString();
+	static void clear();
 	static void addScore(const size_t& value);
 private:
 	static size_t score;

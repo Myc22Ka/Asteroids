@@ -25,6 +25,11 @@ const Vector2f Wind::getRandomPosition() const
 
 void Wind::update(float deltaTime)
 {
+	if (particles.getVertexCount() == 0) {
+		particles = VertexArray(Lines, 400);
+		initParticles();
+	}
+
 	if (Game::freeze.isEffectActive())
 		return;
 
