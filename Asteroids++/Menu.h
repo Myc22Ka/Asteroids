@@ -28,6 +28,9 @@ private:
 	static Texture texture;
 	static Sprite background;
 	static TextField menuText;
+	
+	static vector<TextField> navigation;
+
 	static vector<TextField> options;
 	static int selectedOption;
 	static float defaultPositionX;

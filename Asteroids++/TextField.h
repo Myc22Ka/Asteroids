@@ -22,7 +22,7 @@ public:
 	void setText(const string& text);
 	void setSize(const int size);
 	void setLetterSpacing(const double spacing);
-	const Text getText();
+	Text& getText();
 
 	void setColorText(const Color& color);
 

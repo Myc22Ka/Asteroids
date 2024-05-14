@@ -37,7 +37,7 @@ void TextField::setLetterSpacing(const double spacing) {
 	text.setLetterSpacing(spacing);
 }
 
-const Text TextField::getText()
+Text& TextField::getText()
 {
 	return text;
 }

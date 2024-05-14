@@ -1,8 +1,9 @@
 #include "Menu.h"
 #include "WindowBox.h"
 
-TextField Menu::menuText{ 64 };
+TextField Menu::menuText{ 128 };
 vector<TextField> Menu::options{ { "New game", 24 }, { "Continue", 24 }, { "Highscore", 24 }, { "Exit", 24 } };
+vector<TextField> Menu::navigation{ { "Confirm [Enter]", 8 }, { "Up [Up]", 8 }, { "Down [Down]", 8 }, { "Exit [ESC]", 8 } };
 int Menu::selectedOption{ 0 };
 Sprite Menu::background{};
 Texture Menu::texture{};
@@ -13,7 +14,7 @@ float Menu::defaultPositionX{ 0.0f };
 void Menu::init()
 {
 	menuText.setText("Asteroids++");
-	menuText.setTextCenterX(FileMenager::screenData.padding);
+	menuText.setTextCenterX(FileMenager::screenData.padding * 4);
 
 	FileMenager::highScore = FileMenager::sortMapByFloat(FileMenager::getDataFromFile("highscore.txt"));
 
@@ -22,6 +23,24 @@ void Menu::init()
 		Vector2f position = Vector2f(FileMenager::screenData.padding * 10, (WindowBox::getVideoMode().height >> 1) + offset);
 		offset += 24 + 30.0f;
 		option.setTextPosition(position);
+	}
+
+	float offsetX = 0.0f;
+
+	for (auto& option : navigation)
+	{
+		offsetX += option.getText().getGlobalBounds().width / 2;
+	}
+
+	Vector2f position(WindowBox::getVideoMode().width - offsetX - FileMenager::screenData.padding, WindowBox::getVideoMode().height - FileMenager::screenData.padding - 12);
+
+	for (auto& option : navigation)
+	{
+		option.setTextPosition(position);
+		option.setSize(12);
+		option.setColorText(Color(255, 255, 255, 150));
+
+		position.x += option.getText().getGlobalBounds().width + 30.0f;
 	}
 
 	if (!texture.loadFromFile("./assets/menu.png"))
@@ -38,6 +57,11 @@ void Menu::draw(RenderWindow& window) {
 	window.draw(menuText.getText());
 
 	for (auto& option : options) {
+		window.draw(option.getText());
+	}
+
+	for (auto& option : navigation)
+	{
 		window.draw(option.getText());
 	}
 
@@ -95,13 +119,15 @@ string Menu::getSelectedOption() {
 void Menu::navigator(const Event& event) {
 	if (event.type == Event::KeyPressed && !isKeyPressed) {
 
-		if (event.key.code == Keyboard::Up) {
-			moveUp();
-			SoundData::play(Sounds::PING);
-		}
-		else if (event.key.code == Keyboard::Down) {
-			moveDown();
-			SoundData::play(Sounds::PING);
+		if (Game::getGameState() != MENU_HIGHSCORE) {
+			if (event.key.code == Keyboard::Up) {
+				moveUp();
+				SoundData::play(Sounds::PING);
+			}
+			else if (event.key.code == Keyboard::Down) {
+				moveDown();
+				SoundData::play(Sounds::PING);
+			}
 		}
 
 		isKeyPressed = true;
@@ -115,8 +141,6 @@ void Menu::navigator(const Event& event) {
 
 void Menu::update(const float& deltaTime) {
 	for (size_t i = 0; i < options.size(); ++i) {
-
-
 		if (i == getSelectedOptionIndex()) {
 			options[i].setColorText(sf::Color::Red);
 
@@ -143,6 +167,11 @@ void Menu::displayHighscoreTable(RenderWindow& window)
 	window.draw(background);
 
 	window.draw(highscoreText.getText());
+
+	for (auto& option : navigation)
+	{
+		window.draw(option.getText());
+	}
 
 	float offset = 0.0f;
 	int counter = 1;
