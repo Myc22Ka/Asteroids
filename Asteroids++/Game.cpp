@@ -127,6 +127,10 @@ void Game::removeParticle(Particle* particle)
         });
 }
 
+void Game::clearParticles() {
+    particles.clear();
+}
+
 const bool Game::getEvil(Entity* entity)
 {
     for (auto& enemy : enemies)

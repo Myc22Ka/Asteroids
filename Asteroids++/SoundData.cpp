@@ -65,16 +65,35 @@ void SoundData::play(Sounds name)
     sounds[name].play();
 }
 
-void SoundData::stop(Sounds name){
-    thread t([name]() {
-        while (sounds[name].getStatus() == sf::Sound::Playing && sounds[name].getVolume() > 5) {
-            sounds[name].setVolume(floor(sounds[name].getVolume() - 1));
+void SoundData::playLooped(Sounds name) {
+    sounds[name].setLoop(true);
+    sounds[name].play();
+}
 
-            sleep(milliseconds(20));
+void SoundData::renev(Sounds name) {
+    thread t([name]() {
+        while (sounds[name].getStatus() == Sound::Playing && sounds[name].getVolume() < 95) {
+            sounds[name].setVolume(floor(sounds[name].getVolume() + 1));
+
+            sleep(milliseconds(30));
         }
         sounds[name].setVolume(100);
+        sounds[name].play();
 
-        sounds[name].stop();
+    });
+
+    t.detach();
+}
+
+void SoundData::stop(Sounds name){
+    thread t([name]() {
+        while (sounds[name].getStatus() == Sound::Playing && sounds[name].getVolume() > 5) {
+            sounds[name].setVolume(floor(sounds[name].getVolume() - 1));
+
+            sleep(milliseconds(30));
+        }
+        sounds[name].setVolume(0);
+        sounds[name].pause();
 
     });
 

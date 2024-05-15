@@ -33,6 +33,8 @@ const EntityType DeathScreen::getEntityType()
 
 void DeathScreen::activateDeathScreen(const float& duration) {
 	death.startEffect(duration);
+
+	SoundData::stop(Sounds::AMBIENT);
 }
 
 bool DeathScreen::isScreenOver() {
@@ -66,6 +68,8 @@ void DeathScreen::init(const float& deltaTime, RenderWindow& window) {
 
 	update(deltaTime);
 	render(window);
+
+	if(death.getEffectDuration() < 1.75f * 0.8 && Player::playerStats.lifes.size() == 0) Game::gameOver();
 }
 
 void DeathScreen::initParticles()

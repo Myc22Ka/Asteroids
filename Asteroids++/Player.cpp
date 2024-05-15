@@ -63,6 +63,8 @@ void Player::update(float deltaTime) {
         Game::addEntity(new Explosion(position, size, getSprite(Sprites::APPEARING)));
         dead = false;
         delay.startEffect(0.5f);
+        SoundData::renev(Sounds::AMBIENT);
+
         return;
     }
 
@@ -257,14 +259,10 @@ void Player::destroy() {
     invincibilityFrames.startEffect(5.0f);
     playerStats.lifes.back().death = true;
     playerStats.lifes.back().setSpriteState(16);
+    SoundData::stop(Sounds::AMBIENT);
     SoundData::play(Sounds::DESTROY);
 
     Game::addEntity(new Explosion(position, size, getSprite(Sprites::DESAPPEARING)));
-
-    if (playerStats.lifes.size() == 1) {
-        Game::gameOver();
-        return;
-    }
 
     Game::setGameState(PAUSED);
     DeathScreen::setDelay(0.6f);
@@ -349,6 +347,10 @@ Sprites Player::getPlayerBulletSprite()
 
 void Player::updateStatsbars(const float& deltaTime) {
     float offset = 0.0f;
+    playerStats.drunkMode.getBar()->updatePosition(Vector2f{ position.x - radius / 2, position.y + radius + offset });
+    playerStats.shield.getBar()->updatePosition(Vector2f{ position.x - radius / 2, position.y + radius + offset });
+    playerStats.scoreTimes2.getBar()->updatePosition(Vector2f{ position.x - radius / 2, position.y + radius + offset });
+    playerStats.scoreTimes5.getBar()->updatePosition(Vector2f{ position.x - radius / 2, position.y + radius + offset });
 
     if (playerStats.drunkMode.isEffectActive()) {
         playerStats.drunkMode.updateEffectDuration(deltaTime);
@@ -368,7 +370,7 @@ void Player::updateStatsbars(const float& deltaTime) {
         offset += 15.0f;
     }
 
-    if (!playerStats.shield.isEffectActive() && SoundData::sounds[Sounds::ACTIVE_SHIELD].getStatus() == PLAYING) SoundData::stop(Sounds::ACTIVE_SHIELD);
+    if (!playerStats.shield.isEffectActive()) SoundData::stop(Sounds::ACTIVE_SHIELD);
 
     if (playerStats.scoreTimes2.isEffectActive()) {
         playerStats.scoreTimes2.updateEffectDuration(deltaTime);

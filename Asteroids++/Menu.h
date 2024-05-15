@@ -25,6 +25,10 @@ public:
 	static void displayHighscoreTable(RenderWindow& window);
 
 private:
+
+	static void fadeIn(RenderWindow& window, const float& defaultTime);
+	static void fadeOut(RenderWindow& window, const float& defaultTime);
+
 	static Texture texture;
 	static Sprite background;
 	static TextField menuText;
@@ -32,6 +36,13 @@ private:
 	static vector<TextField> navigation;
 
 	static vector<TextField> options;
+
+	static Effect visible;
+
+	static RectangleShape filter;
+	static Effect animateIn;
+	static Effect animateOut;
+
 	static int selectedOption;
 	static float defaultPositionX;
 

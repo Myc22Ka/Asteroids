@@ -115,20 +115,19 @@ void WindowBox::engine(Wind& wind, const float& deltaTime)
     }
 
     if (Game::getGameState() == MENU_HIGHSCORE) {
-        
         Menu::displayHighscoreTable(window);
+        Menu::update(deltaTime);
         return;
     }
 
     if (Game::getGameState() == GAME_OVER) {
         Game::clearEntities();
+        Game::clearParticles();
         wind.remove();
         GameOver::draw(window);
         GameOver::drawPlayerName(window);
 
         GameOver::update(deltaTime);
-
-        //if (Keyboard::isKeyPressed(Keyboard::Enter)) Game::setGameState(MENU_HIGHSCORE);
 
         return;
     }
@@ -234,8 +233,7 @@ void WindowBox::updateWindow(const float& deltaTime)
             particle->update(deltaTime);
     }
 
-    // if (Game::getGameState() != PLAYING) SoundData::stop(Sounds::AMBIENT);
-    // if (Game::getGameState() == PLAYING && SoundData::sounds[Sounds::AMBIENT].getStatus() != PLAYING) SoundData::play(Sounds::AMBIENT);
+    if (Game::getGameState() != PLAYING) SoundData::stop(Sounds::AMBIENT);
 
     for (auto& entity : Game::getEntities())
     {
@@ -295,7 +293,9 @@ void WindowBox::loadParticles() {
 void WindowBox::begin()
 {
     Game::setGameState(PLAYING);
-    SoundData::play(Sounds::AMBIENT);
+    SoundData::sounds[Sounds::AMBIENT].setVolume(100);
+    SoundData::playLooped(Sounds::AMBIENT);
+
     Game::addEntity(new Player());
     Game::enemySpawn.setEffectDuration(FileMenager::timingsData.default_enemy_spawn_time);
     fps.setColorText(Color(255, 255, 255, 150));

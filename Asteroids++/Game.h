@@ -40,6 +40,7 @@ public:
 	static bool hitboxesVisibility;
 
 	static list<Particle*> getParticles();
+	static void clearParticles();
 	static Entity* findEntity(Sprites spriteType);
 	static void addParticle(Particle* particle);
 	static void removeParticle(Particle* particle);
@@ -59,6 +60,7 @@ public:
 	static void gameOver();
 	static GameState getGameState();
 	static void setGameState(const GameState& newGameState);
+
 
 	static void spawnEnemy(const float& deltaTime);
 

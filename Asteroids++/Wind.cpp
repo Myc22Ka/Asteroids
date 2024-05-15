@@ -78,6 +78,7 @@ void Wind::stopWind() {
 	windThread.detach();
 
 	Game::setGameState(PLAYING);
+	SoundData::renev(Sounds::AMBIENT);
 
 	return;
 }
