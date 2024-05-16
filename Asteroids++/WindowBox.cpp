@@ -103,8 +103,8 @@ void WindowBox::handleKeyPress(Keyboard::Key keyCode) {
 void WindowBox::engine(Wind& wind, const float& deltaTime)
 {
     if (Game::getGameState() == MENU_LOADING) {
-		//launchGame(deltaTime);
-        Game::setGameState(MENU);
+		launchGame(deltaTime);
+        //Game::setGameState(MENU);
 		return;
     }
 

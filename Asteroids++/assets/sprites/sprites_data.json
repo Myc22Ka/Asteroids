@@ -272,11 +272,11 @@
     "defaultSpriteLifeTime": 0.03
   },
   "loader": {
-    "hitboxSize": 512,
-    "spriteSize": 512,
+    "hitboxSize": 500,
+    "spriteSize": 500,
     "rotation": 0,
     "spriteState": 0,
     "currentSpriteLifeTime": 0,
-    "defaultSpriteLifeTime": 0.03
+    "defaultSpriteLifeTime": 0.07
   }
 }

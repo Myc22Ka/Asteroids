@@ -90,7 +90,7 @@ void Pickup::collisionDetection()
 					if (Player::playerStats.shootOffset >= 0.11f) {
 						Player::playerStats.shootOffset -= 0.01f;
 						Player::playerStats.bulletSize += 3.0f;
-						Player::playerStats.critChance += 0.02;
+						Player::playerStats.critChance += 0.03;
 					}
 
 					Score::addScore(10);

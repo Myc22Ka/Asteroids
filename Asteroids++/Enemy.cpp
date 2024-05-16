@@ -4,8 +4,8 @@
 
 Enemy::Enemy(float health, float speed, SpriteInfo spriteInfo) :
 	Entity(getRandomPosition(), physics::getRandomAngle(), physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_size), Color::Red, spriteInfo),
-	health(health),
-	healthBar(size, 3.0f, Color::Red, Color::Black, health, Vector2f(-100.0f, -100.0f)),
+	health(health + Player::playerStats.bulletDamage / 2),
+	healthBar(size, 3.0f, Color::Red, Color::Black, health + Player::playerStats.bulletDamage / 2, Vector2f(-100.0f, -100.0f)),
 	direction(physics::getRandomDirection()),
 	speed(speed),
 	crit("CRIT", 0),

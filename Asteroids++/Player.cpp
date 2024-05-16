@@ -27,7 +27,7 @@ PlayerStats Player::playerStats{
 
 Player::Player() :
     Entity(
-        Vector2f(FileMenager::playerData.start_position_x, FileMenager::playerData.start_position_y),
+        Vector2f(WindowBox::getVideoMode().width / 2, WindowBox::getVideoMode().height / 2),
         FileMenager::playerData.start_position_angle,
         FileMenager::playerData.size,
         Color::Blue,
@@ -103,8 +103,11 @@ void Player::update(float deltaTime) {
             Vector2f leftBulletPosition(position.x - offset * leftBulletDirection.x, position.y - offset * leftBulletDirection.y);
             Vector2f rightBulletPosition(position.x + offset * rightBulletDirection.x, position.y + offset * rightBulletDirection.y);
 
-            Game::addEntity(new SingleBullet(leftBulletPosition, leftBulletDirection, angle));
-            Game::addEntity(new SingleBullet(rightBulletPosition, rightBulletDirection, angle));
+            float leftBulletAngle = angle - bulletSpreadAngle * (180 / physics::getPI());
+            float rightBulletAngle = angle + bulletSpreadAngle * (180 / physics::getPI());
+
+            Game::addEntity(new SingleBullet(leftBulletPosition, leftBulletDirection, leftBulletAngle));
+            Game::addEntity(new SingleBullet(rightBulletPosition, rightBulletDirection, rightBulletAngle));
 
             SoundData::play(Sounds::LASER_SHOOT2);
         }
@@ -124,9 +127,12 @@ void Player::update(float deltaTime) {
             Vector2f leftBulletPosition(position.x + (radius * 1.5f) * cos(leftBulletAngle), position.y + (radius * 1.5f) * sin(leftBulletAngle));
             Vector2f rightBulletPosition(position.x + (radius * 1.5f) * cos(rightBulletAngle), position.y + (radius * 1.5f) * sin(rightBulletAngle));
 
+            float leftAngle = angle - bulletSpreadAngle * (180 / physics::getPI());
+            float rightAngle = angle + bulletSpreadAngle * (180 / physics::getPI());
+
             Game::addEntity(new SingleBullet(centerBulletPosition, centerBulletDirection, angle));
-            Game::addEntity(new SingleBullet(leftBulletPosition, leftBulletDirection, angle));
-            Game::addEntity(new SingleBullet(rightBulletPosition, rightBulletDirection, angle));
+            Game::addEntity(new SingleBullet(leftBulletPosition, leftBulletDirection, leftAngle));
+            Game::addEntity(new SingleBullet(rightBulletPosition, rightBulletDirection, rightAngle));
 
             SoundData::play(Sounds::LASER_SHOOT3);
         }
@@ -312,7 +318,7 @@ void Player::dashAbility(const float& deltaTime)
 void Player::setPlayerStats()
 {
     playerStats.shootOffset = FileMenager::playerData.bullet_shoot_delay;
-    playerStats.bulletAmount = 1;
+    playerStats.bulletAmount = 2;
     playerStats.bulletDamage = 50;
     playerStats.bulletSize = FileMenager::playerData.bullet_size;
     playerStats.bulletSpeed = FileMenager::playerData.bullet_speed;

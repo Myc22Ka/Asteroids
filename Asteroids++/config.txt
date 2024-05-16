@@ -2,7 +2,7 @@
 
 screen_padding: 10
 framerate: 60					# framerate limit
-launch_time: 3					# game launching time
+launch_time: 5					# game launching time
 fps_font_size: 12				# font size
 launch_particle_opacity: 150	# opactiy of particles while launching game
 fps_pos_x: 0					# position of display fps x
