@@ -114,6 +114,7 @@ void Pickup::collisionDetection()
 					Player::playerStats.shield.getBar()->setMaxValue(Player::playerStats.shield.getEffectDuration());
 
 					SoundData::play(Sounds::PICKUP_SHIELD);
+					SoundData::sounds[Sounds::ACTIVE_SHIELD].setVolume(100);
 					SoundData::playLooped(Sounds::ACTIVE_SHIELD);
 
 					break;
@@ -149,6 +150,7 @@ void Pickup::collisionDetection()
 					break;
 				case Sprites::PICKUP_FREEZE:
 					SoundData::play(Sounds::FREEZE);
+					SoundData::stop(Sounds::AMBIENT);
 					Game::freeze.startEffect(physics::getRandomFloatValue(5.0f, 0.5f) + Player::playerStats.time);
 					Score::addScore(50);
 

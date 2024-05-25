@@ -63,7 +63,7 @@ void Player::update(float deltaTime) {
         Game::addEntity(new Explosion(position, size, getSprite(Sprites::APPEARING)));
         dead = false;
         delay.startEffect(0.5f);
-        SoundData::renev(Sounds::AMBIENT);
+        //SoundData::renev(Sounds::AMBIENT);
 
         return;
     }
@@ -265,7 +265,7 @@ void Player::destroy() {
     invincibilityFrames.startEffect(5.0f);
     playerStats.lifes.back().death = true;
     playerStats.lifes.back().setSpriteState(16);
-    SoundData::stop(Sounds::AMBIENT);
+    //SoundData::stop(Sounds::AMBIENT);
     SoundData::play(Sounds::DESTROY);
 
     Game::addEntity(new Explosion(position, size, getSprite(Sprites::DESAPPEARING)));

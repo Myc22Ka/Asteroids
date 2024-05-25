@@ -2,7 +2,7 @@
 
 screen_padding: 10
 framerate: 60					# framerate limit
-launch_time: 5					# game launching time
+launch_time: 0					# game launching time
 fps_font_size: 12				# font size
 launch_particle_opacity: 150	# opactiy of particles while launching game
 fps_pos_x: 0					# position of display fps x
@@ -41,4 +41,4 @@ outline_fill_background_opacity: 150 # value beetween [0 - 255]
 # timings data
 
 default_freeze_time: 15
-default_enemy_spawn_time: 1
+default_enemy_spawn_time: 1.5

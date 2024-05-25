@@ -22,8 +22,8 @@ VideoMode WindowBox::getVideoMode() {
 }
 
 void WindowBox::displayWindow() {
-	//videoMode = VideoMode(1500, 1080);
-    videoMode = VideoMode::getDesktopMode();
+	videoMode = VideoMode(1500, 1080);
+    //videoMode = VideoMode::getDesktopMode();
 
     window.create(videoMode, "Asteroids++", Style::None);
     window.setFramerateLimit(FileMenager::screenData.framerate);
@@ -55,7 +55,7 @@ void WindowBox::displayWindow() {
                 window.close();
                 break;
             case Event::KeyPressed:
-                handleKeyPress(e.key.code);
+                handleKeyPress(e.key.code, wind);
                 break;
             default:
                 break;
@@ -87,7 +87,7 @@ void WindowBox::displayWindow() {
     }
 }
 
-void WindowBox::handleKeyPress(Keyboard::Key keyCode) {
+void WindowBox::handleKeyPress(Keyboard::Key keyCode, Wind& wind) {
     switch (keyCode) {
     case Keyboard::Escape:
         window.close();
@@ -95,16 +95,16 @@ void WindowBox::handleKeyPress(Keyboard::Key keyCode) {
     case Keyboard::H:
         Game::hitboxesVisibility = !Game::hitboxesVisibility;
         break;
-    default:
-        break;
+    case Keyboard::P:
+        wind.forceWind(10.0f, 4.0f, physics::getRandomDirection());
     }
 }
 
 void WindowBox::engine(Wind& wind, const float& deltaTime)
 {
     if (Game::getGameState() == MENU_LOADING) {
-		launchGame(deltaTime);
-        //Game::setGameState(MENU);
+		//launchGame(deltaTime);
+        Game::setGameState(MENU);
 		return;
     }
 
@@ -233,7 +233,9 @@ void WindowBox::updateWindow(const float& deltaTime)
             particle->update(deltaTime);
     }
 
-    if (Game::getGameState() != PLAYING) SoundData::stop(Sounds::AMBIENT);
+    cout << SoundData::sounds[Sounds::AMBIENT].getStatus() << endl;
+
+    if (!Game::freeze.isEffectActive() && SoundData::sounds[Sounds::AMBIENT].getStatus() == Sound::Paused && Game::getGameState() == PLAYING) SoundData::renev(Sounds::AMBIENT);
 
     for (auto& entity : Game::getEntities())
     {
@@ -293,7 +295,7 @@ void WindowBox::loadParticles() {
 void WindowBox::begin()
 {
     Game::setGameState(PLAYING);
-    SoundData::sounds[Sounds::AMBIENT].setVolume(100);
+    //SoundData::sounds[Sounds::AMBIENT].setVolume(100);
     SoundData::playLooped(Sounds::AMBIENT);
 
     Game::addEntity(new Player());

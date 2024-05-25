@@ -20,6 +20,7 @@ public:
     void initParticles() override;
 
     void remove();
+    void forceWind(const float& duration, const float& windLevel, const Vector2f& velocity);
 
 private:
     void activateWind(const float& duration, const float& windLevel, const Vector2f& velocity);

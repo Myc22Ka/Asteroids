@@ -93,9 +93,10 @@ void SoundData::stop(Sounds name){
             sleep(milliseconds(30));
         }
         sounds[name].setVolume(0);
-        sounds[name].pause();
 
     });
 
     t.detach();
+
+    sounds[name].pause();
 }

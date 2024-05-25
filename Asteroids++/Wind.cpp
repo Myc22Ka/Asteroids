@@ -46,6 +46,7 @@ void Wind::update(float deltaTime)
 
 	if (wind.getEffectDuration() < 0 || Game::getGameState() == GAME_OVER || Game::getGameState() == PAUSED) {
 		stopWind();
+		SoundData::renev(Sounds::AMBIENT);
 		return;
 	}
 
@@ -78,7 +79,6 @@ void Wind::stopWind() {
 	windThread.detach();
 
 	Game::setGameState(PLAYING);
-	SoundData::renev(Sounds::AMBIENT);
 
 	return;
 }
@@ -135,14 +135,7 @@ void Wind::wrapLine(Vertex& vertex1, Vertex& vertex2) const {
 void Wind::activateWind(const float& duration, const float& windLevel, const Vector2f& velocity) {
 	if (physics::rollDice(0.001) && !wind.isEffectActive() && SoundData::sounds[Sounds::WIND].getVolume() == 100 && !Game::freeze.isEffectActive() && Game::getGameState() != PAUSED && Game::getGameState() != GAME_OVER) {
 
-	wind.startEffect(duration);
-	fullWindDuration = duration;
-	windSpeed = windLevel * 100.0f;
-	this->windLevel = windLevel;
-	this->velocity = velocity;
-
-	Game::setGameState(WIND);
-	SoundData::play(Sounds::WIND);
+		forceWind(duration, windLevel, velocity);
 	}
 }
 
@@ -165,6 +158,20 @@ void Wind::initParticles()
 void Wind::remove()
 {
 	particles.clear();
+}
+
+void Wind::forceWind(const float& duration, const float& windLevel, const Vector2f& velocity)
+{
+	SoundData::stop(Sounds::AMBIENT);
+
+	wind.startEffect(duration);
+	fullWindDuration = duration;
+	windSpeed = windLevel * 100.0f;
+	this->windLevel = windLevel;
+	this->velocity = velocity;
+
+	Game::setGameState(WIND);
+	SoundData::play(Sounds::WIND);
 }
 
 void Wind::init(const float& deltaTime, RenderWindow& window) {

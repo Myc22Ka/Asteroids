@@ -20,8 +20,7 @@ public:
 private:
 
 	void engine(Wind& wind, const float& deltaTime);
-
-	void handleKeyPress(Keyboard::Key keyCode);
+	void handleKeyPress(Keyboard::Key keyCode, Wind& wind);
 
 	void launchGame(const float& deltaTime);
 
