@@ -5,6 +5,7 @@
 #include "Comet.h"
 #include "Invader.h"
 #include "Strauner.h"
+#include "Tower.h"
 
 GameState Game::gameState{ MENU };
 bool Game::hitboxesVisibility{ false };
@@ -12,7 +13,7 @@ bool Game::hitboxesVisibility{ false };
 list<Entity*> Game::entities;
 list<Particle*> Game::particles;
 vector<EntityType> Game::enemies{ EntityType::TYPE_ENEMY, EntityType::TYPE_ENEMY_BULLET };
-int Game::maxLevel{ 5 };
+int Game::maxLevel{ 6 };
 int Game::level{ 3 };
 
 Effect Game::freeze{ FileMenager::timingsData.default_freeze_time, false };
@@ -82,30 +83,45 @@ void Game::gameOver(){
 
 Entity* Game::getRandomEntity(const int& startIndex, const int& endIndex) {
     const vector<EnemySpawn> enemiesList = {
-        { new Strauner(), 0.1, true},
-        { new Invader(), 0.25, false },
-        { new Comet(), 0.4, true },
-        { new MultiAsteroid(), 0.5, false },
-        { new SingleAsteroid() , 1, false }
+        {new Tower(), 0.18, false},
+        {new Strauner(), 0.19, true},
+        {new Invader(), 0.2, false},
+        {new Comet(), 0.7, true},
+        {new MultiAsteroid(), 0.8, false},
+        {new SingleAsteroid(), 1.0, false}
     };
 
-    if (startIndex < 0 || endIndex >= enemiesList.size() || startIndex > endIndex) return nullptr;
+    if (startIndex < 0 || endIndex >= enemiesList.size() || startIndex > endIndex) {
+        return nullptr;
+    }
 
-    const auto dice = physics::rollDice();
+    double totalChance = 0.0;
+    for (int i = startIndex; i <= endIndex; ++i) {
+        totalChance += enemiesList[i].chance;
+    }
 
+    double dice = physics::rollDice() * totalChance;
+
+    double cumulativeChance = 0.0;
     for (int i = startIndex; i <= endIndex; ++i) {
         const auto& [entity, chance, onlyOne] = enemiesList[i];
+        cumulativeChance += chance;
 
-        if (onlyOne && findEntity(entity->spriteInfo.spriteType) == nullptr && dice < chance) {
-            return entity;
-        }
-        if (!onlyOne && dice < chance) {
-            return entity;
+        if (dice <= cumulativeChance) {
+            if (onlyOne) {
+                if (findEntity(entity->spriteInfo.spriteType) == nullptr) {
+                    return entity;
+                }
+            }
+            else {
+                return entity;
+            }
         }
     }
 
     return nullptr;
 }
+
 list<Particle*> Game::getParticles()
 {
     return particles;
@@ -159,8 +175,10 @@ void Game::spawnEnemy(const float& deltaTime) {
 
 	if (enemySpawn.getEffectDuration() <= 0 && !freeze.isEffectActive()) {
         const auto entity = getRandomEntity(maxLevel - level, maxLevel - 1);
+        //auto entity = new Tower();
 
 		if(entity) addEntity(entity);
-		enemySpawn.setEffectDuration(FileMenager::timingsData.default_enemy_spawn_time + Player::playerStats.time * 0.1f - level * 0.1f);
+		enemySpawn.setEffectDuration(FileMenager::timingsData.default_enemy_spawn_time + Player::playerStats.time * 0.1f - level * 0.1f - floor(Score::getScore() >> 10) * 0.01f);
+        //enemySpawn.setEffectDuration(100000000.0f);
 	}
 }

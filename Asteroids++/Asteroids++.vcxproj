@@ -49,6 +49,7 @@
     <ClCompile Include="SpriteData.cpp" />
     <ClCompile Include="Strauner.cpp" />
     <ClCompile Include="TextField.cpp" />
+    <ClCompile Include="Tower.cpp" />
     <ClCompile Include="Wind.cpp" />
     <ClCompile Include="WindowBox.cpp" />
     <ClCompile Include="WindowBox.h" />
@@ -83,6 +84,7 @@
     <ClInclude Include="SpriteData.h" />
     <ClInclude Include="Strauner.h" />
     <ClInclude Include="TextField.h" />
+    <ClInclude Include="Tower.h" />
     <ClInclude Include="Wind.h" />
   </ItemGroup>
   <ItemGroup>

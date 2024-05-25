@@ -47,6 +47,14 @@
     "currentSpriteLifeTime": 0,
     "defaultSpriteLifeTime": 0.05
   },
+  "tower": {
+    "hitboxSize": 32,
+    "spriteSize": 64,
+    "rotation": 0,
+    "spriteState": 0,
+    "currentSpriteLifeTime": 0,
+    "defaultSpriteLifeTime": 0.2
+  },
   "singleBullet": {
     "hitboxSize": 16,
     "spriteSize": 16,

@@ -171,6 +171,9 @@
     <ClCompile Include="Strauner.cpp">
       <Filter>Source Files\Objects\Entities\Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="Tower.cpp">
+      <Filter>Source Files\Objects\Entities\Enemies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Physics.h">
@@ -261,6 +264,9 @@
       <Filter>Header Files\Objects\Events</Filter>
     </ClInclude>
     <ClInclude Include="Strauner.h">
+      <Filter>Header Files\Objects\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Tower.h">
       <Filter>Header Files\Objects\Entities\Enemies</Filter>
     </ClInclude>
   </ItemGroup>

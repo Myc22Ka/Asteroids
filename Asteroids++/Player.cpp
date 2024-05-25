@@ -156,10 +156,14 @@ void Player::update(float deltaTime) {
             Vector2f rightBulletPosition(position.x + (radius * 1.5f) * cos(rightBulletAngle), position.y + (radius * 1.5f) * sin(rightBulletAngle));
             Vector2f backBulletPosition(position);
 
+            float leftAngle = angle - bulletSpreadAngle * (180 / physics::getPI());
+            float rightAngle = angle + bulletSpreadAngle * (180 / physics::getPI());
+            float backAngle = backBulletAngle * (180 / physics::getPI());
+
             Game::addEntity(new SingleBullet(centerBulletPosition, centerBulletDirection, angle));
-            Game::addEntity(new SingleBullet(leftBulletPosition, leftBulletDirection, angle));
-            Game::addEntity(new SingleBullet(rightBulletPosition, rightBulletDirection, angle));
-            Game::addEntity(new SingleBullet(backBulletPosition, backBulletDirection, angle));
+            Game::addEntity(new SingleBullet(leftBulletPosition, leftBulletDirection, leftAngle));
+            Game::addEntity(new SingleBullet(rightBulletPosition, rightBulletDirection, rightAngle));
+            Game::addEntity(new SingleBullet(backBulletPosition, backBulletDirection, backAngle));
 
             SoundData::play(Sounds::LASER_SHOOT4);
         }
@@ -265,7 +269,6 @@ void Player::destroy() {
     invincibilityFrames.startEffect(5.0f);
     playerStats.lifes.back().death = true;
     playerStats.lifes.back().setSpriteState(16);
-    //SoundData::stop(Sounds::AMBIENT);
     SoundData::play(Sounds::DESTROY);
 
     Game::addEntity(new Explosion(position, size, getSprite(Sprites::DESAPPEARING)));
@@ -318,7 +321,7 @@ void Player::dashAbility(const float& deltaTime)
 void Player::setPlayerStats()
 {
     playerStats.shootOffset = FileMenager::playerData.bullet_shoot_delay;
-    playerStats.bulletAmount = 2;
+    playerStats.bulletAmount = 4;
     playerStats.bulletDamage = 50;
     playerStats.bulletSize = FileMenager::playerData.bullet_size;
     playerStats.bulletSpeed = FileMenager::playerData.bullet_speed;
@@ -336,7 +339,7 @@ void Player::setPlayerStats()
     playerStats.drunkMode = { 6.0f, false, new Bar(radius, 2.0f, Color::Color(242, 142, 28, 255), Color::Black, playerStats.drunkMode.getEffectDuration(), Vector2f(-100.0f, -100.0f), Sprites::PICKUP_DRUNKMODE) };
     playerStats.scoreTimes2 = { 10.0f, false, new Bar(radius, 2.0f, Color::Color(144, 238, 144, 255), Color::Black, playerStats.scoreTimes2.getEffectDuration(), Vector2f(-100.0f, -100.0f), Sprites::PICKUP_TIMES_2) };
     playerStats.scoreTimes5 = { 10.0f, false, new Bar(radius, 2.0f, Color::Color(93, 213, 93, 255), Color::Black, playerStats.scoreTimes5.getEffectDuration(), Vector2f(-100.0f, -100.0f), Sprites::PICKUP_TIMES_5) };
-    playerStats.critChance = 0.0;
+    playerStats.critChance = 0.01;
 
     playerStats.bulletType.piercing = false;
     playerStats.bulletType.homing = false;

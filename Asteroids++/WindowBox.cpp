@@ -233,8 +233,6 @@ void WindowBox::updateWindow(const float& deltaTime)
             particle->update(deltaTime);
     }
 
-    cout << SoundData::sounds[Sounds::AMBIENT].getStatus() << endl;
-
     if (!Game::freeze.isEffectActive() && SoundData::sounds[Sounds::AMBIENT].getStatus() == Sound::Paused && Game::getGameState() == PLAYING) SoundData::renev(Sounds::AMBIENT);
 
     for (auto& entity : Game::getEntities())
@@ -295,7 +293,7 @@ void WindowBox::loadParticles() {
 void WindowBox::begin()
 {
     Game::setGameState(PLAYING);
-    //SoundData::sounds[Sounds::AMBIENT].setVolume(100);
+    SoundData::sounds[Sounds::AMBIENT].setVolume(100);
     SoundData::playLooped(Sounds::AMBIENT);
 
     Game::addEntity(new Player());
