@@ -23,7 +23,7 @@ private:
 
 	void moveUp();
 	void moveDown();
-
+	const int getSelectedOptionIndex() const;
 
 	TextField mainText;
 	static vector<TextField> options;

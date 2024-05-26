@@ -30,7 +30,7 @@ void Wind::update(float deltaTime)
 		initParticles();
 	}
 
-	if (Game::freeze.isEffectActive())
+	if (Game::freeze.isEffectActive() || Game::getGameState() == PAUSED)
 		return;
 
 	for (size_t i = 0; i < particles.getVertexCount() - 1; i += 2)

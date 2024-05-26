@@ -118,3 +118,25 @@ void SoundData::stop(Sounds name) {
 
     sounds[name].stop();
 }
+
+void SoundData::modifySound(Sounds name){
+    thread t([name]() {
+        while (sounds[name].getStatus() == Sound::Playing && sounds[name].getVolume() > 80) {
+            sounds[name].setVolume(floor(sounds[name].getVolume() - 1));
+
+            sleep(milliseconds(50));
+        }
+        sounds[name].setVolume(80);
+
+        });
+
+    t.detach();
+
+    sounds[name].setPitch(0.7f);
+}
+
+void SoundData::recoverSound(Sounds name){
+    renev(name);
+
+    sounds[name].setPitch(1.0f);
+}

@@ -27,6 +27,8 @@ void GameFrame::run(const float& deltaTime, RenderWindow& window)
 }
 
 void GameFrame::navigator(Event& e) {
+    if (Game::getGameState() == PAUSED) gamePause->navigator(e);
+
     switch (e.key.code)
     {
     case Keyboard::H:
@@ -40,6 +42,7 @@ void GameFrame::navigator(Event& e) {
         Game::setGameState(FREZZE);
         break;
     case Keyboard::P:
+        SoundData::modifySound(Sounds::AMBIENT);
         Game::setGameState(PAUSED);
         break;
     }
@@ -96,7 +99,7 @@ void GameFrame::updateWindow(const float& deltaTime, RenderWindow& window)
 
         entity->render(window);
 
-        if (Game::getGameState() == DEATH && entity->getEntityType() != TYPE_EXPLOSION && entity->getEntityType() != TYPE_ENEMY_BULLET && entity->getEntityType() != TYPE_BULLET_SINGLE) continue;
+        if (Game::getGameState() == DEATH && entity->getEntityType() != TYPE_EXPLOSION && entity->getEntityType() != TYPE_ENEMY_BULLET && entity->getEntityType() != TYPE_BULLET_SINGLE || Game::getGameState() == PAUSED) continue;
 
         entity->update(deltaTime);
     }

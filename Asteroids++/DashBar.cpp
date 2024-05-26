@@ -10,6 +10,8 @@ DashBar::DashBar() {
 
 void DashBar::update(double newCurrentValue)
 {
+    if (Game::getGameState() == PAUSED) return;
+
     currentValue = newCurrentValue;
     auto increments = static_cast<int>((currentValue / 0.2) - 0.2);
 

@@ -52,6 +52,9 @@ public:
     static void pause(Sounds name);
     static void stop(Sounds name);
 
+    static void modifySound(Sounds name);
+    static void recoverSound(Sounds name);
+
     static unordered_map <Sounds, Sound> sounds;
 
 private:

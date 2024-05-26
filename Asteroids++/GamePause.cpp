@@ -12,6 +12,14 @@ selectedOption(0)
 
 void GamePause::update(float deltaTime)
 {
+	for (size_t i = 0; i < options.size(); ++i) {
+		if (i == getSelectedOptionIndex()) {
+			options[i].setColorText(Color::Red);
+		}
+		else {
+			options[i].setColorText(Color::White);
+		}
+	}
 }
 
 const EntityType GamePause::getEntityType()
@@ -23,7 +31,7 @@ void GamePause::init(const float& deltaTime, RenderWindow& window)
 {
 	if (Game::getGameState() != PAUSED) return;
 
-	mainText.setText("Asteroids++");
+	mainText.setText("PAUSE");
 	FloatRect textRect = mainText.getText().getLocalBounds();
 	mainText.getText().setOrigin(textRect.left + textRect.width / 2.0f, textRect.top - textRect.height);
 
@@ -36,6 +44,7 @@ void GamePause::init(const float& deltaTime, RenderWindow& window)
 		option.setTextPosition(position);
 	}
 
+	update(deltaTime);
 	render(window);
 
 	window.draw(mainText.getText());
@@ -59,6 +68,10 @@ void GamePause::initParticles()
 	}
 }
 
+const int GamePause::getSelectedOptionIndex() const {
+	return selectedOption;
+}
+
 void GamePause::moveUp() {
 	if (selectedOption > 0) {
 		selectedOption--;
@@ -79,4 +92,35 @@ void GamePause::moveDown() {
 
 void GamePause::navigator(Event& e)
 {
+	if (WindowBox::isKeyPressed) return;
+
+	if (Keyboard::isKeyPressed(Keyboard::Up)) {
+		moveUp();
+		SoundData::play(Sounds::PING);
+
+		WindowBox::isKeyPressed = true;
+	}
+	if (Keyboard::isKeyPressed(Keyboard::Down)) {
+		moveDown();
+		SoundData::play(Sounds::PING);
+
+		WindowBox::isKeyPressed = true;
+	}
+
+	if (Keyboard::isKeyPressed(Keyboard::Enter)) {
+		switch (selectedOption) {
+		case 0:
+			Game::setGameState(PLAYING);
+			SoundData::recoverSound(Sounds::AMBIENT);
+			break;
+		case 1:
+			Game::setGameState(GAME_OVER);
+			break;
+		case 2:
+			Game::setGameState(MENU);
+			break;
+		}
+
+		WindowBox::isKeyPressed = true;
+	}
 }
