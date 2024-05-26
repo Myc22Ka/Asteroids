@@ -28,7 +28,9 @@
     <ClCompile Include="EventHandler.cpp" />
     <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="Bar.cpp" />
+    <ClCompile Include="GameFrame.cpp" />
     <ClCompile Include="GameOver.cpp" />
+    <ClCompile Include="GamePause.cpp" />
     <ClCompile Include="HighScoreTable.cpp" />
     <ClCompile Include="Invader.cpp" />
     <ClCompile Include="main.cpp" />
@@ -71,7 +73,9 @@
     <ClInclude Include="Explosion.h" />
     <ClInclude Include="FileMenager.h" />
     <ClInclude Include="Bar.h" />
+    <ClInclude Include="GameFrame.h" />
     <ClInclude Include="GameOver.h" />
+    <ClInclude Include="GamePause.h" />
     <ClInclude Include="HighScoreTable.h" />
     <ClInclude Include="Invader.h" />
     <ClInclude Include="Menu.h" />

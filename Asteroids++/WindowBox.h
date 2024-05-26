@@ -2,16 +2,7 @@
 #include <SFML/Audio.hpp>
 #include "FileMenager.h"
 #include "Game.h"
-#include "GameOver.h"
-#include "Score.h"
-#include "SpriteData.h"
-#include <unordered_map>
-#include "Wind.h"
-#include "Effect.h"
-#include "TextField.h"
-#include "MenuLoader.h"
-#include "HighScoreTable.h"
-#include "Menu.h"
+#include "DeathScreen.h"
 
 class WindowBox
 {
@@ -21,21 +12,15 @@ public:
 	static VideoMode getVideoMode();
 	void displayWindow();
 	static void begin();
+
+	static void close();
+
+	static bool isKeyPressed;
 private:
-
-	void handleKeyPress(Keyboard::Key keyCode, Wind& wind);
-
-	void engine(Wind& wind, MenuLoader& loader, GameOver& gameOver, HighScoreTable& highScoreTable, Menu& menu, const float& deltaTime);
-
-	void updateWindow(const float& deltaTime);
-	void renderUI();
+	int counter;
 
 	static VideoMode videoMode;
-	static TextField fps;
-	Effect fpsDelay;
+	static DeathScreen* deathScreen;
 
-	Sprite background;
-	Texture backgroundTexture;
-
-	RenderWindow window;
+	static RenderWindow window;
 };

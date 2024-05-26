@@ -12,7 +12,6 @@ void MenuLoader::init()
 
 	loaderSprite = SpriteData::getSprite(Sprites::LOADER);
 
-	Game::setGameState(MENU_LOADING);
 	launch.startEffect(FileMenager::screenData.launch_time);
 
 	loadParticles();
@@ -87,6 +86,8 @@ void MenuLoader::run(const float& deltaTime, RenderWindow& window)
 		window.draw(circle);
 	}
 }
+
+void MenuLoader::navigator(Event& e) {}
 
 void MenuLoader::loadParticles() {
 	for (size_t i = 0; i < 50; i++) {

@@ -14,10 +14,12 @@ class HighScoreTable : public Page
 public:
 	HighScoreTable();
 
-	void run(const float& deltaTime, RenderWindow& window);
+	void run(const float& deltaTime, RenderWindow& window) override;
+	void navigator(Event& e) override;
 
 private:
-	void init();
+	void init() override;
+	bool isKeyPressed;
 
 	TextField highscoreText;
 };

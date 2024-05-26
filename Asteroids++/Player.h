@@ -54,6 +54,8 @@ public:
 	static Sprites getPlayerBulletSprite();
 	void destroy();
 
+	static void setHealth();
+
 	static PlayerStats playerStats;
 	static Effect dash;
 private:
@@ -65,8 +67,9 @@ private:
 
 	void updateStatsbars(const float& deltaTime);
 	void updatePosition(const float& deltaTime);
-	void setPlayerStats();
 	void dashAbility(const float&);
+	void setPlayerStats();
+
 	float shootTimer;
 };
 

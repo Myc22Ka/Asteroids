@@ -316,6 +316,15 @@ void Player::dashAbility(const float& deltaTime)
     }
 }
 
+void Player::setHealth() {
+    float offset = 0.0f;
+
+    for (int i = 0; i < 3; ++i) {
+        playerStats.lifes.push_back(offset);
+        offset += 20.0f;
+    }
+}
+
 void Player::setPlayerStats()
 {
     playerStats.shootOffset = FileMenager::playerData.bullet_shoot_delay;
@@ -324,12 +333,7 @@ void Player::setPlayerStats()
     playerStats.bulletSize = FileMenager::playerData.bullet_size;
     playerStats.bulletSpeed = FileMenager::playerData.bullet_speed;
     
-    float offset = 0.0f;
-
-    for (int i = 0; i < 3; ++i) {
-        playerStats.lifes.push_back(offset);
-        offset += 20.0f;
-    }
+    setHealth();
 
     playerStats.speed = FileMenager::playerData.speed;
     playerStats.turnSpeed = FileMenager::playerData.turn_speed;

@@ -16,12 +16,11 @@ public:
 
 	TextField playerNameText;
 
-	void enterPlayerName(Event& e);
-	void run(const float& deltaTime, RenderWindow& window);
-
+	void run(const float& deltaTime, RenderWindow& window) override;
+	void navigator(Event& e) override;
 
 private:
-	void init();
+	void init() override;
 	void drawPlayerName(RenderWindow& window);
 
 	TextField gameOver;

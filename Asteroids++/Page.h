@@ -12,9 +12,11 @@ class Page
 {
 public:
 	Page(string backgroundname);
+	Page();
 
 	virtual void init();
 	virtual void run(const float& deltaTime, RenderWindow& window);
+	virtual void navigator(Event& e) = 0;
 
 	Color getBackgroundColor();
 	void setBackgroundColor(const Color& newColor);

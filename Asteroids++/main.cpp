@@ -4,6 +4,7 @@
 #include "SpriteData.h"
 #include "WindowBox.h"
 #include "TextField.h"
+#include "Game.h"
 
 using namespace sf;
 using namespace std;

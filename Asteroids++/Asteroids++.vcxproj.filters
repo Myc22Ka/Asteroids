@@ -73,6 +73,9 @@
     <Filter Include="Header Files\Game\Pages">
       <UniqueIdentifier>{5c7ba5a9-7198-4b11-bd60-b568fe8a7d8b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Game\Pages">
+      <UniqueIdentifier>{5d3ace6e-f8a9-4e9c-9ac9-490f538bbf59}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -144,13 +147,7 @@
     <ClCompile Include="Game.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
-    <ClCompile Include="GameOver.cpp">
-      <Filter>Source Files\Game</Filter>
-    </ClCompile>
     <ClCompile Include="WindowBox.cpp">
-      <Filter>Source Files\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Menu.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
     <ClCompile Include="Score.cpp">
@@ -177,14 +174,26 @@
     <ClCompile Include="Tower.cpp">
       <Filter>Source Files\Objects\Entities\Enemies</Filter>
     </ClCompile>
-    <ClCompile Include="MenuLoader.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="GameOver.cpp">
+      <Filter>Source Files\Game\Pages</Filter>
     </ClCompile>
-    <ClCompile Include="HighScoreTable.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Source Files\Game\Pages</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuLoader.cpp">
+      <Filter>Source Files\Game\Pages</Filter>
     </ClCompile>
     <ClCompile Include="Page.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Game\Pages</Filter>
+    </ClCompile>
+    <ClCompile Include="HighScoreTable.cpp">
+      <Filter>Source Files\Game\Pages</Filter>
+    </ClCompile>
+    <ClCompile Include="GameFrame.cpp">
+      <Filter>Source Files\Game\Pages</Filter>
+    </ClCompile>
+    <ClCompile Include="GamePause.cpp">
+      <Filter>Source Files\Objects\Events</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -289,6 +298,12 @@
     </ClInclude>
     <ClInclude Include="Page.h">
       <Filter>Header Files\Game\Pages</Filter>
+    </ClInclude>
+    <ClInclude Include="GameFrame.h">
+      <Filter>Header Files\Game\Pages</Filter>
+    </ClInclude>
+    <ClInclude Include="GamePause.h">
+      <Filter>Header Files\Objects\Events</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

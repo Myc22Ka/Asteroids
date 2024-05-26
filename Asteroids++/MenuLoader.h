@@ -13,10 +13,12 @@ class MenuLoader : public Page
 public:
 	MenuLoader();
 
-	void init();
-	void run(const float& deltaTime, RenderWindow& window);
+	void run(const float& deltaTime, RenderWindow& window) override;
+	void navigator(Event& e) override;
 
 private:
+	void init() override;
+
 	void loadParticles();
 
 	SpriteInfo loaderSprite;

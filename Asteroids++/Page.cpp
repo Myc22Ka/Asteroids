@@ -6,6 +6,8 @@ Page::Page(string backgroundname) : backgroundname(backgroundname)
 	init();
 }
 
+Page::Page() {}
+
 void Page::init()
 {
 	if (!texture.loadFromFile("./assets/" + backgroundname + ".png"))

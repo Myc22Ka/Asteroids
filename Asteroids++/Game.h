@@ -6,6 +6,7 @@
 #include <vector>
 #include "Entity.h"
 #include "Particle.h"
+#include "Page.h"
 #include <list>
 #include <algorithm>
 #include <ranges>
@@ -16,6 +17,7 @@ using namespace std;
 
 class Entity;
 class Particle;
+class Page;
 
 enum GameState {
 	MENU, 
@@ -56,9 +58,12 @@ public:
 	static Entity* doesEntityExist(EntityType type);
 	static void foreachEntity(const function<void(Entity*)>& callback);
 
-	static void gameOver();
 	static GameState getGameState();
 	static void setGameState(const GameState& newGameState);
+
+	static void setCurrentPage(Page* newPage);
+	static void runCurrentPage(float deltaTime, RenderWindow& window);
+	static void navigate(Event& e);
 
 	static const bool isEntityInsideGruop(Entity* entity, const vector<Sprites>& group);
 	static const bool isEntityInsideGruop(Entity* entity, const vector<EntityType>& group);
@@ -77,6 +82,8 @@ private:
 	static unordered_map<Groups, vector<Sprites>> groups;
 
 	static GameState gameState;
+
+	static Page* currentPage;
 };
 
 #endif

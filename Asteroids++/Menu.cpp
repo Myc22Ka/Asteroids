@@ -3,12 +3,10 @@
 
 vector<TextField> Menu::options{ { "New game", 24 }, { "Continue", 24 }, { "Highscore", 24 }, { "Exit", 24 } };
 vector<TextField> Menu::navigation{ { "Confirm [Enter]", 8 }, { "Up [Up]", 8 }, { "Down [Down]", 8 }, { "Exit [ESC]", 8 } };
-bool Menu::confirm{ false };
+int Menu::selectedOption{ 0 };
 
 Menu::Menu() : Page("menu"),
 	menuText(128), 
-	selectedOption(0), 
-	isKeyPressed(false), 
 	defaultPositionX(0.0f),  
 	filter(RectangleShape())
 {
@@ -25,7 +23,7 @@ void Menu::init()
 	
 	menuText.setTextPosition({ WindowBox::getVideoMode().width / 2.0f, 0.0f});
 
-	FileMenager::highScore = FileMenager::sortMapByFloat(FileMenager::getDataFromFile("highscore.txt"));
+	if (navigation[0].getText().getPosition().x) return;
 
 	auto offset = 0.0f;
 	for (auto& option : options) {
@@ -81,35 +79,50 @@ const string Menu::getSelectedOption() const {
 	return options[selectedOption].getText().getString();
 }
 
-void Menu::navigator(const Event& event) {
-	if (event.type == Event::KeyPressed && !isKeyPressed) {
-
-		if (Game::getGameState() != MENU_HIGHSCORE) {
-			if (event.key.code == Keyboard::Up) {
-				moveUp();
-				SoundData::play(Sounds::PING);
-			}
-			else if (event.key.code == Keyboard::Down) {
-				moveDown();
-				SoundData::play(Sounds::PING);
-			}
-		}
-
-		isKeyPressed = true;
-	}
-
-	if (event.type == Event::KeyReleased) {
-		isKeyPressed = false;
-		confirm = false;
-	}
-}
-
 void Menu::draw(RenderWindow& window) {
 	for (auto& option : navigation) window.draw(option.getText());
 
 	window.draw(menuText.getText());
 
 	for (auto& option : options) window.draw(option.getText());
+}
+
+void Menu::navigator(Event& event)
+{
+	if (WindowBox::isKeyPressed) return;
+
+	if (Keyboard::isKeyPressed(Keyboard::Up)) {
+		moveUp();
+		SoundData::play(Sounds::PING);
+
+		WindowBox::isKeyPressed = true;
+	}
+	if (Keyboard::isKeyPressed(Keyboard::Down)) {
+		moveDown();
+		SoundData::play(Sounds::PING);
+
+		WindowBox::isKeyPressed = true;
+	}
+
+	if (Keyboard::isKeyPressed(Keyboard::Enter)) {
+		switch (selectedOption) {
+		case 0:
+			WindowBox::begin();
+			break;
+		case 1:
+			WindowBox::begin();
+			Game::setGameState(GAME_OVER);
+			break;
+		case 2:
+			Game::setGameState(MENU_HIGHSCORE);
+			break;
+		case 3:
+			WindowBox::close();
+			break;
+		}
+
+		WindowBox::isKeyPressed = true;
+	}
 }
 
 void Menu::run(const float& deltaTime, RenderWindow& window) {
@@ -133,27 +146,4 @@ void Menu::run(const float& deltaTime, RenderWindow& window) {
 	}
 
 	draw(window);
-
-	if (!confirm && Keyboard::isKeyPressed(Keyboard::Enter)) {
-		confirm = true;
-
-		switch (getSelectedOptionIndex()) {
-		case 0:
-			WindowBox::begin();
-			break;
-		case 1:
-			WindowBox::begin();
-			Game::setGameState(GAME_OVER);
-			break;
-		case 2:
-			Game::setGameState(MENU_HIGHSCORE);
-			break;
-		case 3:
-			SoundData::play(Sounds::GOODBYE);
-			this_thread::sleep_for(chrono::milliseconds(1000));
-
-			window.close();
-			break;
-		}
-	}
 }

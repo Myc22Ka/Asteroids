@@ -2,7 +2,7 @@
 #include "Menu.h"
 #include "WindowBox.h"
 
-HighScoreTable::HighScoreTable() : Page("menu"), highscoreText(64)
+HighScoreTable::HighScoreTable() : Page("menu"), highscoreText(64), isKeyPressed(false)
 {
 	init();
 }
@@ -13,6 +13,8 @@ void HighScoreTable::init()
 
 	highscoreText.setText("Highscore");
 	highscoreText.setTextCenterX(FileMenager::screenData.padding);
+
+	FileMenager::highScore = FileMenager::sortMapByFloat(FileMenager::getDataFromFile("highscore.txt"));
 }
 
 void HighScoreTable::run(const float& deltaTime, RenderWindow& window)
@@ -43,9 +45,12 @@ void HighScoreTable::run(const float& deltaTime, RenderWindow& window)
 
 		if (counter > 9) break;
 	}
+}
 
-	if (Keyboard::isKeyPressed(Keyboard::Enter) && !Menu::confirm) {
-		Menu::confirm = true;
+void HighScoreTable::navigator(Event& e) {
+	if (Keyboard::isKeyPressed(Keyboard::Enter) && !WindowBox::isKeyPressed) {
 		Game::setGameState(MENU);
+
+		WindowBox::isKeyPressed = true;
 	}
 }

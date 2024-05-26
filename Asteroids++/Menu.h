@@ -13,17 +13,15 @@ class Menu : public Page
 public:
 	Menu();
 
-	void navigator(const Event& event);
-	void run(const float& deltaTime, RenderWindow& window);
+	void navigator(Event& event) override;
+	void run(const float& deltaTime, RenderWindow& window) override;
 
 	static vector<TextField> navigation;
-	static bool confirm;
-
 private:
 	void moveUp();
 	void moveDown();
 
-	void init();
+	void init() override;
 
 	const int getSelectedOptionIndex() const;
 	const string getSelectedOption() const;
@@ -36,10 +34,8 @@ private:
 
 	RectangleShape filter;
 
-	int selectedOption;
+	static int selectedOption;
 	float defaultPositionX;
-
-	bool isKeyPressed;
 };
 
 #endif

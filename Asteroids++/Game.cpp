@@ -6,9 +6,16 @@
 #include "Invader.h"
 #include "Strauner.h"
 #include "Tower.h"
+#include "MenuLoader.h"
+#include "Menu.h"
+#include "HighScoreTable.h"
+#include "GameOver.h"
+#include "GamePause.h"
 
 GameState Game::gameState{ MENU };
 bool Game::hitboxesVisibility{ false };
+
+Page* Game::currentPage = nullptr;
 
 list<Entity*> Game::entities;
 list<Particle*> Game::particles;
@@ -74,10 +81,6 @@ Entity* Game::findEntity(Sprites spriteType) {
         if (entity->spriteInfo.spriteType == spriteType) return entity;
 
     return nullptr;
-}
-
-void Game::gameOver(){
-    gameState = GAME_OVER;
 }
 
 Entity* Game::getRandomEntity(const int& startIndex, const int& endIndex) {
@@ -162,11 +165,29 @@ GameState Game::getGameState()
 }
 
 void Game::setGameState(const GameState& newGameState){
+    switch (newGameState)
+    {
+    case MENU_LOADING:
+        setCurrentPage(new MenuLoader());
+        break;
+    case MENU:
+        setCurrentPage(new Menu());
+        break;
+    case GAME_OVER:
+        cout << "hi" << endl;
+        setCurrentPage(new GameOver());
+        break;
+    case MENU_HIGHSCORE:
+        setCurrentPage(new HighScoreTable());
+        break;
+    default:
+        break;
+    }
     gameState = newGameState;
 }
 
 void Game::spawnEnemy(const float& deltaTime) {
-	if (gameState == PAUSED || gameState == FREZZE || gameState == DEATH) return;
+	if (gameState != PLAYING) return;
 
 	enemySpawn.updateEffectDuration(deltaTime);
 
@@ -178,4 +199,21 @@ void Game::spawnEnemy(const float& deltaTime) {
 		enemySpawn.setEffectDuration(FileMenager::timingsData.default_enemy_spawn_time + Player::playerStats.time * 0.1f - level * 0.1f - floor(Score::getScore() >> 10) * 0.01f);
         //enemySpawn.setEffectDuration(100000000.0f);
 	}
+}
+
+void Game::setCurrentPage(Page* newPage)
+{
+    delete currentPage;
+    currentPage = newPage;
+}
+
+void Game::runCurrentPage(float deltaTime, RenderWindow& window)
+{
+    if (!currentPage) return;
+
+    currentPage->run(deltaTime, window);
+}
+
+void Game::navigate(Event& e){
+    currentPage->navigator(e);
 }

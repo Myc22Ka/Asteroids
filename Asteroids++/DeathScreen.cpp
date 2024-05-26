@@ -68,7 +68,7 @@ void DeathScreen::init(const float& deltaTime, RenderWindow& window) {
 	update(deltaTime);
 	render(window);
 
-	if(death.getEffectDuration() < 1.75f * 0.8 && Player::playerStats.lifes.size() == 0) Game::gameOver();
+	if(death.getEffectDuration() < 1.75f * 0.8 && Player::playerStats.lifes.size() == 0) Game::setGameState(GAME_OVER);
 }
 
 void DeathScreen::initParticles()
