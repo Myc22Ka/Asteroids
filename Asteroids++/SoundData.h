@@ -49,6 +49,7 @@ public:
     static void play(Sounds name);
     static void playLooped(Sounds name);
     static void renev(Sounds name);
+    static void pause(Sounds name);
     static void stop(Sounds name);
 
     static unordered_map <Sounds, Sound> sounds;

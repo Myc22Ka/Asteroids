@@ -2,10 +2,13 @@
 #include "Score.h"
 #include "WindowBox.h"
 
+const vector<Sprites> Enemy::avoidCollisionGroup{ Sprites::COMET, Sprites::TOWER, Sprites::STRAUNER };
+const vector<EntityType> Enemy::enemies{ EntityType::TYPE_ENEMY, EntityType::TYPE_ENEMY_BULLET };
+
 Enemy::Enemy(float health, float speed, SpriteInfo spriteInfo) :
 	Entity(getRandomPosition(), physics::getRandomAngle(), physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_size), Color::Red, spriteInfo),
 	health(health + Player::playerStats.bulletDamage / 2),
-	healthBar(size, 3.0f, Color::Red, Color::Black, health + Player::playerStats.bulletDamage / 2, Vector2f(-100.0f, -100.0f)),
+	healthBar(size, 3.0f, Color::Red, Color::Black, health + Player::playerStats.bulletDamage / 2, { -100.0f, -100.0f }),
 	direction(physics::getRandomDirection()),
 	speed(speed),
 	crit("CRIT", 0),
@@ -28,6 +31,10 @@ void Enemy::render(RenderWindow& window)
 void Enemy::update(float deltaTime)
 {
 	updateHealthBar();
+	updateCritDamage(deltaTime);
+}
+
+void Enemy::updateCritDamage(float deltaTime) {
 	crit.setTextPosition(Vector2f(position.x - crit.getText().getLocalBounds().width / 2, position.y - crit.getText().getLocalBounds().height));
 
 	if (critTimer.isEffectActive()) {
@@ -50,7 +57,7 @@ const EntityType Enemy::getEntityType()
 void Enemy::bounceCollisionDetection()
 {
 	Game::foreachEntity([&](Entity* entity) {
-		if ((entity->getEntityType() == EntityType::TYPE_ENEMY && entity->spriteInfo.spriteType != Sprites::COMET)
+		if ((entity->getEntityType() == EntityType::TYPE_ENEMY && !Game::isEntityInsideGruop(entity, avoidCollisionGroup))
 			&& entity != this) {
 			Enemy* otherEnemy = dynamic_cast<Enemy*>(entity);
 
@@ -91,11 +98,11 @@ const Bar& Enemy::getHealthBar() const
 
 void Enemy::updateHealthBar()
 {
-	healthBar.updatePosition(Vector2f{ position.x - radius, position.y + radius });
+	healthBar.updatePosition({ position.x - radius, position.y + radius });
 	healthBar.updateValue(health);
 }
 
-const float Enemy::getHealth()
+const float Enemy::getHealth() const
 {
 	return health;
 }

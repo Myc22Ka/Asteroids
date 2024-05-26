@@ -44,7 +44,7 @@ void Tower::update(float deltaTime)
 			float directionX = cos(radianAngle);
 			float directionY = sin(radianAngle);
 
-			Game::addEntity(new EnemyBullet(position, { directionX, directionY }, angle, Sprites::HOMING_BULLET));
+			Game::addEntity(new EnemyBullet(position, { directionX, directionY }, angle, Sprites::ENEMY_BULLET));
 		}
 
 		SoundData::play(Sounds::ALIEN_SHOOT1);

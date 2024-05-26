@@ -48,7 +48,7 @@ void Invader::update(float deltaTime)
         if (!shoot.isEffectActive()) {
             shoot.startEffect(1.0f);
 
-            Game::addEntity(new EnemyBullet(position, slightlyOffDirection, angle, Sprites::HOMING_BULLET));
+            Game::addEntity(new EnemyBullet(position, slightlyOffDirection, angle, Sprites::ENEMY_BULLET));
             SoundData::play(Sounds::ALIEN_SHOOT1);
         }
         return;

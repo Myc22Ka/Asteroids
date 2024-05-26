@@ -63,6 +63,14 @@
     "currentSpriteLifeTime": 0,
     "defaultSpriteLifeTime": 0
   },
+  "enemyBullet": {
+    "hitboxSize": 16,
+    "spriteSize": 64,
+    "rotation": 90,
+    "spriteState": 0,
+    "currentSpriteLifeTime": 0,
+    "defaultSpriteLifeTime": 0
+  },
   "piercingBullet": {
     "hitboxSize": 16,
     "spriteSize": 115,

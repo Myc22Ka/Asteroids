@@ -16,9 +16,6 @@
 #include "Effect.h"
 
 class Enemy : public Entity {
-	Bar healthBar;
-	float health;
-
 public:
 	Enemy(float health, float speed, SpriteInfo spriteInfo);
 
@@ -34,13 +31,21 @@ public:
 	const Bar& getHealthBar() const;
 	void updateHealthBar();
 
-	const float getHealth();
+	const float getHealth() const;
 	void updateHealth(const float& newValue);
 
 	float speed;
 	Vector2f direction;
 	TextField crit;
 	Effect critTimer;
+
+	static const vector<EntityType> enemies;
+private:
+	void updateCritDamage(float deltaTime);
+
+	static const vector<Sprites> avoidCollisionGroup;
+	Bar healthBar;
+	float health;
 };
 
 #endif

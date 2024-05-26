@@ -92,7 +92,7 @@ void Strauner::update(float deltaTime)
 		if (!shoot.isEffectActive()) {
 			shoot.startEffect(0.7f);
 
-			Game::addEntity(new EnemyBullet(position, slightlyOffDirection, angle, Sprites::HOMING_BULLET));
+			Game::addEntity(new EnemyBullet(position, slightlyOffDirection, angle, Sprites::ENEMY_BULLET));
 			SoundData::play(Sounds::ALIEN_SHOOT1);
 		}
 	}
@@ -103,7 +103,7 @@ void Strauner::update(float deltaTime)
 
 			for (size_t i = 0; i < 7; i++)
 			{
-				Game::addEntity(new EnemyBullet(position + physics::getRandomDirection() * 30.0f, directionToPlayer, angle, Sprites::HOMING_BULLET));
+				Game::addEntity(new EnemyBullet(position + physics::getRandomDirection() * 30.0f, directionToPlayer, angle, Sprites::ENEMY_BULLET));
 			}
 			SoundData::play(Sounds::ALIEN_SHOOT1);
 		}

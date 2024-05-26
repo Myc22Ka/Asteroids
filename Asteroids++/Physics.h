@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "Enemy.h"
 #include <random>
+#include <ranges>
 
 using namespace std;
 

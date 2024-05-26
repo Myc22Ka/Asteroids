@@ -1,7 +1,7 @@
 #include "PlayerHealthUI.h"
 #include "WindowBox.h"
 
-PlayerHealthUI::PlayerHealthUI(const float& offset) : offset(offset)
+PlayerHealthUI::PlayerHealthUI(const float& offset) : offset(offset), removeHealthFromPlayer(false)
 {
     spriteInfo = getSprite(Sprites::HEART);
 	position = Vector2f(WindowBox::getVideoMode().width - (spriteInfo.spriteSize >> 1) - FileMenager::screenData.padding - offset, float(getSprite(Sprites::DASHBAR).spriteSize - (spriteInfo.spriteSize << 1)));
@@ -17,14 +17,14 @@ void PlayerHealthUI::update(float deltaTime)
 
 	if (spriteInfo.currentSpriteLifeTime < 0) {
 		spriteInfo.currentSpriteLifeTime = spriteInfo.defaultSpriteLifeTime;
-		spriteInfo.spriteState = (spriteInfo.spriteState + 1) % (!death ? 15 : spriteInfo.frames.size());
+		spriteInfo.spriteState = (spriteInfo.spriteState + 1) % (!removeHealthFromPlayer ? 15 : spriteInfo.frames.size());
 		updateSprite(spriteInfo.sprite, spriteInfo.frames, spriteInfo.spriteState);
 	}
 }
 
 void PlayerHealthUI::draw(RenderWindow& window) const
 {
-	if (death && spriteInfo.spriteState == spriteInfo.frames.size() - 1) {
+	if (removeHealthFromPlayer && spriteInfo.spriteState == spriteInfo.frames.size() - 1) {
 		Player::playerStats.lifes.pop_back();
 		return;
 	}
@@ -35,4 +35,9 @@ void PlayerHealthUI::draw(RenderWindow& window) const
 void PlayerHealthUI::setSpriteState(const int& newState)
 {
 	spriteInfo.spriteState = newState;
+}
+
+void PlayerHealthUI::removeHealth()
+{
+	removeHealthFromPlayer = true;
 }

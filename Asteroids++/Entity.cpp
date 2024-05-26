@@ -1,5 +1,6 @@
 #include "Entity.h"
 #include "FileMenager.h"
+#include "DeathScreen.h"
 
 Entity::Entity(Vector2f position, float angle, float size, Color hitboxColor, SpriteInfo spriteInfo)
 	: position(position), angle(angle), size(size), hitboxColor(hitboxColor), radius(float(static_cast<int>(size) >> 1)), spriteInfo(spriteInfo) 
@@ -14,6 +15,10 @@ bool Entity::isActive() const
 void Entity::setActive(const bool& active)
 {
 	this->active = active;
+}
+
+const Sprites Entity::getSpriteType() const {
+	return this->spriteInfo.spriteType;
 }
 
 void Entity::drawHitboxes()

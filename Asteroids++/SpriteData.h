@@ -26,6 +26,7 @@ enum class Sprites {
     STRAUNER,
     TOWER,
     SINGLE_BULLET,
+    ENEMY_BULLET,
     PIERCING_BULLET,
     HOMING_BULLET,
     EXPLOSION_1,
@@ -81,6 +82,7 @@ private:
 
 public:
     void loadJSONData(const string& filename);
+
     template<typename T>
     const T getJSONProperty(const string& property, Value& spriteData);
 

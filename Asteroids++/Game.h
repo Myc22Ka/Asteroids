@@ -24,6 +24,8 @@ enum GameState {
 	PLAYING, 
 	WIND,
 	PAUSED,
+	FREZZE,
+	DEATH,
 	GAME_OVER
 };
 
@@ -54,13 +56,12 @@ public:
 	static Entity* doesEntityExist(EntityType type);
 	static void foreachEntity(const function<void(Entity*)>& callback);
 
-	static const bool isEnemy(Entity* entity);
-	static const bool getEvil(Entity* entity);
-
 	static void gameOver();
 	static GameState getGameState();
 	static void setGameState(const GameState& newGameState);
 
+	static const bool isEntityInsideGruop(Entity* entity, const vector<Sprites>& group);
+	static const bool isEntityInsideGruop(Entity* entity, const vector<EntityType>& group);
 
 	static void spawnEnemy(const float& deltaTime);
 
@@ -71,9 +72,7 @@ public:
 	static int maxLevel;
 private:
 	static list<Entity*> entities;
-	static list<Particle*> particles;
-	static vector<EntityType> enemies;
-	
+	static list<Particle*> particles;	
 	
 	static unordered_map<Groups, vector<Sprites>> groups;
 

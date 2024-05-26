@@ -8,6 +8,7 @@
 #include "Wind.h"
 #include "Effect.h"
 #include "TextField.h"
+#include "MenuLoader.h"
 
 class WindowBox : public SpriteData
 {
@@ -19,17 +20,14 @@ public:
 	static void begin();
 private:
 
-	void engine(Wind& wind, const float& deltaTime);
 	void handleKeyPress(Keyboard::Key keyCode, Wind& wind);
 
-	void launchGame(const float& deltaTime);
+	void engine(Wind& wind, MenuLoader& loader, const float& deltaTime);
 
 	void initSprite(Sprite& sprite, const string filename, Texture& texture);
 	void displayMenu();
 	void updateWindow(const float& deltaTime);
 	void renderUI();
-
-	void loadParticles();
 
 	static VideoMode videoMode;
 	static TextField fps;

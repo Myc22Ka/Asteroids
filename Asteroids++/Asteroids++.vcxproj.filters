@@ -70,6 +70,9 @@
     <Filter Include="Source Files\Game">
       <UniqueIdentifier>{b648257b-1fed-4b6a-b06c-e85924303dba}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Game\Pages">
+      <UniqueIdentifier>{5c7ba5a9-7198-4b11-bd60-b568fe8a7d8b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -174,6 +177,9 @@
     <ClCompile Include="Tower.cpp">
       <Filter>Source Files\Objects\Entities\Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="MenuLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Physics.h">
@@ -239,12 +245,6 @@
     <ClInclude Include="Game.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
-    <ClInclude Include="GameOver.h">
-      <Filter>Header Files\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Menu.h">
-      <Filter>Header Files\Game</Filter>
-    </ClInclude>
     <ClInclude Include="Score.h">
       <Filter>Header Files\Draws</Filter>
     </ClInclude>
@@ -268,6 +268,15 @@
     </ClInclude>
     <ClInclude Include="Tower.h">
       <Filter>Header Files\Objects\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameOver.h">
+      <Filter>Header Files\Game\Pages</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>Header Files\Game\Pages</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuLoader.h">
+      <Filter>Header Files\Game\Pages</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

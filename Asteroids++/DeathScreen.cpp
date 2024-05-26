@@ -33,8 +33,7 @@ const EntityType DeathScreen::getEntityType()
 
 void DeathScreen::activateDeathScreen(const float& duration) {
 	death.startEffect(duration);
-
-	SoundData::stop(Sounds::AMBIENT);
+	Game::setGameState(DEATH);
 }
 
 bool DeathScreen::isScreenOver() {
@@ -60,7 +59,7 @@ void DeathScreen::resetPosition() {
 }
 
 void DeathScreen::init(const float& deltaTime, RenderWindow& window) {
-	if (!death.isEffectActive() && Game::getGameState() == PAUSED) {
+	if (!death.isEffectActive() && Game::getGameState() == DEATH) {
 		Game::setGameState(PLAYING);
 		return;
 	}

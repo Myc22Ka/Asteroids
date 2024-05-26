@@ -4,6 +4,7 @@
 EnemyBullet::EnemyBullet(Vector2f position, Vector2f direction, float& angle, Sprites spriteType) : Bullet(position, direction, angle, spriteType, Color::Red)
 {
     setRotation(spriteInfo.sprite, angle);
+
     drawHitboxes();
 
     scaleSprite(spriteInfo.sprite, int(FileMenager::playerData.bullet_size), int(FileMenager::playerData.bullet_size));

@@ -12,7 +12,6 @@ bool Game::hitboxesVisibility{ false };
 
 list<Entity*> Game::entities;
 list<Particle*> Game::particles;
-vector<EntityType> Game::enemies{ EntityType::TYPE_ENEMY, EntityType::TYPE_ENEMY_BULLET };
 int Game::maxLevel{ 6 };
 int Game::level{ 3 };
 
@@ -140,23 +139,21 @@ void Game::removeParticle(Particle* particle)
             return true; // Remove this entity from the list
         }
         return false; // Keep this entity in the list
-        });
+    });
 }
 
 void Game::clearParticles() {
     particles.clear();
 }
 
-const bool Game::getEvil(Entity* entity)
+const bool Game::isEntityInsideGruop(Entity* entity, const vector<Sprites>& group)
 {
-    for (auto& enemy : enemies)
-        if (entity->getEntityType() == enemy) return true;
-
-    return false;
+    return ranges::find(group, entity->getSpriteType()) != group.end();
 }
 
-const bool Game::isEnemy(Entity* entity) {
-    return entity->getEntityType() == EntityType::TYPE_ENEMY;
+const bool Game::isEntityInsideGruop(Entity* entity, const vector<EntityType>& group)
+{
+    return ranges::find(group, entity->getEntityType()) != group.end();
 }
 
 GameState Game::getGameState()
@@ -169,7 +166,7 @@ void Game::setGameState(const GameState& newGameState){
 }
 
 void Game::spawnEnemy(const float& deltaTime) {
-	if (gameState == PAUSED) return;
+	if (gameState == PAUSED || gameState == FREZZE || gameState == DEATH) return;
 
 	enemySpawn.updateEffectDuration(deltaTime);
 

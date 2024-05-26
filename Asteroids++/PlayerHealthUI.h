@@ -12,6 +12,8 @@ class PlayerHealthUI : public SpriteData {
 private:
     Vector2f position;
     SpriteInfo spriteInfo;
+
+    bool removeHealthFromPlayer;
 public:
     PlayerHealthUI(const float& offset);
 
@@ -19,7 +21,8 @@ public:
     void draw(RenderWindow& window) const;
     void setSpriteState(const int& newState);
 
-    bool death = false;
+    void removeHealth();
+
     float offset;
 };
 

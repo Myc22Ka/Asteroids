@@ -45,7 +45,7 @@ Entity* Bullet::findNearestEnemy() const
     float minTimeToEnemy = 0.3f;
 
     Game::foreachEntity([&](Entity* entity) {
-        if (Game::isEnemy(entity))
+        if (entity->getEntityType() == EntityType::TYPE_ENEMY)
         {
             float timeToEnemy = physics::distance(position, entity->position) / Player::playerStats.bulletSpeed;
 
@@ -72,7 +72,7 @@ void Bullet::collisionDetection()
 {
     for (auto& entity : Game::getEntities())
     {
-        if (Game::isEnemy(entity)) enemyHit(entity);
+        if (entity->getEntityType() == EntityType::TYPE_ENEMY) enemyHit(entity);
     }
 }
 

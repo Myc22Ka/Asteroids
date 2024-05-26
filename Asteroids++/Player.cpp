@@ -63,8 +63,6 @@ void Player::update(float deltaTime) {
         Game::addEntity(new Explosion(position, size, getSprite(Sprites::APPEARING)));
         dead = false;
         delay.startEffect(0.5f);
-        //SoundData::renev(Sounds::AMBIENT);
-
         return;
     }
 
@@ -254,7 +252,7 @@ const EntityType Player::getEntityType()
 void Player::collisionDetection()
 {
     Game::foreachEntity([this](Entity* entity) {
-        if (!Game::getEvil(entity) || entity == this || dead) return;
+        if (!Game::isEntityInsideGruop(entity, Enemy::enemies) || entity == this || dead) return;
 
             if (!physics::intersects(position, radius, entity->position, entity->radius))
                 return;
@@ -267,7 +265,7 @@ void Player::destroy() {
     if (invincibilityFrames.getEffectDuration() > 0) return;
 
     invincibilityFrames.startEffect(5.0f);
-    playerStats.lifes.back().death = true;
+    playerStats.lifes.back().removeHealth();
     playerStats.lifes.back().setSpriteState(16);
     SoundData::play(Sounds::DESTROY);
 
@@ -321,7 +319,7 @@ void Player::dashAbility(const float& deltaTime)
 void Player::setPlayerStats()
 {
     playerStats.shootOffset = FileMenager::playerData.bullet_shoot_delay;
-    playerStats.bulletAmount = 4;
+    playerStats.bulletAmount = 1;
     playerStats.bulletDamage = 50;
     playerStats.bulletSize = FileMenager::playerData.bullet_size;
     playerStats.bulletSpeed = FileMenager::playerData.bullet_speed;

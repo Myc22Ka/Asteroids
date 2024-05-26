@@ -32,6 +32,8 @@ public:
     bool isActive() const;
     void setActive(const bool& active);
 
+    const Sprites getSpriteType() const;
+
     void drawHitboxes();
     void drawHitboxes(const float& radius);
 
