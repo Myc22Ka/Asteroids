@@ -2,15 +2,19 @@
 #include <regex>
 #include "WindowBox.h"
 
-TextField GameOver::gameOver{ 128 };
-TextField GameOver::underscore{ 24 };
-TextField GameOver::playerNameText{ 24 };
-string GameOver::playerName{""};
-Sprite GameOver::background{};
-Texture GameOver::texture{};
+GameOver::GameOver() : Page("gameover"),
+    gameOver(128), 
+    underscore(24), 
+    playerNameText(24), 
+    playerName("")
+{
+    init();
+}
 
 void GameOver::init()
 {
+    Page::init();
+
     gameOver.setText("Game Over!");
     gameOver.setTextCenterX(100.0f);
 
@@ -18,11 +22,6 @@ void GameOver::init()
     playerNameText.setLetterSpacing(2.05);
 
     underscore.setText("_");
-
-    if (!texture.loadFromFile("./assets/gameover.png"))
-        cout << "Error: Cannot load background!" << endl;
-
-    background.setTexture(texture);
 }
 
 void GameOver::enterPlayerName(Event& e)
@@ -57,15 +56,10 @@ void GameOver::drawPlayerName(RenderWindow& window) {
     window.draw(playerNameText.getText());
 }
 
-void GameOver::draw(RenderWindow& window)
+void GameOver::run(const float& deltaTime, RenderWindow& window)
 {
-    window.draw(background);
+    Page::run(deltaTime, window);
 
-    window.draw(gameOver.getText());
-}
-
-void GameOver::update(const float& deltaTime)
-{
     if (!playerNameText.getText().getString().isEmpty()) {
         if (Keyboard::isKeyPressed(Keyboard::Enter) && Game::getGameState() == GAME_OVER) {
             FileMenager::saveData("highscore.txt", pair<string, size_t>(playerName, Score::getScore()));
@@ -76,4 +70,8 @@ void GameOver::update(const float& deltaTime)
             Game::setGameState(MENU_HIGHSCORE);
         }
     }
+
+    window.draw(gameOver.getText());
+
+    drawPlayerName(window);
 }

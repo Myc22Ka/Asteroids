@@ -3,51 +3,43 @@
 #define MENU_H
 
 #include "TextField.h"
-#include "Player.h"
+#include "Page.h"
 
 using namespace sf;
 using namespace std;
 
-class Menu
+class Menu : public Page
 {
 public:
-	static void init();
-	static void draw(RenderWindow& window);
+	Menu();
 
-	static void moveUp();
-	static void moveDown();
-	static int getSelectedOptionIndex();
-	static string getSelectedOption();
+	void navigator(const Event& event);
+	void run(const float& deltaTime, RenderWindow& window);
 
-	static void navigator(const Event& event);
-	static void update(const float& deltaTime);
-
-	static void displayHighscoreTable(RenderWindow& window);
+	static vector<TextField> navigation;
+	static bool confirm;
 
 private:
+	void moveUp();
+	void moveDown();
 
-	static void fadeIn(RenderWindow& window, const float& defaultTime);
-	static void fadeOut(RenderWindow& window, const float& defaultTime);
+	void init();
 
-	static Texture texture;
-	static Sprite background;
-	static TextField menuText;
+	const int getSelectedOptionIndex() const;
+	const string getSelectedOption() const;
 	
-	static vector<TextField> navigation;
+	void draw(RenderWindow& window);
+
+	TextField menuText;
 
 	static vector<TextField> options;
 
-	static Effect visible;
+	RectangleShape filter;
 
-	static RectangleShape filter;
-	static Effect animateIn;
-	static Effect animateOut;
+	int selectedOption;
+	float defaultPositionX;
 
-	static int selectedOption;
-	static float defaultPositionX;
-
-	static bool isKeyPressed;
-	static bool confirm;
+	bool isKeyPressed;
 };
 
 #endif

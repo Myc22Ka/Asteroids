@@ -2,8 +2,6 @@
 #include "Enemy.h"
 #include <iostream>
 #include "Score.h"
-#include "GameOver.h"
-#include "Menu.h"
 #include "Physics.h"
 #include "DashBar.h"
 #include "WindowBox.h"
@@ -28,18 +26,24 @@ void WindowBox::displayWindow() {
     window.create(videoMode, "Asteroids++", Style::None);
     window.setFramerateLimit(FileMenager::screenData.framerate);
 
+    //vector<Page*> pages {new MenuLoader()};
+
     Wind wind;
 	DeathScreen deathScreen;
     MenuLoader loader;
+    HighScoreTable highScoreTable;
+    GameOver gameOver;
+    Menu menu;
 
-    initSprite(background, "background", backgroundTexture);
+    if (!backgroundTexture.loadFromFile("./assets/background.png")) cout << "Error: Cannot load background!" << endl;
+
+    background.setTexture(backgroundTexture);
 
     Clock clock;
     
-    GameOver::init();
-    Menu::init();
 
     loader.init();
+
 
     fps.setSize(FileMenager::screenData.fps_font_size);
 
@@ -65,19 +69,19 @@ void WindowBox::displayWindow() {
 
         switch (Game::getGameState()) {
         case MENU:
-            Menu::navigator(e);
+            menu.navigator(e);
             break;
         case MENU_HIGHSCORE:
-            Menu::navigator(e);
+            menu.navigator(e);
             break;
         case GAME_OVER:
-            GameOver::enterPlayerName(e);
+            gameOver.enterPlayerName(e);
             break;
         default:
             break;
         }
 
-        engine(wind, loader, deltaTime); 
+        engine(wind, loader, gameOver, highScoreTable, menu, deltaTime);
         deathScreen.init(deltaTime, window);
 
         window.display();
@@ -105,7 +109,7 @@ void WindowBox::handleKeyPress(Keyboard::Key keyCode, Wind& wind) {
     }
 }
 
-void WindowBox::engine(Wind& wind, MenuLoader& loader, const float& deltaTime)
+void WindowBox::engine(Wind& wind, MenuLoader& loader, GameOver& gameOver, HighScoreTable& highScoreTable, Menu& menu, const float& deltaTime)
 {
     switch (Game::getGameState())
     {
@@ -114,43 +118,27 @@ void WindowBox::engine(Wind& wind, MenuLoader& loader, const float& deltaTime)
         //Game::setGameState(MENU);
         return;
     case MENU:
-        displayMenu();
-        Menu::update(deltaTime);
+        menu.run(deltaTime, window);
         return;
     case MENU_HIGHSCORE:
-        Menu::displayHighscoreTable(window);
-        Menu::update(deltaTime);
+        highScoreTable.run(deltaTime, window);
         return;
     case GAME_OVER:
         Game::clearEntities();
         Game::clearParticles();
         wind.remove();
-        GameOver::draw(window);
-        GameOver::drawPlayerName(window);
+        gameOver.run(deltaTime, window);
         Game::level = 1;
-        GameOver::update(deltaTime);
 
         return;
     }
 
     updateWindow(deltaTime);
 
-	wind.init(deltaTime, window);
+    wind.init(deltaTime, window);
     Game::spawnEnemy(deltaTime);
 
     renderUI();
-}
-
-void WindowBox::initSprite(Sprite& sprite, const string filename, Texture& texture) {
-	if (!texture.loadFromFile("./assets/" + filename + ".png")) cout << "Error: Cannot load background!" << endl;
-
-    sprite.setTexture(texture);
-}
-
-void WindowBox::displayMenu() { // hahah idiot
-    if (Game::getGameState() != MENU) return;
-
-    Menu::draw(window); 
 }
 
 void WindowBox::updateWindow(const float& deltaTime)

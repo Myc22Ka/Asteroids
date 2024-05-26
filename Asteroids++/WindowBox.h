@@ -2,6 +2,7 @@
 #include <SFML/Audio.hpp>
 #include "FileMenager.h"
 #include "Game.h"
+#include "GameOver.h"
 #include "Score.h"
 #include "SpriteData.h"
 #include <unordered_map>
@@ -9,8 +10,10 @@
 #include "Effect.h"
 #include "TextField.h"
 #include "MenuLoader.h"
+#include "HighScoreTable.h"
+#include "Menu.h"
 
-class WindowBox : public SpriteData
+class WindowBox
 {
 public:
 	WindowBox();
@@ -22,10 +25,8 @@ private:
 
 	void handleKeyPress(Keyboard::Key keyCode, Wind& wind);
 
-	void engine(Wind& wind, MenuLoader& loader, const float& deltaTime);
+	void engine(Wind& wind, MenuLoader& loader, GameOver& gameOver, HighScoreTable& highScoreTable, Menu& menu, const float& deltaTime);
 
-	void initSprite(Sprite& sprite, const string filename, Texture& texture);
-	void displayMenu();
 	void updateWindow(const float& deltaTime);
 	void renderUI();
 
@@ -35,14 +36,6 @@ private:
 
 	Sprite background;
 	Texture backgroundTexture;
-
-	SpriteInfo loaderSprite;
-	Sprite loader;
-	Texture loaderTexture;
-
-	vector<pair<CircleShape, Vector2f>> loaderParticles;
-
-	Effect launch;
 
 	RenderWindow window;
 };

@@ -73,6 +73,14 @@ struct SpriteInfo
 };
 
 class SpriteData {
+public:
+    void loadAllSprites();
+
+    static SpriteInfo getSprite(const Sprites &spriteType);
+    static void updateSprite(Sprite& sprite, const vector<IntRect>& frames, const int& spriteState);
+
+    void setRotation(Sprite& sprite, const float& angle);
+    void scaleSprite(Sprite& sprite, const int& spriteSize, const float& size);
 private:
     const int getTextureHeight(const Texture& texture);
     const int getTextureWidth(const Texture& texture);
@@ -80,19 +88,10 @@ private:
     Document document;
     void populateSpriteInfo(const string& objectKey, const Sprites& spriteType);
 
-public:
-    void loadJSONData(const string& filename);
-
     template<typename T>
     const T getJSONProperty(const string& property, Value& spriteData);
 
-    void loadAllSprites();
-
-    SpriteInfo getSprite(const Sprites &spriteType);
-
-    void setRotation(Sprite& sprite, const float& angle);
-    void updateSprite(Sprite& sprite, const vector<IntRect>& frames, const int& spriteState);
-    void scaleSprite(Sprite& sprite, const int& spriteSize, const float& size);
+    void loadJSONData(const string& filename);
 
     static unordered_map<Sprites, SpriteInfo> sprites;
 };

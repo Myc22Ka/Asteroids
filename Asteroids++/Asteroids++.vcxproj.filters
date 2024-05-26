@@ -180,6 +180,12 @@
     <ClCompile Include="MenuLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="HighScoreTable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Page.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Physics.h">
@@ -276,6 +282,12 @@
       <Filter>Header Files\Game\Pages</Filter>
     </ClInclude>
     <ClInclude Include="MenuLoader.h">
+      <Filter>Header Files\Game\Pages</Filter>
+    </ClInclude>
+    <ClInclude Include="HighScoreTable.h">
+      <Filter>Header Files\Game\Pages</Filter>
+    </ClInclude>
+    <ClInclude Include="Page.h">
       <Filter>Header Files\Game\Pages</Filter>
     </ClInclude>
   </ItemGroup>

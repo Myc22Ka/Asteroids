@@ -1,13 +1,16 @@
 #include "MenuLoader.h"
 #include "WindowBox.h"
 
+MenuLoader::MenuLoader() : Page("loader")
+{
+	init();
+}
+
 void MenuLoader::init()
 {
-	if (!loaderTexture.loadFromFile("./assets/loader.png")) cout << "Error: Cannot load loader background!" << endl;
+	Page::init();
 
-	loader.setTexture(loaderTexture);
-
-	loaderSprite = getSprite(Sprites::LOADER);
+	loaderSprite = SpriteData::getSprite(Sprites::LOADER);
 
 	Game::setGameState(MENU_LOADING);
 	launch.startEffect(FileMenager::screenData.launch_time);
@@ -17,7 +20,9 @@ void MenuLoader::init()
 
 void MenuLoader::run(const float& deltaTime, RenderWindow& window)
 {
-	Color color = loader.getColor();
+	Page::run(deltaTime, window);
+
+	auto color = getBackgroundColor();
 
 	if (launch.isEffectActive() && loaderSprite.spriteState != loaderSprite.frames.size() - 1) {
 		launch.updateEffectDuration(deltaTime);
@@ -25,7 +30,7 @@ void MenuLoader::run(const float& deltaTime, RenderWindow& window)
 
 		color.a = static_cast<Uint8>(opacity);
 
-		loader.setColor(color);
+		setBackgroundColor(color);
 		loaderSprite.sprite.setColor(color);
 	}
 
@@ -38,7 +43,7 @@ void MenuLoader::run(const float& deltaTime, RenderWindow& window)
 		if (loaderSprite.currentSpriteLifeTime <= 0) {
 			loaderSprite.currentSpriteLifeTime = loaderSprite.defaultSpriteLifeTime;
 			loaderSprite.spriteState = (loaderSprite.spriteState + 1) % loaderSprite.frames.size();
-			updateSprite(loaderSprite.sprite, loaderSprite.frames, loaderSprite.spriteState);
+			SpriteData::updateSprite(loaderSprite.sprite, loaderSprite.frames, loaderSprite.spriteState);
 		}
 	};
 
@@ -48,13 +53,11 @@ void MenuLoader::run(const float& deltaTime, RenderWindow& window)
 
 		color.a = static_cast<Uint8>(opacity);
 
-		loader.setColor(color);
+		setBackgroundColor(color);
 		loaderSprite.sprite.setColor(color);
 
 		if (!launch.isEffectActive() && loaderSprite.spriteState == loaderSprite.frames.size() - 1) Game::setGameState(MENU);
 	}
-
-	window.draw(loader);
 
 	window.draw(loaderSprite.sprite, Transform().translate(Vector2f(WindowBox::getVideoMode().width >> 1, WindowBox::getVideoMode().height >> 1)));
 

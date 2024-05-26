@@ -4,29 +4,30 @@
 
 #include "TextField.h"
 #include "Player.h"
+#include "Page.h"
 
 using namespace sf;
 using namespace std;
 
-class GameOver
+class GameOver : public Page
 {
 public:
-	static TextField playerNameText;
+	GameOver();
 
-	static void init();
-	static void enterPlayerName(Event& e);
-	static void draw(RenderWindow& window);
-	static void update(const float& deltaTime);
+	TextField playerNameText;
 
-	static void drawPlayerName(RenderWindow& window);
+	void enterPlayerName(Event& e);
+	void run(const float& deltaTime, RenderWindow& window);
+
 
 private:
-	static TextField gameOver;
-	static TextField underscore;
+	void init();
+	void drawPlayerName(RenderWindow& window);
 
-	static string playerName;
-	static Texture texture;
-	static Sprite background;
+	TextField gameOver;
+	TextField underscore;
+
+	string playerName;
 };
 
 #endif
