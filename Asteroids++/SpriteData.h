@@ -54,7 +54,10 @@ enum class Sprites {
     HEART,
     SHIELD,
     WIND,
-    LOADER
+    LOADER,
+    ICON_PLAY,
+    ICON_RETRY,
+    ICON_QUIT
 };
 
 struct SpriteInfo

@@ -27,6 +27,9 @@ public:
 	void setColorText(const Color& color);
 
 	static void loadFont();
+
+	void draw(RenderWindow& window) const;
+
 private:
 	Text text;
 	static Font font;

@@ -195,6 +195,9 @@
     <ClCompile Include="GamePause.cpp">
       <Filter>Source Files\Objects\Events</Filter>
     </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Physics.h">
@@ -304,6 +307,9 @@
     </ClInclude>
     <ClInclude Include="GamePause.h">
       <Filter>Header Files\Objects\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Header Files\Draws</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -39,7 +39,10 @@ const vector<pair<string, Sprites>> objects = {
         {"heart", Sprites::HEART},
         {"shield", Sprites::SHIELD},
         {"wind", Sprites::WIND},
-        {"loader",Sprites::LOADER}
+        {"loader",Sprites::LOADER},
+        {"play", Sprites::ICON_PLAY},
+        {"retry", Sprites::ICON_RETRY},
+        {"quit", Sprites::ICON_QUIT},
 };
 
 unordered_map<Sprites, SpriteInfo> SpriteData::sprites;

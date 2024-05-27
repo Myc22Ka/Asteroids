@@ -53,3 +53,8 @@ void TextField::loadFont()
 		return;
 	}
 }
+
+void TextField::draw(RenderWindow& window) const
+{
+	window.draw(text);
+}

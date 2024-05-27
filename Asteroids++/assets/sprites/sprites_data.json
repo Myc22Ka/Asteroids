@@ -294,5 +294,29 @@
     "spriteState": 0,
     "currentSpriteLifeTime": 0,
     "defaultSpriteLifeTime": 0.05
+  },
+  "play": {
+    "hitboxSize": 64,
+    "spriteSize": 64,
+    "rotation": 0,
+    "spriteState": 0,
+    "currentSpriteLifeTime": 0,
+    "defaultSpriteLifeTime": 0
+  },
+  "retry": {
+    "hitboxSize": 64,
+    "spriteSize": 64,
+    "rotation": 0,
+    "spriteState": 0,
+    "currentSpriteLifeTime": 0,
+    "defaultSpriteLifeTime": 0
+  },
+  "quit": {
+    "hitboxSize": 64,
+    "spriteSize": 64,
+    "rotation": 0,
+    "spriteState": 0,
+    "currentSpriteLifeTime": 0,
+    "defaultSpriteLifeTime": 0
   }
 }

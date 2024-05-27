@@ -60,3 +60,10 @@ aasdasdasdada: 0
 asdadasdasdas: 0
 sadadasdasdad: 0
 adadadasdadas: 0
+asdadadadadas: 8890
+asdadasdadasd: 21790
+dsadsdadsdads: 0
+adadadsadadsd: 140780
+asdadasdasdad: 20810
+sadsdasdasdad: 120
+asdadasdasdsd: 1620

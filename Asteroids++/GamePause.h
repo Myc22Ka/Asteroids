@@ -4,6 +4,7 @@
 
 #include "EventHandler.h"
 #include "TextField.h"
+#include "Button.h"
 
 using namespace sf;
 using namespace std;
@@ -21,12 +22,13 @@ public:
 	void navigator(Event& e);
 private:
 
-	void moveUp();
-	void moveDown();
+	void moveRight();
+	void moveLeft();
 	const int getSelectedOptionIndex() const;
 
 	TextField mainText;
-	static vector<TextField> options;
+	static vector<string> options;
+	vector<Button> buttons;
 
 	int selectedOption;
 };
