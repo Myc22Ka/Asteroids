@@ -12,7 +12,14 @@ namespace physics {
 	bool intersects(const Vector2f& point, const float& size, const Vector2f& circlePosition, const float& size2);
 	float length(const Vector2f& v);
 	Vector2f normalize(const Vector2f& v);
+
 	Vector2f calculateDirection(const Vector2f& startPos, const Vector2f& targetPos);
+	Vector2f calculateDirection(const float& angle);
+	Vector2f calculateDirection(const float& angle, const float& spreadAngle);
+
+	float floatToAngle(const float& value);
+	float angleToRadians(const float& angle);
+
 	float magnitude(const Vector2f& vec);
 	float dotProduct(const Vector2f& v1, const Vector2f& v2);
 	float distance(const Vector2f& p1, const Vector2f& p2);

@@ -11,6 +11,7 @@
 #include "HighScoreTable.h"
 #include "GameOver.h"
 #include "GamePause.h"
+#include "DeathScreen.h"
 
 GameState Game::gameState{ MENU };
 bool Game::hitboxesVisibility{ false };
@@ -174,8 +175,7 @@ void Game::setGameState(const GameState& newGameState){
         setCurrentPage(new Menu());
         break;
     case GAME_OVER:
-        cout << "hi" << endl;
-        setCurrentPage(new GameOver());
+        if(DeathScreen::isScreenOver()) setCurrentPage(new GameOver());
         break;
     case MENU_HIGHSCORE:
         setCurrentPage(new HighScoreTable());
@@ -187,7 +187,7 @@ void Game::setGameState(const GameState& newGameState){
 }
 
 void Game::spawnEnemy(const float& deltaTime) {
-	if (gameState != PLAYING) return;
+	if (gameState != PLAYING && gameState != FREZZE && gameState != WIND) return;
 
 	enemySpawn.updateEffectDuration(deltaTime);
 

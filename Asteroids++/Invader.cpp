@@ -44,11 +44,13 @@ void Invader::update(float deltaTime)
         changePosition.startEffect(5.0f);
     }
 
+    float bulletAngle = atan2(slightlyOffDirection.y, slightlyOffDirection.x) * 180 / physics::getPI();
+
     if (physics::distance(newPosition, position) <= 100.0f) {
         if (!shoot.isEffectActive()) {
             shoot.startEffect(1.0f);
 
-            Game::addEntity(new EnemyBullet(position, slightlyOffDirection, angle, Sprites::ENEMY_BULLET));
+            Game::addEntity(new EnemyBullet(position, slightlyOffDirection, bulletAngle, Sprites::ENEMY_BULLET));
             SoundData::play(Sounds::ALIEN_SHOOT1);
         }
         return;

@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "DashBar.h"
 #include "GamePause.h"
+#include "WindowBox.h"
 
 TextField GameFrame::fps{ 0 };
 Wind* GameFrame::wind = nullptr;
@@ -27,12 +28,18 @@ void GameFrame::run(const float& deltaTime, RenderWindow& window)
 }
 
 void GameFrame::navigator(Event& e) {
+    if (WindowBox::isKeyPressed) return;
+
     if (Game::getGameState() == PAUSED) gamePause->navigator(e);
 
     switch (e.key.code)
     {
     case Keyboard::H:
         Game::hitboxesVisibility = !Game::hitboxesVisibility;
+        break;
+    case Keyboard::Num8:
+        Player::playerStats.bulletAmount += 1;
+        if (Player::playerStats.bulletAmount == 5) Player::playerStats.bulletAmount = 1;
         break;
     case Keyboard::Num9:
         wind->forceWind(10.0f, 4.0f, physics::getRandomDirection());
@@ -46,6 +53,8 @@ void GameFrame::navigator(Event& e) {
         Game::setGameState(PAUSED);
         break;
     }
+
+    WindowBox::isKeyPressed = true;
 }
 
 void GameFrame::init()

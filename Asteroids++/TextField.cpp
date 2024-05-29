@@ -42,6 +42,11 @@ Text& TextField::getText()
 	return text;
 }
 
+string TextField::toString()
+{
+	return text.getString();
+}
+
 void TextField::setColorText(const Color& color) {
 	text.setFillColor(color);
 }

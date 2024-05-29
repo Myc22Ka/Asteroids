@@ -84,10 +84,9 @@ void Player::update(float deltaTime) {
 
     if (Keyboard::isKeyPressed(Keyboard::Space) && shootTimer <= 0.0f) {
         shootTimer = Player::playerStats.shootOffset;
-        float radians = angle * (physics::getPI() / 180.0f);
 
         if (playerStats.bulletAmount == 1) {
-            Game::addEntity(new SingleBullet(position, Vector2f(cos(radians), sin(radians)), angle));
+            Game::addEntity(new SingleBullet(position, physics::calculateDirection(angle), angle));
             SoundData::play(Sounds::LASER_SHOOT1);
         }
 
@@ -95,14 +94,14 @@ void Player::update(float deltaTime) {
             float bulletSpreadAngle = 0.05f;
             float offset = radius / 4;
 
-            Vector2f leftBulletDirection(cos(radians - bulletSpreadAngle), sin(radians - bulletSpreadAngle));
-            Vector2f rightBulletDirection(cos(radians + bulletSpreadAngle), sin(radians + bulletSpreadAngle));
+            auto leftBulletDirection = physics::calculateDirection(angle, bulletSpreadAngle);
+            auto rightBulletDirection = physics::calculateDirection(angle, -bulletSpreadAngle);
 
             Vector2f leftBulletPosition(position.x - offset * leftBulletDirection.x, position.y - offset * leftBulletDirection.y);
             Vector2f rightBulletPosition(position.x + offset * rightBulletDirection.x, position.y + offset * rightBulletDirection.y);
 
-            float leftBulletAngle = angle - bulletSpreadAngle * (180 / physics::getPI());
-            float rightBulletAngle = angle + bulletSpreadAngle * (180 / physics::getPI());
+            float leftBulletAngle = angle - physics::floatToAngle(bulletSpreadAngle);
+            float rightBulletAngle = angle + physics::floatToAngle(bulletSpreadAngle);
 
             Game::addEntity(new SingleBullet(leftBulletPosition, leftBulletDirection, leftBulletAngle));
             Game::addEntity(new SingleBullet(rightBulletPosition, rightBulletDirection, rightBulletAngle));
@@ -113,22 +112,16 @@ void Player::update(float deltaTime) {
         if (playerStats.bulletAmount == 3) {
             float bulletSpreadAngle = 1.0f;
 
-            float centerBulletAngle = radians;
-            float leftBulletAngle = radians - bulletSpreadAngle;
-            float rightBulletAngle = radians + bulletSpreadAngle;
+            auto leftBulletDirection = physics::calculateDirection(angle, bulletSpreadAngle);
+            auto rightBulletDirection = physics::calculateDirection(angle, -bulletSpreadAngle);
 
-            Vector2f centerBulletDirection(cos(centerBulletAngle), sin(centerBulletAngle));
-            Vector2f leftBulletDirection(cos(leftBulletAngle), sin(leftBulletAngle));
-            Vector2f rightBulletDirection(cos(rightBulletAngle), sin(rightBulletAngle));
+            Vector2f leftBulletPosition(position.x + (radius * 1.5f) * leftBulletDirection.x, position.y + (radius * 1.5f) * leftBulletDirection.y);
+            Vector2f rightBulletPosition(position.x + (radius * 1.5f) * rightBulletDirection.x, position.y + (radius * 1.5f) * rightBulletDirection.y);
 
-            Vector2f centerBulletPosition(position.x, position.y);
-            Vector2f leftBulletPosition(position.x + (radius * 1.5f) * cos(leftBulletAngle), position.y + (radius * 1.5f) * sin(leftBulletAngle));
-            Vector2f rightBulletPosition(position.x + (radius * 1.5f) * cos(rightBulletAngle), position.y + (radius * 1.5f) * sin(rightBulletAngle));
+            float leftAngle = angle - physics::floatToAngle(bulletSpreadAngle);
+            float rightAngle = angle + physics::floatToAngle(bulletSpreadAngle);
 
-            float leftAngle = angle - bulletSpreadAngle * (180 / physics::getPI());
-            float rightAngle = angle + bulletSpreadAngle * (180 / physics::getPI());
-
-            Game::addEntity(new SingleBullet(centerBulletPosition, centerBulletDirection, angle));
+            Game::addEntity(new SingleBullet(position, physics::calculateDirection(angle), angle));
             Game::addEntity(new SingleBullet(leftBulletPosition, leftBulletDirection, leftAngle));
             Game::addEntity(new SingleBullet(rightBulletPosition, rightBulletDirection, rightAngle));
 
@@ -138,30 +131,22 @@ void Player::update(float deltaTime) {
         if (playerStats.bulletAmount == 4) {
             float bulletSpreadAngle = 0.05f;
 
-            float centerBulletAngle = radians;
-            float leftBulletAngle = radians - bulletSpreadAngle;
-            float rightBulletAngle = radians + bulletSpreadAngle;
+            float backBulletAngle = physics::angleToRadians(angle) + physics::getPI();
 
-            Vector2f centerBulletDirection(cos(centerBulletAngle), sin(centerBulletAngle));
-            Vector2f leftBulletDirection(cos(leftBulletAngle), sin(leftBulletAngle));
-            Vector2f rightBulletDirection(cos(rightBulletAngle), sin(rightBulletAngle));
-            
-            float backBulletAngle = radians + physics::getPI(); 
-            Vector2f backBulletDirection(cos(backBulletAngle), sin(backBulletAngle));
+            auto leftBulletDirection = physics::calculateDirection(angle, bulletSpreadAngle);
+            auto rightBulletDirection = physics::calculateDirection(angle, -bulletSpreadAngle);
 
-            Vector2f centerBulletPosition(position.x, position.y);
-            Vector2f leftBulletPosition(position.x + (radius * 1.5f) * cos(leftBulletAngle), position.y + (radius * 1.5f) * sin(leftBulletAngle));
-            Vector2f rightBulletPosition(position.x + (radius * 1.5f) * cos(rightBulletAngle), position.y + (radius * 1.5f) * sin(rightBulletAngle));
-            Vector2f backBulletPosition(position);
+            Vector2f leftBulletPosition(position.x + (radius * 1.5f) * leftBulletDirection.x, position.y + (radius * 1.5f) * leftBulletDirection.y);
+            Vector2f rightBulletPosition(position.x + (radius * 1.5f) * rightBulletDirection.x, position.y + (radius * 1.5f) * rightBulletDirection.y);
 
-            float leftAngle = angle - bulletSpreadAngle * (180 / physics::getPI());
-            float rightAngle = angle + bulletSpreadAngle * (180 / physics::getPI());
-            float backAngle = backBulletAngle * (180 / physics::getPI());
+            float leftAngle = angle - physics::floatToAngle(bulletSpreadAngle);
+            float rightAngle = angle + physics::floatToAngle(bulletSpreadAngle);
+            float backAngle = physics::floatToAngle(backBulletAngle);
 
-            Game::addEntity(new SingleBullet(centerBulletPosition, centerBulletDirection, angle));
+            Game::addEntity(new SingleBullet(position, physics::calculateDirection(angle), angle));
             Game::addEntity(new SingleBullet(leftBulletPosition, leftBulletDirection, leftAngle));
             Game::addEntity(new SingleBullet(rightBulletPosition, rightBulletDirection, rightAngle));
-            Game::addEntity(new SingleBullet(backBulletPosition, backBulletDirection, backAngle));
+            Game::addEntity(new SingleBullet(position, { cos(backBulletAngle), sin(backBulletAngle) }, backAngle));
 
             SoundData::play(Sounds::LASER_SHOOT4);
         }
@@ -319,7 +304,7 @@ void Player::dashAbility(const float& deltaTime)
 void Player::setHealth() {
     float offset = 0.0f;
 
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < 1; ++i) {
         playerStats.lifes.push_back(offset);
         offset += 20.0f;
     }
@@ -328,7 +313,7 @@ void Player::setHealth() {
 void Player::setPlayerStats()
 {
     playerStats.shootOffset = FileMenager::playerData.bullet_shoot_delay;
-    playerStats.bulletAmount = 1;
+    playerStats.bulletAmount = 2;
     playerStats.bulletDamage = 50;
     playerStats.bulletSize = FileMenager::playerData.bullet_size;
     playerStats.bulletSpeed = FileMenager::playerData.bullet_speed;
@@ -343,7 +328,7 @@ void Player::setPlayerStats()
     playerStats.scoreTimes5 = { 10.0f, false, new Bar(radius, 2.0f, Color::Color(93, 213, 93, 255), Color::Black, playerStats.scoreTimes5.getEffectDuration(), Vector2f(-100.0f, -100.0f), Sprites::PICKUP_TIMES_5) };
     playerStats.critChance = 0.01;
 
-    playerStats.bulletType.piercing = false;
+    playerStats.bulletType.piercing = true;
     playerStats.bulletType.homing = false;
 }
 

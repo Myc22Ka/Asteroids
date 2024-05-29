@@ -24,6 +24,8 @@ public:
 	void setLetterSpacing(const double spacing);
 	Text& getText();
 
+	string toString();
+
 	void setColorText(const Color& color);
 
 	static void loadFont();

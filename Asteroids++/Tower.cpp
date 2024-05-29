@@ -8,6 +8,7 @@ const int counter = 5;
 
 Tower::Tower() : Enemy(10000.0f + 200.0f * floor(Score::getScore() / FileMenager::screenData.game_next_level_spike), physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_speed), getSprite(Sprites::TOWER)),
 shoot(shootTime, false),
+changePosition(0.0f, false),
 shootCounter(counter)
 {
 	scaleSprite(spriteInfo.sprite, spriteInfo.hitboxSize, spriteInfo.spriteSize);
@@ -25,9 +26,18 @@ void Tower::render(RenderWindow& window)
 void Tower::update(float deltaTime)
 {
 	Enemy::update(deltaTime);
-	shoot.updateEffectDuration(deltaTime);
 
 	if (Game::freeze.isEffectActive()) return;
+
+	shoot.updateEffectDuration(deltaTime);
+	changePosition.updateEffectDuration(deltaTime);
+	float radius = 0.3f;
+	float circularX = cos(changePosition.getEffectDuration()) * radius;
+	float circularY = sin(changePosition.getEffectDuration()) * radius;
+
+	Vector2f originalPosition = position;
+	position.x = originalPosition.x + circularX;
+	position.y = originalPosition.y + circularY;
 
 	if (shootCounter == counter) {
 		angle += 45;
@@ -44,7 +54,9 @@ void Tower::update(float deltaTime)
 			float directionX = cos(radianAngle);
 			float directionY = sin(radianAngle);
 
-			Game::addEntity(new EnemyBullet(position, { directionX, directionY }, angle, Sprites::ENEMY_BULLET));
+			float bulletAngle = atan2(directionY, directionX) * 180 / physics::getPI();
+
+			Game::addEntity(new EnemyBullet(position, { directionX, directionY }, bulletAngle, Sprites::ENEMY_BULLET));
 		}
 
 		SoundData::play(Sounds::ALIEN_SHOOT1);

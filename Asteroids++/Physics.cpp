@@ -38,6 +38,29 @@ Vector2f physics::calculateDirection(const Vector2f& startPos, const Vector2f& t
 	return direction;
 }
 
+Vector2f physics::calculateDirection(const float& angle) {
+	float radians = physics::angleToRadians(angle);
+
+	return Vector2f(cos(radians), sin(radians));
+}
+
+Vector2f physics::calculateDirection(const float& angle, const float& spreadAngle)
+{
+	float radians = physics::angleToRadians(angle);
+
+	return Vector2f(cos(radians - spreadAngle), sin(radians - spreadAngle));
+}
+
+float physics::floatToAngle(const float& value)
+{
+	return value * (180 / M_PI);
+}
+
+float physics::angleToRadians(const float& angle)
+{
+	return angle * (M_PI / 180.0f);
+}
+
 float physics::magnitude(const Vector2f& vec) {
 	return sqrt(vec.x * vec.x + vec.y * vec.y);
 }

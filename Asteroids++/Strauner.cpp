@@ -89,10 +89,12 @@ void Strauner::update(float deltaTime)
 
 	position += directionToPlayer * speed * deltaTime;
 
+	float bulletAngle = atan2(slightlyOffDirection.y, slightlyOffDirection.x) * 180 / physics::getPI();
+
 		if (!shoot.isEffectActive()) {
 			shoot.startEffect(0.7f);
 
-			Game::addEntity(new EnemyBullet(position, slightlyOffDirection, angle, Sprites::ENEMY_BULLET));
+			Game::addEntity(new EnemyBullet(position, slightlyOffDirection, bulletAngle, Sprites::ENEMY_BULLET));
 			SoundData::play(Sounds::ALIEN_SHOOT1);
 		}
 	}

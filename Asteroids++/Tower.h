@@ -20,6 +20,7 @@ public:
 
 private:
 	Effect shoot;
+	Effect changePosition;
 	int shootCounter;
 };
 

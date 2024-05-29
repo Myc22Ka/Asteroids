@@ -14,6 +14,8 @@ GameOver::GameOver() : Page("gameover"),
 void GameOver::init()
 {
     Page::init();
+    SoundData::recoverSound(Sounds::AMBIENT);
+    SoundData::stop(Sounds::AMBIENT);
 
     gameOver.setText("Game Over!");
     gameOver.setTextCenterX(100.0f);
@@ -43,7 +45,7 @@ void GameOver::run(const float& deltaTime, RenderWindow& window)
 {
     Page::run(deltaTime, window);
 
-    window.draw(gameOver.getText());
+    gameOver.draw(window);
 
     drawPlayerName(window);
 }
