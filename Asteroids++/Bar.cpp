@@ -35,6 +35,11 @@ void Bar::setMaxValue(const float& newMaxValue)
     maxValue = newMaxValue;
 }
 
+void Bar::updateMaxValue(const float& newMaxValue)
+{
+    maxValue += newMaxValue;
+}
+
 void Bar::updateValue(const float& newValue) {
     value = newValue;
 

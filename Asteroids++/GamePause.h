@@ -5,6 +5,7 @@
 #include "EventHandler.h"
 #include "TextField.h"
 #include "Button.h"
+#include "Game.h"
 
 using namespace sf;
 using namespace std;
@@ -20,6 +21,8 @@ public:
 	void initParticles() override;
 
 	void navigator(Event& e);
+
+	void setPrevGameState();
 private:
 
 	void moveRight();
@@ -31,6 +34,7 @@ private:
 	vector<Button> buttons;
 
 	int selectedOption;
+	GameState prevGameState;
 };
 
 #endif

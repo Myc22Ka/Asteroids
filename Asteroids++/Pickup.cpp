@@ -151,6 +151,8 @@ void Pickup::collisionDetection()
 
 					break;
 				case Sprites::PICKUP_FREEZE:
+					if (SoundData::sounds[Sounds::AMBIENT].getStatus() != Sound::Playing) SoundData::recoverSound(Sounds::AMBIENT);
+
 					SoundData::play(Sounds::FREEZE);
 					Game::setGameState(FREZZE);
 					Game::freeze.startEffect(physics::getRandomFloatValue(5.0f, 0.5f) + Player::playerStats.time);

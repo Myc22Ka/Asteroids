@@ -33,6 +33,7 @@ public:
     const float getValue() const;
     const float getMaxWidth() const;
     void setMaxValue(const float& newMaxValue);
+    void updateMaxValue(const float& newMaxValue);
 
     void updateValue(const float& newValue);
 

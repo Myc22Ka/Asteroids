@@ -69,7 +69,7 @@ void Enemy::bounceCollisionDetection()
 			if (!otherEnemy) return;
 
 			if (physics::intersects(this->position, radius, otherEnemy->position, otherEnemy->radius)) {
-				const auto bounceDirection = physics::bounceDirection(this, otherEnemy, 0.01f);
+				const auto bounceDirection = physics::bounceDirection(this, otherEnemy, 0.05f);
 
 				this->position += bounceDirection.second;
 				otherEnemy->position -= bounceDirection.second;
@@ -120,5 +120,5 @@ void Enemy::updateHealth(const float& newValue)
 void Enemy::increaseHealth(const float& newValue){
 	health += newValue;
 
-	healthBar.setMaxValue(health);
+	healthBar.updateMaxValue(newValue);
 }

@@ -15,6 +15,7 @@ public:
     Wind();
 
     void init(const float& deltaTime, RenderWindow& window) override;
+    bool isActive();
     void update(float deltaTime) override;
     const EntityType getEntityType() override;  
     void initParticles() override;

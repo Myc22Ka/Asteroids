@@ -23,11 +23,18 @@ VideoMode WindowBox::getVideoMode() {
 }
 
 void WindowBox::displayWindow() {
-	//videoMode = VideoMode(1500, 1080);
-    videoMode = VideoMode::getDesktopMode();
+	videoMode = VideoMode(1500, 1080);
+    //videoMode = VideoMode::getDesktopMode();
 
     window.create(videoMode, "Asteroids++", Style::None);
     window.setFramerateLimit(FileMenager::screenData.framerate);
+
+    Image icon;
+    if (!icon.loadFromFile("assets/favicon.png")) {
+        cerr << "Unable to load icon " << "assets/favicon.png" << endl;
+    }
+
+    window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 
     deathScreen = new DeathScreen();
     Game::setGameState(MENU_LOADING);

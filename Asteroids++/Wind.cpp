@@ -44,8 +44,9 @@ void Wind::update(float deltaTime)
 
 	wind.updateEffectDuration(deltaTime);
 
-	if (wind.getEffectDuration() < 0 || Game::getGameState() == GAME_OVER || Game::getGameState() == FREZZE || Game::getGameState() == DEATH) {
+	if (wind.getEffectDuration() < 0 || Game::getGameState() == GAME_OVER || Game::getGameState() == FREZZE) {
 		stopWind();
+		SoundData::unmodifySound(Sounds::AMBIENT);
 		SoundData::renev(Sounds::AMBIENT);
 		return;
 	}
@@ -67,6 +68,8 @@ void Wind::update(float deltaTime)
 
 		entity->position += velocity * windLevel;
 	}
+
+	if (!SoundData::isSoundPlaying(Sounds::WIND)) SoundData::renev(Sounds::WIND);
 }
 
 void Wind::stopWind() {
@@ -162,7 +165,7 @@ void Wind::remove()
 
 void Wind::forceWind(const float& duration, const float& windLevel, const Vector2f& velocity)
 {
-	SoundData::stop(Sounds::AMBIENT);
+	SoundData::pause(Sounds::AMBIENT);
 
 	wind.startEffect(duration);
 	fullWindDuration = duration;
@@ -171,7 +174,6 @@ void Wind::forceWind(const float& duration, const float& windLevel, const Vector
 	this->velocity = velocity;
 
 	Game::setGameState(WIND);
-	SoundData::play(Sounds::WIND);
 }
 
 void Wind::init(const float& deltaTime, RenderWindow& window) {
@@ -185,4 +187,8 @@ void Wind::init(const float& deltaTime, RenderWindow& window) {
 	}
 
 	render(window);
+}
+
+bool Wind::isActive(){
+	return wind.isEffectActive();
 }

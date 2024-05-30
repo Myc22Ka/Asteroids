@@ -313,8 +313,8 @@ void Player::setHealth() {
 void Player::setPlayerStats()
 {
     playerStats.shootOffset = FileMenager::playerData.bullet_shoot_delay;
-    playerStats.bulletAmount = 2;
-    playerStats.bulletDamage = 200;
+    playerStats.bulletAmount = 1;
+    playerStats.bulletDamage = 50;
     playerStats.bulletSize = FileMenager::playerData.bullet_size;
     playerStats.bulletSpeed = FileMenager::playerData.bullet_speed;
     
@@ -329,7 +329,7 @@ void Player::setPlayerStats()
     playerStats.critChance = 0.01;
 
     playerStats.bulletType.piercing = false;
-    playerStats.bulletType.homing = true;
+    playerStats.bulletType.homing = false;
 }
 
 Sprites Player::getPlayerBulletSprite()

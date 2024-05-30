@@ -53,7 +53,10 @@ public:
     static void stop(Sounds name);
 
     static void modifySound(Sounds name);
+    static void unmodifySound(Sounds name);
     static void recoverSound(Sounds name);
+
+    static bool isSoundPlaying(Sounds name);
 
     static unordered_map <Sounds, Sound> sounds;
 

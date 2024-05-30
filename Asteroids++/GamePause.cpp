@@ -5,7 +5,8 @@ vector<string> GamePause::options{ "Resume", "Retry", "Quit" };
 GamePause::GamePause() : EventHandler(VertexArray(Quads, 4)),
 mainText(64),
 selectedOption(0),
-buttons({})
+buttons({}),
+prevGameState(GameState())
 {
 	vector<Sprites> icons = { Sprites::ICON_PLAY, Sprites::ICON_RETRY, Sprites::ICON_QUIT };
 
@@ -120,8 +121,11 @@ void GamePause::navigator(Event& e)
 	if (Keyboard::isKeyPressed(Keyboard::Enter)) {
 		switch (selectedOption) {
 		case 0:
-			Game::setGameState(PLAYING);
+			Game::setGameState(prevGameState);
+
+			SoundData::recoverSound(Sounds::WIND);
 			SoundData::recoverSound(Sounds::AMBIENT);
+
 			break;
 		case 1:
 			Game::setGameState(GAME_OVER);
@@ -133,4 +137,9 @@ void GamePause::navigator(Event& e)
 
 		WindowBox::isKeyPressed = true;
 	}
+}
+
+void GamePause::setPrevGameState()
+{
+	prevGameState = Game::getGameState();
 }

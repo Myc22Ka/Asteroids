@@ -79,12 +79,12 @@ void SoundData::renev(Sounds name) {
 
             sleep(milliseconds(20));
         }
-        sounds[name].setVolume(100);
-        sounds[name].play();
-
     });
 
     t.detach();
+
+    sounds[name].setVolume(100);
+    sounds[name].play();
 }
 
 void SoundData::pause(Sounds name){
@@ -135,8 +135,27 @@ void SoundData::modifySound(Sounds name){
     sounds[name].setPitch(0.7f);
 }
 
-void SoundData::recoverSound(Sounds name){
-    renev(name);
-
+void SoundData::unmodifySound(Sounds name) {
+    thread t([name]() {
+        while (sounds[name].getStatus() == Sound::Playing && sounds[name].getVolume() < 95) {
+            sounds[name].setVolume(floor(sounds[name].getVolume() - 1));
+    
+            sleep(milliseconds(20));
+        }
+        sounds[name].setVolume(100);
+    
+        });
+    
+    t.detach();
+    
     sounds[name].setPitch(1.0f);
+}
+
+void SoundData::recoverSound(Sounds name){
+    sounds[name].setVolume(100);
+    sounds[name].setPitch(1.0f);
+}
+
+bool SoundData::isSoundPlaying(Sounds name){
+    return sounds[name].getStatus() == Sound::Playing;
 }

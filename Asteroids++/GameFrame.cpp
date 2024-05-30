@@ -31,7 +31,10 @@ void GameFrame::run(const float& deltaTime, RenderWindow& window)
 void GameFrame::navigator(Event& e) {
     if (WindowBox::isKeyPressed) return;
 
-    if (Game::getGameState() == PAUSED) gamePause->navigator(e);
+    if (Game::getGameState() == PAUSED) {
+        gamePause->navigator(e);
+        return;
+    }
 
     switch (e.key.code)
     {
@@ -53,7 +56,9 @@ void GameFrame::navigator(Event& e) {
         Game::setGameState(FREZZE);
         break;
     case Keyboard::P:
+        gamePause->setPrevGameState();
         SoundData::modifySound(Sounds::AMBIENT);
+        SoundData::modifySound(Sounds::WIND);
         Game::setGameState(PAUSED);
         break;
     }
@@ -104,7 +109,8 @@ void GameFrame::updateWindow(const float& deltaTime, RenderWindow& window)
     }
 
     if (!Game::freeze.isEffectActive() && Game::getGameState() == FREZZE) Game::setGameState(PLAYING);
-    if (SoundData::sounds[Sounds::AMBIENT].getStatus() == Sound::Paused && Game::getGameState() == PLAYING) SoundData::renev(Sounds::AMBIENT);
+    if (!SoundData::isSoundPlaying(Sounds::AMBIENT) && Game::getGameState() == PLAYING) SoundData::renev(Sounds::AMBIENT);
+    if (SoundData::isSoundPlaying(Sounds::WIND) && !wind->isActive()) SoundData::stop(Sounds::WIND);
 
     for (auto& entity : Game::getEntities())
     {
