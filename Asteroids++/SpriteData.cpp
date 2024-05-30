@@ -10,6 +10,7 @@ const vector<pair<string, Sprites>> objects = {
         {"invader", Sprites::INVADER},
         {"strauner", Sprites::STRAUNER},
         {"tower", Sprites::TOWER},
+        {"blackHole", Sprites::BLACKHOLE},
         {"singleBullet", Sprites::SINGLE_BULLET},
         {"enemyBullet", Sprites::ENEMY_BULLET},
         {"piercingBullet", Sprites::PIERCING_BULLET},

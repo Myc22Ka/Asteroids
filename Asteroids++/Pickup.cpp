@@ -53,6 +53,8 @@ void Pickup::render(RenderWindow& window)
 
 void Pickup::update(float deltaTime)
 {
+	Entity::update(deltaTime);
+
 	lifeTime -= deltaTime;
 	collected.currentSpriteLifeTime -= deltaTime;
 

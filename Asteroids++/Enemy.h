@@ -15,6 +15,8 @@
 #include "TextField.h"
 #include "Effect.h"
 
+class BlackHole;
+
 class Enemy : public Entity {
 public:
 	Enemy(float health, float speed, SpriteInfo spriteInfo);
@@ -34,16 +36,19 @@ public:
 	const float getHealth() const;
 	void updateHealth(const float& newValue);
 
+	void increaseHealth(const float& newValue);
+
 	float speed;
 	Vector2f direction;
 	TextField crit;
 	Effect critTimer;
 
 	static const vector<EntityType> enemies;
+	static const vector<Sprites> avoidCollisionGroup;
+	static const vector<Sprites> blackHoleGroup;
 private:
 	void updateCritDamage(float deltaTime);
 
-	static const vector<Sprites> avoidCollisionGroup;
 	Bar healthBar;
 	float health;
 };

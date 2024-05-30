@@ -195,8 +195,11 @@
     <ClCompile Include="GamePause.cpp">
       <Filter>Source Files\Objects\Events</Filter>
     </ClCompile>
+    <ClCompile Include="BlackHole.cpp">
+      <Filter>Source Files\Objects\Entities\Enemies</Filter>
+    </ClCompile>
     <ClCompile Include="Button.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Draws</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -310,6 +313,9 @@
     </ClInclude>
     <ClInclude Include="Button.h">
       <Filter>Header Files\Draws</Filter>
+    </ClInclude>
+    <ClInclude Include="BlackHole.h">
+      <Filter>Header Files\Objects\Entities\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

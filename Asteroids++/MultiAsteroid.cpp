@@ -37,7 +37,7 @@ void MultiAsteroid::update(float deltaTime)
 		direction.y = -abs(direction.y);
 	}
 
-	setSpriteFullCycle(deltaTime);
+	//setSpriteFullCycle(deltaTime);
 
 	collisionDetection();
 }

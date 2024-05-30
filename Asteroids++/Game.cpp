@@ -12,6 +12,7 @@
 #include "GameOver.h"
 #include "GamePause.h"
 #include "DeathScreen.h"
+#include "BlackHole.h"
 
 GameState Game::gameState{ MENU };
 bool Game::hitboxesVisibility{ false };
@@ -20,8 +21,8 @@ Page* Game::currentPage = nullptr;
 
 list<Entity*> Game::entities;
 list<Particle*> Game::particles;
-int Game::maxLevel{ 6 };
-int Game::level{ 3 };
+int Game::maxLevel{ 7 };
+int Game::level{ 4 };
 
 Effect Game::freeze{ FileMenager::timingsData.default_freeze_time, false };
 Effect Game::enemySpawn{ FileMenager::timingsData.default_enemy_spawn_time, false };
@@ -88,7 +89,8 @@ Entity* Game::getRandomEntity(const int& startIndex, const int& endIndex) {
     const vector<EnemySpawn> enemiesList = {
         {new Tower(), 0.18, false},
         {new Strauner(), 0.19, true},
-        {new Invader(), 0.2, false},
+        {new Invader(), 0.5, false},
+        {new BlackHole(), 0.6, false},
         {new Comet(), 0.7, true},
         {new MultiAsteroid(), 0.8, false},
         {new SingleAsteroid(), 1.0, false}
@@ -193,7 +195,7 @@ void Game::spawnEnemy(const float& deltaTime) {
 
 	if (enemySpawn.getEffectDuration() <= 0 && !freeze.isEffectActive()) {
         const auto entity = getRandomEntity(maxLevel - level, maxLevel - 1);
-        //auto entity = new Tower();
+        //auto entity = new BlackHole();
 
 		if(entity) addEntity(entity);
 		enemySpawn.setEffectDuration(FileMenager::timingsData.default_enemy_spawn_time + Player::playerStats.time * 0.1f - level * 0.1f - floor(Score::getScore() >> 10) * 0.01f);

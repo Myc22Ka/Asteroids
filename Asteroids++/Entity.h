@@ -18,13 +18,16 @@ enum EntityType {
     TYPE_EVENT_DEATHSCREEN
 };
 
+class BlackHole;
+
 class Entity : public SpriteData {
     bool active = true;
+    BlackHole* spiralingTarget;
 public:
     
     Entity(Vector2f position, float angle, float size, Color hitboxColor, SpriteInfo spriteInfo);
 
-    virtual void update(float deltaTime) = 0;
+    virtual void update(float deltaTime);
     virtual void render(RenderWindow& window) = 0;
     virtual const EntityType getEntityType() = 0;
     virtual void collisionDetection() = 0;
@@ -40,9 +43,12 @@ public:
     void setSpriteFullCycle(const double& deltaTime);
     void setSpriteFullCycle(SpriteInfo& spriteInfo);
 
+    void startSpiraling(BlackHole* blackHole);
+
     Color hitboxColor;
     Vector2f position;
     CircleShape shape;
+    bool spiraling;
     float angle;
     float size;
     float radius;

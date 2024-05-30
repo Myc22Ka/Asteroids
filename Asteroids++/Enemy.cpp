@@ -1,8 +1,10 @@
 #include "Enemy.h"
 #include "Score.h"
 #include "WindowBox.h"
+#include "BlackHole.h"
 
-const vector<Sprites> Enemy::avoidCollisionGroup{ Sprites::COMET, Sprites::TOWER, Sprites::STRAUNER };
+const vector<Sprites> Enemy::avoidCollisionGroup{ Sprites::COMET, Sprites::TOWER, Sprites::STRAUNER, Sprites::BLACKHOLE };
+const vector<Sprites> Enemy::blackHoleGroup{ Sprites::STRAUNER, Sprites::BLACKHOLE };
 const vector<EntityType> Enemy::enemies{ EntityType::TYPE_ENEMY, EntityType::TYPE_ENEMY_BULLET };
 
 Enemy::Enemy(float health, float speed, SpriteInfo spriteInfo) :
@@ -30,8 +32,11 @@ void Enemy::render(RenderWindow& window)
 
 void Enemy::update(float deltaTime)
 {
+	Entity::update(deltaTime);
+
 	updateHealthBar();
 	updateCritDamage(deltaTime);
+
 }
 
 void Enemy::updateCritDamage(float deltaTime) {
@@ -57,7 +62,7 @@ const EntityType Enemy::getEntityType()
 void Enemy::bounceCollisionDetection()
 {
 	Game::foreachEntity([&](Entity* entity) {
-		if ((entity->getEntityType() == EntityType::TYPE_ENEMY && !Game::isEntityInsideGruop(entity, avoidCollisionGroup))
+		if ((entity->getEntityType() == EntityType::TYPE_ENEMY && !Game::isEntityInsideGruop(entity, avoidCollisionGroup) && !entity->spiraling)
 			&& entity != this) {
 			Enemy* otherEnemy = dynamic_cast<Enemy*>(entity);
 
@@ -98,7 +103,7 @@ const Bar& Enemy::getHealthBar() const
 
 void Enemy::updateHealthBar()
 {
-	healthBar.updatePosition({ position.x - radius, position.y + radius });
+	healthBar.updatePosition({ position.x - healthBar.getMaxWidth() / 2, position.y + radius});
 	healthBar.updateValue(health);
 }
 
@@ -110,4 +115,10 @@ const float Enemy::getHealth() const
 void Enemy::updateHealth(const float& newValue)
 {
 	health -= newValue;
+}
+
+void Enemy::increaseHealth(const float& newValue){
+	health += newValue;
+
+	healthBar.setMaxValue(health);
 }

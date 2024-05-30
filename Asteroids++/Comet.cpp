@@ -2,7 +2,7 @@
 #include "WindowBox.h"
 #include "Pickup.h"
 
-Comet::Comet() : Enemy(500.0f + 500.0f * floor(Score::getScore() / FileMenager::screenData.game_next_level_spike), physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_speed) + 100.0f, getSprite(Sprites::COMET))
+Comet::Comet() : Enemy(Player::playerStats.bulletDamage * 20, physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_speed) + 100.0f, getSprite(Sprites::COMET))
 {
 	scaleSprite(spriteInfo.sprite, spriteInfo.spriteSize, size);
 
@@ -25,6 +25,10 @@ void Comet::update(float deltaTime)
     angle += FileMenager::enemiesData.asteroid_spin * deltaTime;
     position += Vector2f(direction.x * speed * deltaTime, direction.y * speed * deltaTime);
 
+    setSpriteFullCycle(deltaTime);
+
+    if (spiraling) return;
+
     if (position.x < -radius) {
         position.x = WindowBox::getVideoMode().width + radius;
     }
@@ -38,8 +42,6 @@ void Comet::update(float deltaTime)
     else if (position.y > WindowBox::getVideoMode().height + radius) {
         position.y = -radius;
     }
-
-    setSpriteFullCycle(deltaTime);
 }
 
 void Comet::collisionDetection() {}

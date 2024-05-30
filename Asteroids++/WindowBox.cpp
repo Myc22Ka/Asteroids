@@ -23,8 +23,8 @@ VideoMode WindowBox::getVideoMode() {
 }
 
 void WindowBox::displayWindow() {
-	videoMode = VideoMode(1500, 1080);
-    //videoMode = VideoMode::getDesktopMode();
+	//videoMode = VideoMode(1500, 1080);
+    videoMode = VideoMode::getDesktopMode();
 
     window.create(videoMode, "Asteroids++", Style::None);
     window.setFramerateLimit(FileMenager::screenData.framerate);

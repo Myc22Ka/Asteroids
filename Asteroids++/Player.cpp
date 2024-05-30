@@ -184,7 +184,7 @@ void Player::update(float deltaTime) {
         setSpriteFullCycle(shieldSprite);
     }
 
-    if(!invincibilityFrames.isEffectActive() && !playerStats.shield.isEffectActive()) collisionDetection();
+    if (!invincibilityFrames.isEffectActive() && !playerStats.shield.isEffectActive()) collisionDetection();
 }
 
 void Player::updatePosition(const float& deltaTime) {
@@ -304,7 +304,7 @@ void Player::dashAbility(const float& deltaTime)
 void Player::setHealth() {
     float offset = 0.0f;
 
-    for (int i = 0; i < 1; ++i) {
+    for (int i = 0; i < 3; ++i) {
         playerStats.lifes.push_back(offset);
         offset += 20.0f;
     }
@@ -314,7 +314,7 @@ void Player::setPlayerStats()
 {
     playerStats.shootOffset = FileMenager::playerData.bullet_shoot_delay;
     playerStats.bulletAmount = 2;
-    playerStats.bulletDamage = 50;
+    playerStats.bulletDamage = 200;
     playerStats.bulletSize = FileMenager::playerData.bullet_size;
     playerStats.bulletSpeed = FileMenager::playerData.bullet_speed;
     
@@ -328,8 +328,8 @@ void Player::setPlayerStats()
     playerStats.scoreTimes5 = { 10.0f, false, new Bar(radius, 2.0f, Color::Color(93, 213, 93, 255), Color::Black, playerStats.scoreTimes5.getEffectDuration(), Vector2f(-100.0f, -100.0f), Sprites::PICKUP_TIMES_5) };
     playerStats.critChance = 0.01;
 
-    playerStats.bulletType.piercing = true;
-    playerStats.bulletType.homing = false;
+    playerStats.bulletType.piercing = false;
+    playerStats.bulletType.homing = true;
 }
 
 Sprites Player::getPlayerBulletSprite()

@@ -25,6 +25,7 @@ enum class Sprites {
     INVADER,
     STRAUNER,
     TOWER,
+    BLACKHOLE,
     SINGLE_BULLET,
     ENEMY_BULLET,
     PIERCING_BULLET,

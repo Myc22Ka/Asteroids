@@ -4,6 +4,7 @@
 #include "DashBar.h"
 #include "GamePause.h"
 #include "WindowBox.h"
+#include "Pickup.h"
 
 TextField GameFrame::fps{ 0 };
 Wind* GameFrame::wind = nullptr;
@@ -36,6 +37,9 @@ void GameFrame::navigator(Event& e) {
     {
     case Keyboard::H:
         Game::hitboxesVisibility = !Game::hitboxesVisibility;
+        break;
+    case Keyboard::Num7:
+        Game::addEntity(new Pickup(physics::getRandomPosition(32)));
         break;
     case Keyboard::Num8:
         Player::playerStats.bulletAmount += 1;

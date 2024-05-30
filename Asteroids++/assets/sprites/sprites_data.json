@@ -55,6 +55,14 @@
     "currentSpriteLifeTime": 0,
     "defaultSpriteLifeTime": 0.2
   },
+  "blackHole": {
+    "hitboxSize": 256,
+    "spriteSize": 256,
+    "rotation": 0,
+    "spriteState": 0,
+    "currentSpriteLifeTime": 0,
+    "defaultSpriteLifeTime": 0.05
+  },
   "singleBullet": {
     "hitboxSize": 16,
     "spriteSize": 16,

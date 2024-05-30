@@ -78,3 +78,4 @@ sdasdadsdasdd: 3500
 assdaasdasdad: 40
 asdadas: 0
 asdasdasdasda: 60
+sdadasdasdads: 10380

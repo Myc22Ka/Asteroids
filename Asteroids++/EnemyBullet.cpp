@@ -12,6 +12,8 @@ EnemyBullet::EnemyBullet(Vector2f position, Vector2f direction, float& angle, Sp
 
 void EnemyBullet::update(float deltaTime)
 {
+    Entity::update(deltaTime);
+
     lifeTime -= deltaTime;
 
     position += Vector2f(direction.x * Player::playerStats.bulletSpeed * deltaTime, direction.y * Player::playerStats.bulletSpeed * deltaTime);
