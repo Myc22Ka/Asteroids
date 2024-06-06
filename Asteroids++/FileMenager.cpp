@@ -1,5 +1,6 @@
 #include "FileMenager.h"
 #include <map>
+#include "Game.h"
 
 PlayerData FileMenager::playerData;
 ScreenData FileMenager::screenData;

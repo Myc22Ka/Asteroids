@@ -18,6 +18,7 @@
 struct BulletType {
 	bool piercing;
 	bool homing;
+	bool poison;
 };
 
 struct PlayerStats {
@@ -55,6 +56,7 @@ public:
 	void destroy();
 
 	static void setHealth();
+	static void resetBulletEffect();
 
 	static PlayerStats playerStats;
 	static Effect dash;
@@ -67,7 +69,7 @@ private:
 
 	void updateStatsbars(const float& deltaTime);
 	void updatePosition(const float& deltaTime);
-	void dashAbility(const float&);
+	void dashAbility(const float& deltaTime);
 	void setPlayerStats();
 
 	float shootTimer;

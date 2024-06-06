@@ -29,6 +29,7 @@ enum class Sprites {
     SINGLE_BULLET,
     ENEMY_BULLET,
     PIERCING_BULLET,
+    POISON_BULLET,
     HOMING_BULLET,
     EXPLOSION_1,
     EXPLOSION_2,

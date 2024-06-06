@@ -34,11 +34,13 @@ public:
 	void updateHealthBar();
 
 	const float getHealth() const;
+	const float getMaxHealth() const;
 	void updateHealth(const float& newValue);
 
 	void increaseHealth(const float& newValue);
 
 	float speed;
+	bool poisoned;
 	Vector2f direction;
 	TextField crit;
 	Effect critTimer;
@@ -51,6 +53,7 @@ private:
 
 	Bar healthBar;
 	float health;
+	float maxHealth;
 };
 
 #endif

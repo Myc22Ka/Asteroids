@@ -87,6 +87,14 @@
     "currentSpriteLifeTime": 0,
     "defaultSpriteLifeTime": 0
   },
+  "poisonBullet": {
+    "hitboxSize": 16,
+    "spriteSize": 16,
+    "rotation": 90,
+    "spriteState": 0,
+    "currentSpriteLifeTime": 0,
+    "defaultSpriteLifeTime": 0
+  },
   "homingBullet": {
     "hitboxSize": 16,
     "spriteSize": 64,
@@ -96,24 +104,24 @@
     "defaultSpriteLifeTime": 0
   },
   "explosion1": {
-    "hitboxSize": 64,
-    "spriteSize": 256,
+    "hitboxSize": 200,
+    "spriteSize": 100,
     "rotation": 0,
     "spriteState": 0,
     "currentSpriteLifeTime": 0,
     "defaultSpriteLifeTime": 0.01
   },
   "explosion2": {
-    "hitboxSize": 64,
-    "spriteSize": 256,
+    "hitboxSize": 200,
+    "spriteSize": 100,
     "rotation": 0,
     "spriteState": 0,
     "currentSpriteLifeTime": 0,
     "defaultSpriteLifeTime": 0.01
   },
   "explosion3": {
-    "hitboxSize": 64,
-    "spriteSize": 256,
+    "hitboxSize": 200,
+    "spriteSize": 100,
     "rotation": 0,
     "spriteState": 0,
     "currentSpriteLifeTime": 0,

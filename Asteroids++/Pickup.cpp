@@ -4,8 +4,8 @@
 const map<double, Sprites> Pickup::boosters{
 	{ 0.01, Sprites::HEART1UP },
 	{ 0.075, Sprites::PICKUP_EXTRA_TIME },
-	{ 0.1, Sprites::PICKUP_DRUNKMODE },
-	{ 0.2, Sprites::PICKUP_FREEZE },
+	{ 0.1, Sprites::PICKUP_FREEZE },
+	{ 0.2, Sprites::PICKUP_DRUNKMODE },
 	{ 0.25, Sprites::PICKUP_TIMES_5 },
 	{ 0.3, Sprites::PICKUP_SHIELD },
 	{ 0.35, Sprites::PICKUP_EXTRA_SPEED },
@@ -89,7 +89,7 @@ void Pickup::collisionDetection()
 				switch (spriteInfo.spriteType)
 				{
 				case Sprites::PICKUP_EXTRA_BULLET:
-					if (Player::playerStats.shootOffset >= 0.11f) {
+					if (Player::playerStats.shootOffset >= 0.17f) {
 						Player::playerStats.shootOffset -= 0.01f;
 						Player::playerStats.bulletSize += 3.0f;
 						Player::playerStats.critChance += 0.03;
@@ -129,14 +129,16 @@ void Pickup::collisionDetection()
 
 					break;
 				case Sprites::PICKUP_PIERCING:
+					Player::resetBulletEffect();
 					if (!Player::playerStats.bulletType.piercing) Player::playerStats.bulletType.piercing = true;
-					Score::addScore(1000);
+					Score::addScore(500);
 					SoundData::play(Sounds::PICKUP_DRUNKMODE);
 
 					break;
 				case Sprites::PICKUP_HOMING:
+					Player::resetBulletEffect();
 					if (!Player::playerStats.bulletType.homing) Player::playerStats.bulletType.homing = true;
-					Score::addScore(1000);
+					Score::addScore(500);
 					SoundData::play(Sounds::PICKUP_EXTRA_BULLET);
 
 					break;
@@ -185,21 +187,21 @@ void Pickup::collisionDetection()
 				case Sprites::PICKUP_DOUBLESHOOT:
 					SoundData::play(Sounds::PICKUP_DOUBLESHOOT);
 					Player::playerStats.bulletAmount = 2;
-					Score::addScore(1000);
+					Score::addScore(200);
 
 					break;
 
 				case Sprites::PICKUP_TRIPLESHOOT:
 					SoundData::play(Sounds::PICKUP_TRIPLESHOOT);
 					Player::playerStats.bulletAmount = 3;
-					Score::addScore(1000);
+					Score::addScore(300);
 
 					break;
 
 				case Sprites::PICKUP_QUADSHOOT:
 					SoundData::play(Sounds::PICKUP_QUADSHOOT);
 					Player::playerStats.bulletAmount = 4;
-					Score::addScore(1000);
+					Score::addScore(400);
 
 					break;
 				}

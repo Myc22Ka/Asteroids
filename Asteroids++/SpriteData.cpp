@@ -14,6 +14,7 @@ const vector<pair<string, Sprites>> objects = {
         {"singleBullet", Sprites::SINGLE_BULLET},
         {"enemyBullet", Sprites::ENEMY_BULLET},
         {"piercingBullet", Sprites::PIERCING_BULLET},
+        {"poisonBullet", Sprites::POISON_BULLET},
         {"homingBullet", Sprites::HOMING_BULLET},
         {"explosion1", Sprites::EXPLOSION_1},
         {"explosion2", Sprites::EXPLOSION_2},

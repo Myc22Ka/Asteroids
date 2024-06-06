@@ -81,3 +81,5 @@ asdasdasdasda: 60
 sdadasdasdads: 10380
 asdadasdadsad: 20060
 sadasdadadasd: 220380
+sadasdasdasda: 12060
+asdasdasdasda: 23080

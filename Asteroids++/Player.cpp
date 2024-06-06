@@ -18,7 +18,7 @@ PlayerStats Player::playerStats{
     50.0f,
     FileMenager::playerData.bullet_speed,
     0.0,
-    { false, false },
+    { false, false, false },
     { 10.0f, false },
     { 10.0f, false },
     { 10.0f, false },
@@ -330,13 +330,22 @@ void Player::setPlayerStats()
 
     playerStats.bulletType.piercing = false;
     playerStats.bulletType.homing = false;
+    playerStats.bulletType.poison = true;
+}
+
+void Player::resetBulletEffect() {
+    playerStats.bulletType.homing = false;
+    playerStats.bulletType.piercing = false;
+    playerStats.bulletType.poison = false;
 }
 
 Sprites Player::getPlayerBulletSprite()
 {
-    if (playerStats.bulletType.homing) return  Sprites::HOMING_BULLET;
+    if (playerStats.bulletType.homing) return Sprites::HOMING_BULLET;
 
     if (playerStats.bulletType.piercing) return Sprites::PIERCING_BULLET;
+
+    if (playerStats.bulletType.poison) return Sprites::POISON_BULLET;
 
     return Sprites::SINGLE_BULLET;
 }

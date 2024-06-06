@@ -1,7 +1,7 @@
 #include "Menu.h"
 #include "WindowBox.h"
 
-vector<TextField> Menu::options{ { "New game", 24 }, { "Continue", 24 }, { "Highscore", 24 }, { "Exit", 24 } };
+vector<TextField> Menu::options{ { "New game", 24 }, { "Highscore", 24 }, { "Exit", 24 } };
 vector<TextField> Menu::navigation{ { "Confirm [Enter]", 8 }, { "Up [Up]", 8 }, { "Down [Down]", 8 }, { "Exit [ESC]", 8 } };
 int Menu::selectedOption{ 0 };
 
@@ -110,13 +110,9 @@ void Menu::navigator(Event& event)
 			WindowBox::begin();
 			break;
 		case 1:
-			WindowBox::begin();
-			Game::setGameState(GAME_OVER);
-			break;
-		case 2:
 			Game::setGameState(MENU_HIGHSCORE);
 			break;
-		case 3:
+		case 2:
 			WindowBox::close();
 			break;
 		}

@@ -41,8 +41,6 @@ void BlackHole::devour(Entity* entity) {
 	size += entity->size * 0.15f;
 	increaseHealth(Player::playerStats.bulletDamage * 3.0f);
 
-	cout << getHealth() << endl;
-
 	radius = size / 2.0f;
 	entity->spiraling = false;
 

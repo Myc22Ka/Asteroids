@@ -82,6 +82,8 @@ void Bullet::enemyHit(Entity* entity) {
     if (physics::intersects(position, radius, enemy->position, enemy->radius) && lifeTime > 0 && hitEnemies.find(enemy) == hitEnemies.end()) {
         if (!Player::playerStats.bulletType.piercing) lifeTime = 0;
 
+        if (Player::playerStats.bulletType.poison) enemy->poisoned = true;
+
         auto critHit = physics::rollDice(Player::playerStats.critChance);
 
         critHit ? enemy->updateHealth(Player::playerStats.bulletDamage * 2) : enemy->updateHealth(Player::playerStats.bulletDamage);
@@ -93,33 +95,37 @@ void Bullet::enemyHit(Entity* entity) {
                 SoundData::play(Sounds::CRITHIT);
             }
 
-            Clock clock;
-			thread t([enemy, clock, critHit]() {
-				if(!critHit) SoundData::play(Sounds::HIT);
-				enemy->spriteInfo.sprite.setColor(Color::Red);
-
-				Color startColor = Color::Red;
-				Color endColor = Color::White;
-
-				while (clock.getElapsedTime().asSeconds() < 0.2f) {
-					float progress = clock.getElapsedTime().asSeconds() / 0.2f;
-					Color interpolatedColor = Color(
-						static_cast<Uint8>(startColor.r + progress * (endColor.r - startColor.r)),
-						static_cast<Uint8>(startColor.g + progress * (endColor.g - startColor.g)),
-						static_cast<Uint8>(startColor.b + progress * (endColor.b - startColor.b)),
-						static_cast<Uint8>(startColor.a + progress * (endColor.a - startColor.a)));
-					enemy->spriteInfo.sprite.setColor(interpolatedColor);
-
-					this_thread::sleep_for(chrono::milliseconds(35));
-				}
-                enemy->spriteInfo.sprite.setColor(Color::White);
-			});
-
-			t.detach();
+            damageEnemy(enemy, critHit, Color::Red);
 
             return;
         }
 
-        enemy->destroy();
+        if(!enemy->poisoned) enemy->destroy();
     }
+}
+
+void Bullet::damageEnemy(Enemy* enemy, bool critHit, Color color){
+    Clock clock;
+    thread t([enemy, clock, critHit, color]() {
+        if (!critHit) SoundData::play(Sounds::HIT);
+        enemy->spriteInfo.sprite.setColor(color);
+
+        Color startColor = color;
+        Color endColor = Color::White;
+
+        while (clock.getElapsedTime().asSeconds() < 0.2f) {
+            float progress = clock.getElapsedTime().asSeconds() / 0.2f;
+            Color interpolatedColor = Color(
+                static_cast<Uint8>(startColor.r + progress * (endColor.r - startColor.r)),
+                static_cast<Uint8>(startColor.g + progress * (endColor.g - startColor.g)),
+                static_cast<Uint8>(startColor.b + progress * (endColor.b - startColor.b)),
+                static_cast<Uint8>(startColor.a + progress * (endColor.a - startColor.a)));
+            enemy->spriteInfo.sprite.setColor(interpolatedColor);
+
+            this_thread::sleep_for(chrono::milliseconds(35));
+        }
+        enemy->spriteInfo.sprite.setColor(Color::White);
+        });
+
+    t.detach();
 }

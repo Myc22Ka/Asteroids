@@ -128,7 +128,14 @@ void GamePause::navigator(Event& e)
 
 			break;
 		case 1:
-			Game::setGameState(GAME_OVER);
+			SoundData::recoverSound(Sounds::AMBIENT);
+			Score::clear();
+			Game::clearEntities();
+			Game::clearParticles();
+			Game::level = 1;
+			Player::playerStats.lifes.clear();
+
+			WindowBox::begin();
 			break;
 		case 2:
 			WindowBox::close();

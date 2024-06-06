@@ -22,7 +22,7 @@ Page* Game::currentPage = nullptr;
 list<Entity*> Game::entities;
 list<Particle*> Game::particles;
 int Game::maxLevel{ 7 };
-int Game::level{ 2 };
+int Game::level{ 1 };
 
 Effect Game::freeze{ FileMenager::timingsData.default_freeze_time, false };
 Effect Game::enemySpawn{ FileMenager::timingsData.default_enemy_spawn_time, false };
