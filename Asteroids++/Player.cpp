@@ -18,7 +18,7 @@ PlayerStats Player::playerStats{
     50.0f,
     FileMenager::playerData.bullet_speed,
     0.0,
-    { false, false, false },
+    NORMAL,
     { 10.0f, false },
     { 10.0f, false },
     { 10.0f, false },
@@ -328,26 +328,28 @@ void Player::setPlayerStats()
     playerStats.scoreTimes5 = { 10.0f, false, new Bar(radius, 2.0f, Color::Color(93, 213, 93, 255), Color::Black, playerStats.scoreTimes5.getEffectDuration(), Vector2f(-100.0f, -100.0f), Sprites::PICKUP_TIMES_5) };
     playerStats.critChance = 0.01;
 
-    playerStats.bulletType.piercing = false;
-    playerStats.bulletType.homing = false;
-    playerStats.bulletType.poison = true;
+    playerStats.bulletType = NORMAL;
 }
 
 void Player::resetBulletEffect() {
-    playerStats.bulletType.homing = false;
-    playerStats.bulletType.piercing = false;
-    playerStats.bulletType.poison = false;
+    playerStats.bulletType = NORMAL;
 }
 
 Sprites Player::getPlayerBulletSprite()
 {
-    if (playerStats.bulletType.homing) return Sprites::HOMING_BULLET;
-
-    if (playerStats.bulletType.piercing) return Sprites::PIERCING_BULLET;
-
-    if (playerStats.bulletType.poison) return Sprites::POISON_BULLET;
-
-    return Sprites::SINGLE_BULLET;
+    switch (playerStats.bulletType)
+    {
+    case NORMAL:
+        return Sprites::SINGLE_BULLET;
+    case PIERCING:
+        return Sprites::PIERCING_BULLET;
+    case HOMING:
+        return Sprites::HOMING_BULLET;
+    case POISON:
+        return Sprites::POISON_BULLET;
+    default:
+        return Sprites::SINGLE_BULLET;
+    }
 }
 
 void Player::updateStatsbars(const float& deltaTime) {

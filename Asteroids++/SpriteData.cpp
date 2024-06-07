@@ -36,6 +36,7 @@ const vector<pair<string, Sprites>> objects = {
         {"heart1UP", Sprites::HEART1UP},
         {"freeze", Sprites::PICKUP_FREEZE},
         {"pickupPiercing", Sprites::PICKUP_PIERCING},
+        {"pickupPoison", Sprites::PICKUP_POISON},
         {"pickupHoming", Sprites::PICKUP_HOMING},
         {"collected", Sprites::COLLECTED},
         {"heart", Sprites::HEART},

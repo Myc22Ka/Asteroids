@@ -19,7 +19,11 @@ public:
 	static size_t getScore();
 	static string getScoreString();
 	static void clear();
+
 	static void addScore(const size_t& value);
+	static void addScore(Sprites& spirte);
+
+	static unordered_map<Sprites, int> scoreTable;
 private:
 	static size_t score;
 };

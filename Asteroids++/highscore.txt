@@ -83,3 +83,6 @@ asdadasdadsad: 20060
 sadasdadadasd: 220380
 sadasdasdasda: 12060
 asdasdasdasda: 23080
+asdasdasdasda: 11270
+asdasdasdasda: 29490
+chu: 31520

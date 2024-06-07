@@ -7,6 +7,7 @@ ScreenData FileMenager::screenData;
 EnemiesData FileMenager::enemiesData;
 DrawsData FileMenager::drawsData;
 TimingsData FileMenager::timingsData;
+GameData FileMenager::gameData;
 vector<pair<string, float>> FileMenager::highScore;
 
 FileMenager::FileMenager(){
@@ -105,6 +106,7 @@ map<string, float> FileMenager::getDataFromFile(const string& name){
 void FileMenager::setDataFromFile() const {
 	auto dataMap = getDataFromFile(fileName);
 
+	// Screen data
 	screenData.padding = dataMap["screen_padding"];
 	screenData.framerate = static_cast<int>(dataMap["framerate"]);
 	screenData.launch_time = dataMap["launch_time"];
@@ -114,6 +116,7 @@ void FileMenager::setDataFromFile() const {
 	screenData.fps_pos_y = dataMap["fps_pos_y"];
 	screenData.game_next_level_spike = dataMap["game_next_level_spike"];
 
+	// Player data
 	playerData.size = dataMap["player_size"];
 	playerData.start_position_x = dataMap["player_start_position_x"];
 	playerData.start_position_y = dataMap["player_start_position_y"];
@@ -128,16 +131,39 @@ void FileMenager::setDataFromFile() const {
 	playerData.dash_duration = dataMap["player_dash_duration"];
 	playerData.dash_length = static_cast<int>(dataMap["player_dash_length"]);
 	playerData.dash_time_delay = dataMap["player_dash_time_delay"];
+	playerData.player_bullet_poison_damage = dataMap["player_bullet_poison_damage"];
+	playerData.player_bullet_poison_amount = static_cast<int>(dataMap["player_bullet_poison_amount"]);
 
+	// Enemies data
 	enemiesData.asteroid_spin = dataMap["enemy_asteroid_spin"];
 	enemiesData.asteroid_speed = dataMap["enemy_asteroid_speed"];
 	enemiesData.asteroid_size = dataMap["enemy_asteroid_size"];
+	enemiesData.enemy_tower_spawn_chance = dataMap["enemy_tower_spawn_chance"];
+	enemiesData.enemy_strauner_spawn_chance = dataMap["enemy_strauner_spawn_chance"];
+	enemiesData.enemy_invader_spawn_chance = dataMap["enemy_invader_spawn_chance"];
+	enemiesData.enemy_blackhole_spawn_chance = dataMap["enemy_blackhole_spawn_chance"];
+	enemiesData.enemy_comet_spawn_chance = dataMap["enemy_comet_spawn_chance"];
+	enemiesData.enemy_multiasteroid_spawn_chance = dataMap["enemy_multiasteroid_spawn_chance"];
+	enemiesData.enemy_singleasteroid_spawn_chance = dataMap["enemy_singleasteroid_spawn_chance"];
+	enemiesData.enemy_blackhole_increse_size = dataMap["enemy_blackhole_increse_size"];
 
+	// Draws data
 	drawsData.outline_fill_background_opacity = static_cast<int>(dataMap["outline_fill_background_opacity"]);
 	drawsData.outline_thickness = dataMap["outline_thickness"];
 
+	// Timings data
 	timingsData.default_freeze_time = dataMap["default_freeze_time"];
 	timingsData.default_enemy_spawn_time = dataMap["default_enemy_spawn_time"];
+	timingsData.default_fps_delay = dataMap["default_fps_delay"];
+	timingsData.default_bullet_homing_time = dataMap["default_bullet_homing_time"];
+	timingsData.default_crit_timer = dataMap["default_crit_timer"];
+	timingsData.default_poison_dose_time = static_cast<int>(dataMap["default_poison_dose_time"] * 1000);
+	timingsData.default_hit_effect_time = dataMap["default_hit_effect_time"];
+
+	// Game data
+	gameData.max_level = static_cast<int>(dataMap["max_level"]);
+	gameData.starting_level = static_cast<int>(dataMap["starting_level"]);
+	gameData.debug_mode = static_cast<int>(dataMap["debug_mode"]);
 
 	return;
 }

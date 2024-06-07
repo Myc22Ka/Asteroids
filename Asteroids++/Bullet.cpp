@@ -14,6 +14,13 @@ Bullet::Bullet(Vector2f position, Vector2f direction, float& angle, Sprites spri
 {
 }
 
+Bullet::Bullet(Vector2f position, Vector2f direction, float& angle, Sprites spriteType, Color color, float size) :
+    direction(direction),
+    Entity(position, angle, size, color, getSprite(spriteType)),
+    lifeTime(FileMenager::playerData.bullet_lifetime)
+{
+}
+
 void Bullet::homeToEnemy(float deltaTime) {
     const auto enemy = findNearestEnemy();
 
@@ -42,7 +49,7 @@ void Bullet::homeToEnemy(float deltaTime) {
 Entity* Bullet::findNearestEnemy() const
 {
     Entity* nearestEnemy = nullptr;
-    float minTimeToEnemy = 0.3f;
+    float minTimeToEnemy = FileMenager::timingsData.default_bullet_homing_time;
 
     Game::foreachEntity([&](Entity* entity) {
         if (entity->getEntityType() == EntityType::TYPE_ENEMY)
@@ -80,27 +87,34 @@ void Bullet::enemyHit(Entity* entity) {
     Enemy* enemy = dynamic_cast<Enemy*>(entity);
 
     if (physics::intersects(position, radius, enemy->position, enemy->radius) && lifeTime > 0 && hitEnemies.find(enemy) == hitEnemies.end()) {
-        if (!Player::playerStats.bulletType.piercing) lifeTime = 0;
-
-        if (Player::playerStats.bulletType.poison) enemy->poisoned = true;
+        if (!Player::playerStats.bulletType == PIERCING) lifeTime = 0;
 
         auto critHit = physics::rollDice(Player::playerStats.critChance);
 
         critHit ? enemy->updateHealth(Player::playerStats.bulletDamage * 2) : enemy->updateHealth(Player::playerStats.bulletDamage);
 
-        if (enemy->getHealth() > 0) {
-            hitEnemies.insert(enemy);
-            if (critHit) {
-                enemy->critTimer.startEffect(0.3f);
-                SoundData::play(Sounds::CRITHIT);
-            }
-
-            damageEnemy(enemy, critHit, Color::Red);
-
-            return;
+        hitEnemies.insert(enemy);
+        if (critHit) {
+            enemy->critTimer.startEffect(FileMenager::timingsData.default_crit_timer);
+            SoundData::play(Sounds::CRITHIT);
         }
 
-        if(!enemy->poisoned) enemy->destroy();
+        damageEnemy(enemy, critHit, Color::Red);
+
+        if (Player::playerStats.bulletType == POISON) {
+            thread t([enemy]() {
+                for (int i = 0; i < FileMenager::playerData.player_bullet_poison_amount; i++) {
+                    if (enemy->getHealth() < 0) break;
+
+                    enemy->updateHealth(enemy->getMaxHealth() * FileMenager::playerData.player_bullet_poison_damage);
+                    Bullet::damageEnemy(enemy, true, Color::Magenta);
+
+                    this_thread::sleep_for(chrono::milliseconds(FileMenager::timingsData.default_poison_dose_time));
+                }
+            });
+
+            t.detach();
+        }
     }
 }
 
@@ -113,8 +127,8 @@ void Bullet::damageEnemy(Enemy* enemy, bool critHit, Color color){
         Color startColor = color;
         Color endColor = Color::White;
 
-        while (clock.getElapsedTime().asSeconds() < 0.2f) {
-            float progress = clock.getElapsedTime().asSeconds() / 0.2f;
+        while (clock.getElapsedTime().asSeconds() < FileMenager::timingsData.default_hit_effect_time) {
+            float progress = clock.getElapsedTime().asSeconds() / FileMenager::timingsData.default_hit_effect_time;
             Color interpolatedColor = Color(
                 static_cast<Uint8>(startColor.r + progress * (endColor.r - startColor.r)),
                 static_cast<Uint8>(startColor.g + progress * (endColor.g - startColor.g)),

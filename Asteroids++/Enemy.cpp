@@ -14,8 +14,7 @@ Enemy::Enemy(float health, float speed, SpriteInfo spriteInfo) :
 	direction(physics::getRandomDirection()),
 	speed(speed),
 	crit("CRIT", 0),
-	critTimer(2.0f, false),
-	poisoned(false)
+	critTimer(2.0f, false)
 {
 	maxHealth = health;
 	crit.setColorText(Color::Red);
@@ -39,24 +38,7 @@ void Enemy::update(float deltaTime)
 	updateHealthBar();
 	updateCritDamage(deltaTime);
 
-	if (poisoned) {
-		poisoned = false;
-
-		thread t([this, deltaTime]() {
-			for (int i = 0; i < 10; i++) {
-				updateHealth(maxHealth * 0.01f);
-				Bullet::damageEnemy(this, true, Color::Magenta);
-
-				if (getHealth() < 0) break;
-
-				this_thread::sleep_for(chrono::milliseconds(200));
-			}
-		});
-
-		if (getHealth() < 0) destroy();
-		t.detach();
-	}
-
+	if (getHealth() < 0) destroy();
 }
 
 

@@ -52,6 +52,7 @@ enum class Sprites {
     HEART1UP,
     PICKUP_PIERCING,
     PICKUP_HOMING,
+    PICKUP_POISON,
     COLLECTED,
     HEART,
     SHIELD,

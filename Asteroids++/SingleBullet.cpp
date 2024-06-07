@@ -21,7 +21,7 @@ void SingleBullet::update(float deltaTime)
         return;
     }
 
-    if (Player::playerStats.bulletType.homing && lifeTime < 0.9 * FileMenager::playerData.bullet_lifetime) homeToEnemy(deltaTime);
+    if (Player::playerStats.bulletType == HOMING && lifeTime < 0.9 * FileMenager::playerData.bullet_lifetime) homeToEnemy(deltaTime);
 
     collisionDetection();
 }

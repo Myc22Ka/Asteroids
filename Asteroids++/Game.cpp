@@ -21,13 +21,25 @@ Page* Game::currentPage = nullptr;
 
 list<Entity*> Game::entities;
 list<Particle*> Game::particles;
-int Game::maxLevel{ 7 };
-int Game::level{ 1 };
+int Game::maxLevel{0};
+int Game::level{0};
 
-Effect Game::freeze{ FileMenager::timingsData.default_freeze_time, false };
-Effect Game::enemySpawn{ FileMenager::timingsData.default_enemy_spawn_time, false };
+Effect Game::freeze{};
+Effect Game::enemySpawn{};
 
 Game::Game() {}
+
+void Game::init() {
+
+    const auto gd = FileMenager::gameData;
+    const auto td = FileMenager::timingsData;
+    const auto ed = FileMenager::enemiesData;
+
+    maxLevel = gd.max_level;
+    level = gd.starting_level;
+    freeze = { td.default_freeze_time, false };
+    enemySpawn = { td.default_enemy_spawn_time, false };
+}
 
 void Game::addEntity(Entity* entity) {
     entities.push_front(entity);
@@ -86,16 +98,18 @@ Entity* Game::findEntity(Sprites spriteType) {
 }
 
 Entity* Game::getRandomEntity(const int& startIndex, const int& endIndex) {
-    const vector<EnemySpawn> enemiesList = {
-        {new Tower(), 0.18, false},
-        {new Strauner(), 0.19, true},
-        {new Invader(), 0.5, false},
-        {new BlackHole(), 0.6, false},
-        {new Comet(), 0.7, true},
-        {new MultiAsteroid(), 0.8, false},
-        {new SingleAsteroid(), 1.0, false}
-    };
+    const auto ed = FileMenager::enemiesData;
 
+    const vector<EnemySpawn> enemiesList = {
+        {new Tower(), ed.enemy_tower_spawn_chance, false},
+        {new Strauner(), ed.enemy_strauner_spawn_chance, true},
+        {new Invader(), ed.enemy_invader_spawn_chance, false},
+        {new BlackHole(), ed.enemy_blackhole_spawn_chance, false},
+        {new Comet(), ed.enemy_comet_spawn_chance, true},
+        {new MultiAsteroid(), ed.enemy_multiasteroid_spawn_chance, false},
+        {new SingleAsteroid(), ed.enemy_singleasteroid_spawn_chance, false}
+    };
+    
     if (startIndex < 0 || endIndex >= enemiesList.size() || startIndex > endIndex) {
         return nullptr;
     }

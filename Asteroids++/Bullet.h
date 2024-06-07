@@ -16,6 +16,7 @@ class Enemy;
 class Bullet: public Entity {
 public:
 	Bullet(Vector2f position, Vector2f direction, float& angle, Sprites spriteType, Color color);
+	Bullet(Vector2f position, Vector2f direction, float& angle, Sprites spriteType, Color color, float size);
 
 	virtual void update(float deltaTime) override = 0;
 	void render(RenderWindow&) override;

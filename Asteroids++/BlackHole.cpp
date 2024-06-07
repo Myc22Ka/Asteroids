@@ -20,6 +20,8 @@ void BlackHole::update(float deltaTime)
 {
 	Enemy::update(deltaTime);
 
+	if (Game::getGameState() == FREZZE) return;
+		 
 	setSpriteFullCycle(deltaTime);
 
 	collisionDetection();
@@ -38,7 +40,7 @@ void BlackHole::collisionDetection()
 }
 
 void BlackHole::devour(Entity* entity) {
-	size += entity->size * 0.15f;
+	size += entity->size * FileMenager::enemiesData.enemy_blackhole_increse_size;
 	increaseHealth(Player::playerStats.bulletDamage * 3.0f);
 
 	radius = size / 2.0f;
@@ -47,28 +49,7 @@ void BlackHole::devour(Entity* entity) {
 	this->scaleSprite(spriteInfo.sprite, spriteInfo.spriteSize, size);
 	this->drawHitboxes();
 
-	Clock clock;
-	thread t([this, clock]() {
-		spriteInfo.sprite.setColor(Color::Green);
-
-		Color startColor = Color::Green;
-		Color endColor = Color::White;
-
-		while (clock.getElapsedTime().asSeconds() < 0.2f) {
-			float progress = clock.getElapsedTime().asSeconds() / 0.2f;
-			Color interpolatedColor = Color(
-				static_cast<Uint8>(startColor.r + progress * (endColor.r - startColor.r)),
-				static_cast<Uint8>(startColor.g + progress * (endColor.g - startColor.g)),
-				static_cast<Uint8>(startColor.b + progress * (endColor.b - startColor.b)),
-				static_cast<Uint8>(startColor.a + progress * (endColor.a - startColor.a)));
-			spriteInfo.sprite.setColor(interpolatedColor);
-
-			this_thread::sleep_for(chrono::milliseconds(35));
-		}
-		spriteInfo.sprite.setColor(Color::White);
-	});
-
-	t.detach();
+	Bullet::damageEnemy(this, true, Color::Green);
 
 	Game::replaceEntity(entity, new Explosion(entity->position, entity->size));
 }
@@ -77,6 +58,6 @@ void BlackHole::destroy()
 {
 	Game::replaceEntity(this, new Explosion(position, radius));
 
-	Score::addScore(1000);
+	Score::addScore(500);
 	SoundData::play(Sounds::EXPLOSION);
 }

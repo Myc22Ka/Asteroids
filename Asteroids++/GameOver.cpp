@@ -77,7 +77,7 @@ void GameOver::navigator(Event& e)
         Game::setGameState(MENU_HIGHSCORE);
         Game::clearEntities();
         Game::clearParticles();
-        Game::level = 1;
+        Game::level = FileMenager::gameData.starting_level;
         Player::playerStats.lifes.clear();
 
         WindowBox::isKeyPressed = true;

@@ -41,6 +41,8 @@ class Game {
 public:
 	Game();
 
+	static void init();
+
 	static bool hitboxesVisibility;
 
 	static list<Particle*> getParticles();

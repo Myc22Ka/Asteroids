@@ -14,7 +14,7 @@ const map<double, Sprites> Pickup::boosters{
 };
 
 const vector<Sprites> Pickup::modifiers{ Sprites::PICKUP_EXTRA_BULLET, Sprites::PICKUP_EXTRA_SPEED, Sprites::PICKUP_EXTRA_TIME };
-const vector<Sprites> Pickup::bulletTypes{ Sprites::PICKUP_HOMING, Sprites::PICKUP_PIERCING, Sprites::PICKUP_DOUBLESHOOT, Sprites::PICKUP_TRIPLESHOOT, Sprites::PICKUP_QUADSHOOT };
+const vector<Sprites> Pickup::bulletTypes{ Sprites::PICKUP_HOMING, Sprites::PICKUP_PIERCING, Sprites::PICKUP_POISON, Sprites::PICKUP_DOUBLESHOOT, Sprites::PICKUP_TRIPLESHOOT, Sprites::PICKUP_QUADSHOOT };
 
 Pickup::Pickup(Vector2f position): Entity(position, 0, 64, Color::Cyan, SpriteInfo()),
 lifeTime(5.0f)
@@ -95,7 +95,6 @@ void Pickup::collisionDetection()
 						Player::playerStats.critChance += 0.03;
 					}
 
-					Score::addScore(10);
 					Player::playerStats.bulletDamage += 50.0f;
 					SoundData::play(Sounds::PICKUP_EXTRA_BULLET);
 
@@ -106,12 +105,10 @@ void Pickup::collisionDetection()
 						Player::playerStats.turnSpeed += 5.0f;
 						Player::playerStats.bulletSpeed += 25.0f;
 					}
-					Score::addScore(20);
 					SoundData::play(Sounds::PICKUP_EXTRA_SPEED);
 
 					break;
 				case Sprites::PICKUP_SHIELD:
-					Score::addScore(50);
 					Player::playerStats.shield.startEffect(15.0f + Player::playerStats.time);
 					Player::playerStats.shield.getBar()->setMaxValue(Player::playerStats.shield.getEffectDuration());
 
@@ -124,21 +121,27 @@ void Pickup::collisionDetection()
 					Player::playerStats.drunkMode.startEffect(2.0f + Player::playerStats.time);
 					Player::playerStats.drunkMode.getBar()->setMaxValue(Player::playerStats.drunkMode.getEffectDuration());
 
-					Score::addScore(100);
 					SoundData::play(Sounds::PICKUP_DRUNKMODE);
 
 					break;
 				case Sprites::PICKUP_PIERCING:
 					Player::resetBulletEffect();
-					if (!Player::playerStats.bulletType.piercing) Player::playerStats.bulletType.piercing = true;
-					Score::addScore(500);
-					SoundData::play(Sounds::PICKUP_DRUNKMODE);
+					Player::playerStats.bulletType = PIERCING;
+
+					SoundData::play(Sounds::PICKUP_EXTRA_BULLET);
 
 					break;
 				case Sprites::PICKUP_HOMING:
 					Player::resetBulletEffect();
-					if (!Player::playerStats.bulletType.homing) Player::playerStats.bulletType.homing = true;
-					Score::addScore(500);
+					Player::playerStats.bulletType = HOMING;
+
+					SoundData::play(Sounds::PICKUP_EXTRA_BULLET);
+
+					break;
+				case Sprites::PICKUP_POISON:
+					Player::resetBulletEffect();
+					Player::playerStats.bulletType = POISON;
+
 					SoundData::play(Sounds::PICKUP_EXTRA_BULLET);
 
 					break;
@@ -149,7 +152,6 @@ void Pickup::collisionDetection()
 							life.setSpriteState(0);
 					}
 					SoundData::play(Sounds::HEART1UP);
-					Score::addScore(200);
 
 					break;
 				case Sprites::PICKUP_FREEZE:
@@ -158,13 +160,11 @@ void Pickup::collisionDetection()
 					SoundData::play(Sounds::FREEZE);
 					Game::setGameState(FREZZE);
 					Game::freeze.startEffect(physics::getRandomFloatValue(5.0f, 0.5f) + Player::playerStats.time);
-					Score::addScore(50);
 
 					break;
 				case Sprites::PICKUP_EXTRA_TIME:
 					SoundData::play(Sounds::PICKUP_EXTRA_TIME);
 					if (Player::playerStats.time < 10.0f) Player::playerStats.time += 1.0f;
-					Score::addScore(50);
 
 					break;
 				case Sprites::PICKUP_TIMES_2:
@@ -172,7 +172,6 @@ void Pickup::collisionDetection()
 					if (Player::playerStats.scoreTimes5.isEffectActive()) Player::playerStats.scoreTimes5.setEffectActive(false);
 					Player::playerStats.scoreTimes2.startEffect(physics::getRandomFloatValue(10.0f, 0.5f) + Player::playerStats.time);
 					Player::playerStats.scoreTimes2.getBar()->setMaxValue(Player::playerStats.scoreTimes2.getEffectDuration());
-					Score::addScore(20);
 
 					break;
 				case Sprites::PICKUP_TIMES_5:
@@ -180,31 +179,29 @@ void Pickup::collisionDetection()
 					if (Player::playerStats.scoreTimes2.isEffectActive()) Player::playerStats.scoreTimes2.setEffectActive(false);
 					Player::playerStats.scoreTimes5.startEffect(physics::getRandomFloatValue(10.0f, 0.5f) + Player::playerStats.time);
 					Player::playerStats.scoreTimes5.getBar()->setMaxValue(Player::playerStats.scoreTimes5.getEffectDuration());
-					Score::addScore(100);
 
 					break;
 
 				case Sprites::PICKUP_DOUBLESHOOT:
 					SoundData::play(Sounds::PICKUP_DOUBLESHOOT);
 					Player::playerStats.bulletAmount = 2;
-					Score::addScore(200);
 
 					break;
 
 				case Sprites::PICKUP_TRIPLESHOOT:
 					SoundData::play(Sounds::PICKUP_TRIPLESHOOT);
 					Player::playerStats.bulletAmount = 3;
-					Score::addScore(300);
 
 					break;
 
 				case Sprites::PICKUP_QUADSHOOT:
 					SoundData::play(Sounds::PICKUP_QUADSHOOT);
 					Player::playerStats.bulletAmount = 4;
-					Score::addScore(400);
 
 					break;
 				}
+
+				Score::addScore(spriteInfo.spriteType);
 				Game::addEntity(new Explosion(this->position, this->size, collected));
 			}
 		}

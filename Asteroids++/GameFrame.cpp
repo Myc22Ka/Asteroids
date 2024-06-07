@@ -36,6 +36,18 @@ void GameFrame::navigator(Event& e) {
         return;
     }
 
+    if (FileMenager::gameData.debug_mode == 0) {
+
+        if (e.key.code == Keyboard::P) {
+            gamePause->setPrevGameState();
+            SoundData::modifySound(Sounds::AMBIENT);
+            SoundData::modifySound(Sounds::WIND);
+            Game::setGameState(PAUSED);
+        }
+        WindowBox::isKeyPressed = true;
+        return;
+    }
+
     switch (e.key.code)
     {
     case Keyboard::H:
@@ -131,7 +143,7 @@ void GameFrame::updateWindow(const float& deltaTime, RenderWindow& window)
     fpsDelay.updateEffectDuration(deltaTime);
 
     if (!fpsDelay.isEffectActive()) {
-        fpsDelay.startEffect(0.2f);
+        fpsDelay.startEffect(FileMenager::timingsData.default_fps_delay);
         float lastTime = 0;
         fps.setText(to_string(static_cast<int>(1.0f / (deltaTime - lastTime))) + " FPS");
         fps.setTextPosition(Vector2f(FileMenager::screenData.fps_pos_x + FileMenager::screenData.padding, FileMenager::screenData.fps_pos_y + FileMenager::screenData.padding));

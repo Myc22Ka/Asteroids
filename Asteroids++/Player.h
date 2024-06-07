@@ -15,10 +15,11 @@
 #include "Physics.h"
 #include "PlayerHealthUI.h"
 
-struct BulletType {
-	bool piercing;
-	bool homing;
-	bool poison;
+enum BulletType {
+	NORMAL,
+	PIERCING, 
+	HOMING, 
+	POISON
 };
 
 struct PlayerStats {

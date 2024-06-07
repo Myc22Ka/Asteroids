@@ -38,6 +38,7 @@ void WindowBox::displayWindow() {
 
     deathScreen = new DeathScreen();
     Game::setGameState(MENU_LOADING);
+    Game::init();
 
     Clock clock;
 

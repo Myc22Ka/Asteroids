@@ -2,7 +2,7 @@
 
 screen_padding: 10
 framerate: 60					# framerate limit
-launch_time: 0				# game launching time
+launch_time: 0					# game launching time
 fps_font_size: 12				# font size
 launch_particle_opacity: 150	# opactiy of particles while launching game
 fps_pos_x: 0					# position of display fps x
@@ -27,11 +27,24 @@ player_dash_time_delay: 2 # in seconds
 player_dash_duration: 0.4 # keep it below 0.5
 player_dash_length: 3 # dash length in player sizes
 
+player_bullet_poison_damage: 0.01 # target percent value
+player_bullet_poison_amount: 10 # poison doses
+
 # enemies data
 
 enemy_asteroid_spin: 25
 enemy_asteroid_speed: 120
 enemy_asteroid_size: 64
+
+enemy_blackhole_increse_size: 0.15
+
+enemy_tower_spawn_chance: 0.18
+enemy_strauner_spawn_chance: 0.19
+enemy_invader_spawn_chance: 0.5
+enemy_blackhole_spawn_chance: 0.6
+enemy_comet_spawn_chance: 0.7
+enemy_multiasteroid_spawn_chance: 0.8
+enemy_singleasteroid_spawn_chance: 1.0
 
 # draws data
 
@@ -40,5 +53,16 @@ outline_fill_background_opacity: 150 # value beetween [0 - 255]
 
 # timings data
 
-default_freeze_time: 15
+default_freeze_time: 5
 default_enemy_spawn_time: 1.5
+default_fps_delay: 0.2
+default_bullet_homing_time: 0.3
+default_crit_timer: 0.3
+default_poison_dose_time: 0.2	# time between next poison dose
+default_hit_effect_time: 0.2	# time to change color hit to normal
+
+# game data
+
+max_level: 7					# don't change it or might crash
+starting_level: 4				# keep it as below max_level
+debug_mode: 1					# enables debug_mode
