@@ -3,7 +3,7 @@
 #include "EnemyBullet.h"
 #include "Pickup.h"
 
-Invader::Invader() : Enemy(300.0f + 30.0f * floor(Score::getScore() / FileMenager::screenData.game_next_level_spike), physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_speed) + 150.0f, getSprite(Sprites::INVADER)),
+Invader::Invader() : Enemy(500.0f + 60.0f * floor(Score::getScore() / FileMenager::screenData.game_next_level_spike), physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_speed) + 150.0f, getSprite(Sprites::INVADER)),
 changePosition(5.0f, false),
 shoot(0.0f, false)
 {

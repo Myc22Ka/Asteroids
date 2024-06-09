@@ -87,7 +87,7 @@ void Bullet::enemyHit(Entity* entity) {
     Enemy* enemy = dynamic_cast<Enemy*>(entity);
 
     if (physics::intersects(position, radius, enemy->position, enemy->radius) && lifeTime > 0 && hitEnemies.find(enemy) == hitEnemies.end()) {
-        if (!Player::playerStats.bulletType == PIERCING) lifeTime = 0;
+        if (Player::playerStats.bulletType != PIERCING) lifeTime = 0;
 
         auto critHit = physics::rollDice(Player::playerStats.critChance);
 

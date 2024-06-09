@@ -209,11 +209,9 @@ void Game::spawnEnemy(const float& deltaTime) {
 
 	if (enemySpawn.getEffectDuration() <= 0 && !freeze.isEffectActive()) {
         const auto entity = getRandomEntity(maxLevel - level, maxLevel - 1);
-        //auto entity = new BlackHole();
 
 		if(entity) addEntity(entity);
-		enemySpawn.setEffectDuration(FileMenager::timingsData.default_enemy_spawn_time + Player::playerStats.time * 0.1f - level * 0.1f - floor(Score::getScore() >> 10) * 0.01f);
-        //enemySpawn.setEffectDuration(100000000.0f);
+		enemySpawn.setEffectDuration(FileMenager::timingsData.default_enemy_spawn_time + Player::playerStats.time * 0.1f - level * 0.1f - floor(Score::getScore() >> 9) * 0.01f);
 	}
 }
 

@@ -1,6 +1,7 @@
 #include "MultiAsteroid.h"
 #include "WindowBox.h"
 #include "SingleAsteroid.h"
+#include "Pickup.h"
 
 MultiAsteroid::MultiAsteroid(): Enemy(20.0f + 20.0f * floor(Score::getScore() / FileMenager::screenData.game_next_level_spike), physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_speed), getSprite(Sprites::MULTI_ASTEROID))
 {
@@ -64,6 +65,8 @@ void MultiAsteroid::destroy()
 
 	Game::addEntity(new SingleAsteroid(asteroid1->position, asteroid1->direction));
 	Game::addEntity(new SingleAsteroid(asteroid2->position, asteroid2->direction));
+
+	Game::addEntity(new Pickup(position, Sprites::PICKUP_EXTRA_BULLET));
 
 	Score::addScore(40);
 	SoundData::play(Sounds::EXPLOSION);

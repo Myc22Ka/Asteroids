@@ -4,6 +4,7 @@
 Wind::Wind() : EventHandler(VertexArray(Lines, 400)),
 windSpeed(200.0f),
 wind(3.0f, false),  
+delay(10.0f, true),
 windLevel(3.0f), 
 lineWidth(30.0f), 
 lineHeight(0.8f), 
@@ -25,6 +26,8 @@ const Vector2f Wind::getRandomPosition() const
 
 void Wind::update(float deltaTime)
 {
+	if(delay.isEffectActive()) delay.updateEffectDuration(deltaTime);
+
 	if (particles.getVertexCount() == 0) {
 		particles = VertexArray(Lines, 400);
 		initParticles();
@@ -61,6 +64,7 @@ void Wind::update(float deltaTime)
 	for (auto& entity : Game::getEntities())
 	{
 		if (!entity || !entity->isActive() || entity->getEntityType() != TYPE_PLAYER) continue;
+		if (DeathScreen::isScreenOver()) continue;
 
 		if (entity->position.x < entity->radius || entity->position.x >= WindowBox::getVideoMode().width - entity->radius ||
 			entity->position.y < entity->radius || entity->position.y >= WindowBox::getVideoMode().height - entity->radius)
@@ -68,8 +72,6 @@ void Wind::update(float deltaTime)
 
 		entity->position += velocity * windLevel;
 	}
-
-	if (!SoundData::isSoundPlaying(Sounds::WIND)) SoundData::renev(Sounds::WIND);
 }
 
 void Wind::stopWind() {
@@ -136,8 +138,15 @@ void Wind::wrapLine(Vertex& vertex1, Vertex& vertex2) const {
 }
 
 void Wind::activateWind(const float& duration, const float& windLevel, const Vector2f& velocity) {
-	if (physics::rollDice(0.001) && !wind.isEffectActive() && SoundData::sounds[Sounds::WIND].getVolume() == 100 && !Game::freeze.isEffectActive() && Game::getGameState() != PAUSED && Game::getGameState() != GAME_OVER && Game::getGameState() != FREZZE && Game::getGameState() != DEATH) {
-
+	if (
+		physics::rollDice(FileMenager::gameData.wind_chance) && 
+		!wind.isEffectActive() && 
+		!delay.isEffectActive() &&
+		!Game::freeze.isEffectActive() && 
+		Game::getGameState() != PAUSED && 
+		Game::getGameState() != GAME_OVER && 
+		Game::getGameState() != FREZZE && 
+		Game::getGameState() != DEATH) {
 		forceWind(duration, windLevel, velocity);
 	}
 }
@@ -173,11 +182,12 @@ void Wind::forceWind(const float& duration, const float& windLevel, const Vector
 	this->windLevel = windLevel;
 	this->velocity = velocity;
 
+	SoundData::renev(Sounds::WIND);
 	Game::setGameState(WIND);
 }
 
 void Wind::init(const float& deltaTime, RenderWindow& window) {
-	activateWind(physics::getRandomFloatValue(10.0f, 0.75f) + Player::playerStats.time, physics::getRandomFloatValue(3.0f), physics::getRandomDirection());
+	activateWind(physics::getRandomFloatValue(FileMenager::timingsData.default_wind_time, 0.75f) + Player::playerStats.time, physics::getRandomFloatValue(3.0f), physics::getRandomDirection());
 
 	update(deltaTime);
 

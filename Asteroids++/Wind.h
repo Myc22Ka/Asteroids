@@ -33,6 +33,7 @@ private:
     void resetParticlePositions();
 
     Effect wind;
+    Effect delay;
 
     float windSpeed;
     float fullWindDuration;

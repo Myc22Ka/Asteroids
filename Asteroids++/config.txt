@@ -2,12 +2,12 @@
 
 screen_padding: 10
 framerate: 60					# framerate limit
-launch_time: 0					# game launching time
+launch_time: 0.5				# game launching time
 fps_font_size: 12				# font size
 launch_particle_opacity: 150	# opactiy of particles while launching game
 fps_pos_x: 0					# position of display fps x
 fps_pos_y: 0					# position of display fps y
-game_next_level_spike: 2000		# frequancy of achieving new level
+game_next_level_spike: 1500		# frequancy of achieving new level
 
 # player data
 
@@ -23,12 +23,16 @@ player_bullet_shoot_delay: 0.3
 player_bullet_lifetime: 3
 player_sprite_cycle_time: 0.3
 
-player_dash_time_delay: 2 # in seconds
-player_dash_duration: 0.4 # keep it below 0.5
-player_dash_length: 3 # dash length in player sizes
+player_dash_time_delay: 2			# in seconds
+player_dash_duration: 0.4			# keep it below 0.5
+player_dash_length: 3				# dash length in player sizes
 
-player_bullet_poison_damage: 0.01 # target percent value
-player_bullet_poison_amount: 10 # poison doses
+player_bullet_amount: 1				# keep it below 5
+player_bullet_type: 0				# enum of bullet types [0-3]
+player_bullet_damage: 150			# player damage
+player_bullet_poison_damage: 0.02	# target percent value
+player_bullet_poison_amount: 7		# poison doses
+player_crit_chance: 0.01			# chance of deal crit damage
 
 # enemies data
 
@@ -53,16 +57,23 @@ outline_fill_background_opacity: 150 # value beetween [0 - 255]
 
 # timings data
 
-default_freeze_time: 5
-default_enemy_spawn_time: 1.5
-default_fps_delay: 0.2
-default_bullet_homing_time: 0.3
-default_crit_timer: 0.3
-default_poison_dose_time: 0.2	# time between next poison dose
-default_hit_effect_time: 0.2	# time to change color hit to normal
+default_freeze_time: 5					# time of freeze game
+default_shield_time: 4					# time of shield buff
+default_drunkMode_time: 6				# time of drunkMode buff
+default_scoreTimes2_time: 10			# time of scoreTimes2 buff
+default_scoreTimes5_time: 10			# time of scoreTimes5 buff
+default_enemy_spawn_time: 2				# time to spawn next enemy
+default_fps_delay: 0.2					# fps delay time
+default_bullet_homing_time: 0.3			# homing correction time
+default_crit_timer: 0.3					# crit text disapear time
+default_poison_dose_time: 0.2			# time between next poison dose
+default_hit_effect_time: 0.2			# time to change color hit to normal
+default_invincibility_frames_time: 5.0	# time of invincibility after being destroyed
+default_wind_time: 10.0					# time of wind being active
 
 # game data
 
-max_level: 7					# don't change it or might crash
-starting_level: 4				# keep it as below max_level
-debug_mode: 1					# enables debug_mode
+max_level: 7							# don't change it or might crash
+starting_level: 3						# keep it as below max_level
+debug_mode: 1							# enables debug_mode
+wind_chance: 0.0015						# chance for wind

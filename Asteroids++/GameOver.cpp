@@ -16,6 +16,9 @@ void GameOver::init()
     Page::init();
     SoundData::recoverSound(Sounds::AMBIENT);
     SoundData::stop(Sounds::AMBIENT);
+    SoundData::stop(Sounds::WIND);
+
+    SoundData::renev(Sounds::MENU);
 
     gameOver.setText("Game Over!");
     gameOver.setTextCenterX(100.0f);

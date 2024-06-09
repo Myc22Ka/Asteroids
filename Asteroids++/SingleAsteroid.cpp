@@ -3,7 +3,7 @@
 #include "Game.h"
 #include "Pickup.h"
 
-SingleAsteroid::SingleAsteroid(): Enemy(100.0f + 100.0f * floor(Score::getScore() / FileMenager::screenData.game_next_level_spike), physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_speed) + 50.0f, getSprite(Sprites::SINGLE_ASTEROID))
+SingleAsteroid::SingleAsteroid(): Enemy(100.0f + 100.0f * floor(Score::getScore() / FileMenager::screenData.game_next_level_spike * 2.0f), physics::getRandomFloatValue(FileMenager::enemiesData.asteroid_speed) + 50.0f, getSprite(Sprites::SINGLE_ASTEROID))
 {
 	scaleSprite(spriteInfo.sprite, spriteInfo.spriteSize, size);
 	drawHitboxes();

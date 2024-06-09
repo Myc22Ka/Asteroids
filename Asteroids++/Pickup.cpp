@@ -7,10 +7,10 @@ const map<double, Sprites> Pickup::boosters{
 	{ 0.1, Sprites::PICKUP_FREEZE },
 	{ 0.2, Sprites::PICKUP_DRUNKMODE },
 	{ 0.25, Sprites::PICKUP_TIMES_5 },
-	{ 0.3, Sprites::PICKUP_SHIELD },
-	{ 0.35, Sprites::PICKUP_EXTRA_SPEED },
 	{ 0.4, Sprites::PICKUP_TIMES_2 },
-	{ 0.5, Sprites::PICKUP_EXTRA_BULLET },
+	{ 0.5, Sprites::PICKUP_EXTRA_SPEED },
+	{ 0.55, Sprites::PICKUP_SHIELD },
+	{ 0.6, Sprites::PICKUP_EXTRA_BULLET },
 };
 
 const vector<Sprites> Pickup::modifiers{ Sprites::PICKUP_EXTRA_BULLET, Sprites::PICKUP_EXTRA_SPEED, Sprites::PICKUP_EXTRA_TIME };
@@ -23,7 +23,7 @@ lifeTime(5.0f)
 
 	for (const auto& [prob, spriteType] : boosters) {
 		if (dice < prob) {
-			if (dice <= 0.5) spriteInfo = getSprite(spriteType);
+			if (dice <= 0.75) spriteInfo = getSprite(spriteType);
 			break;
 		}
 	}
@@ -155,7 +155,10 @@ void Pickup::collisionDetection()
 
 					break;
 				case Sprites::PICKUP_FREEZE:
-					if (SoundData::sounds[Sounds::AMBIENT].getStatus() != Sound::Playing) SoundData::recoverSound(Sounds::AMBIENT);
+					if (SoundData::sounds[Sounds::AMBIENT].getStatus() != Sound::Playing) {
+						SoundData::recoverSound(Sounds::AMBIENT);
+						SoundData::renev(Sounds::AMBIENT);
+					}
 
 					SoundData::play(Sounds::FREEZE);
 					Game::setGameState(FREZZE);
@@ -214,7 +217,7 @@ const Sprites Pickup::getRandomDrop(const map<double, Sprites>& group)
 
 	for (const auto& [prob, spriteType] : group) {
 		if (dice < prob) {
-			if (dice <= 0.5) return spriteType;
+			if (dice <= 0.75) return spriteType;
 		}
 	}
 	return Sprites();

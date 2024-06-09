@@ -64,6 +64,10 @@ void GameFrame::navigator(Event& e) {
         wind->forceWind(10.0f, 4.0f, physics::getRandomDirection());
         break;
     case Keyboard::Num0:
+        if (SoundData::sounds[Sounds::AMBIENT].getStatus() != Sound::Playing) {
+            SoundData::recoverSound(Sounds::AMBIENT);
+            SoundData::renev(Sounds::AMBIENT);
+        }
         Game::freeze.startEffect(physics::getRandomFloatValue(5.0f, 0.5f) + Player::playerStats.time);
         Game::setGameState(FREZZE);
         break;
@@ -82,6 +86,7 @@ void GameFrame::init()
 {
     Page::init();
 
+    SoundData::stop(Sounds::MENU);
     SoundData::sounds[Sounds::AMBIENT].setVolume(100);
     SoundData::playLooped(Sounds::AMBIENT);
 

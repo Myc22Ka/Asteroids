@@ -40,7 +40,8 @@ enum class Sounds {
     HIT,
     CRITHIT,
     ACTIVE_SHIELD,
-    AMBIENT
+    AMBIENT,
+    MENU
 };
 
 class SoundData {

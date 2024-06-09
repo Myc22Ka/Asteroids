@@ -12,6 +12,7 @@ class Particle : public Entity {
 public:
     Particle(Vector2f position, float angle, Sprites sprites, Color color, double lifeTime, bool oneCycleLife);
     Particle(Vector2f position, float angle, Sprites sprites, Color color, double lifeTime);
+    Particle(Vector2f position, float angle, Sprites sprites, Color color, double lifeTime, float size);
 
     void render(RenderWindow& window) override;
     void update(float deltaTime) override;

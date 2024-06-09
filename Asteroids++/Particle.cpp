@@ -14,6 +14,15 @@ lifeTime(lifeTime)
 	spriteInfo.sprite.setColor(color);
 }
 
+Particle::Particle(Vector2f position, float angle, Sprites sprites, Color color, double lifeTime, float size) : 
+	Entity(position, angle, size, Color::Yellow, getSprite(sprites)),
+	lifeTime(lifeTime)
+{
+	scaleSprite(spriteInfo.sprite, spriteInfo.spriteSize, size);
+
+	spriteInfo.sprite.setColor(color);
+}
+
 void Particle::render(RenderWindow& window)
 {
 	window.draw(spriteInfo.sprite, Transform().translate(position).rotate(angle));

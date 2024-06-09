@@ -33,12 +33,13 @@ void Enemy::render(RenderWindow& window)
 
 void Enemy::update(float deltaTime)
 {
+	updateHealthBar();
+
 	Entity::update(deltaTime);
 
-	updateHealthBar();
 	updateCritDamage(deltaTime);
 
-	if (getHealth() < 0) destroy();
+	if (getHealth() <= 0) destroy();
 }
 
 
@@ -93,7 +94,7 @@ const Vector2f Enemy::getRandomPosition() const
 	Vector2f randomPosition;
 	
 	do {
-		randomPosition = physics::getRandomPosition(size);
+		randomPosition = physics::getRandomPosition(size * 2);
 	} while (physics::intersects(randomPosition, radius, player->position, player->radius * 6.0f));
 	
 	return randomPosition;

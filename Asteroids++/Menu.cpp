@@ -17,6 +17,10 @@ void Menu::init()
 {
 	Page::init();
 
+	if (!SoundData::isSoundPlaying(Sounds::MENU)) {
+		SoundData::unmodifySound(Sounds::MENU);
+		SoundData::playLooped(Sounds::MENU);
+	}
 	menuText.setText("Asteroids++");
 	FloatRect textRect = menuText.getText().getLocalBounds();
 	menuText.getText().setOrigin(textRect.left + textRect.width / 2.0f, textRect.top - textRect.height);

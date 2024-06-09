@@ -133,6 +133,10 @@ void FileMenager::setDataFromFile() const {
 	playerData.dash_time_delay = dataMap["player_dash_time_delay"];
 	playerData.player_bullet_poison_damage = dataMap["player_bullet_poison_damage"];
 	playerData.player_bullet_poison_amount = static_cast<int>(dataMap["player_bullet_poison_amount"]);
+	playerData.player_bullet_amount = static_cast<int>(dataMap["player_bullet_amount"]);
+	playerData.player_bullet_damage = dataMap["player_bullet_damage"];
+	playerData.player_bullet_type = static_cast<int>(dataMap["player_bullet_type"]);
+	playerData.player_crit_chance = dataMap["player_crit_chance"];
 
 	// Enemies data
 	enemiesData.asteroid_spin = dataMap["enemy_asteroid_spin"];
@@ -159,11 +163,18 @@ void FileMenager::setDataFromFile() const {
 	timingsData.default_crit_timer = dataMap["default_crit_timer"];
 	timingsData.default_poison_dose_time = static_cast<int>(dataMap["default_poison_dose_time"] * 1000);
 	timingsData.default_hit_effect_time = dataMap["default_hit_effect_time"];
+	timingsData.default_invincibility_frames_time = dataMap["default_invincibility_frames_time"];
+	timingsData.default_shield_time = dataMap["default_shield_time"];
+	timingsData.default_drunkMode_time = dataMap["default_drunkMode_time"];
+	timingsData.default_scoreTimes2_time = dataMap["default_scoreTimes2_time"];
+	timingsData.default_scoreTimes5_time = dataMap["default_scoreTimes5_time"];
+	timingsData.default_wind_time = dataMap["default_wind_time"];
 
 	// Game data
 	gameData.max_level = static_cast<int>(dataMap["max_level"]);
 	gameData.starting_level = static_cast<int>(dataMap["starting_level"]);
 	gameData.debug_mode = static_cast<int>(dataMap["debug_mode"]);
+	gameData.wind_chance = dataMap["wind_chance"];
 
 	return;
 }

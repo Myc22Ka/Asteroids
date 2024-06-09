@@ -41,6 +41,10 @@ struct PlayerData {
 
     float player_bullet_poison_damage;
     int player_bullet_poison_amount;
+    int player_bullet_amount;
+    float player_bullet_damage;
+    int player_bullet_type;
+    float player_crit_chance;
 };
 
 struct EnemiesData {
@@ -72,12 +76,19 @@ struct TimingsData {
     float default_crit_timer;
     int default_poison_dose_time;
     float default_hit_effect_time;
+    float default_invincibility_frames_time;
+    float default_shield_time;
+    float default_drunkMode_time;
+    float default_scoreTimes2_time;
+    float default_scoreTimes5_time;
+    float default_wind_time;
 };
 
 struct GameData {
     int max_level;
     int starting_level;
     int debug_mode;
+    float wind_chance;
 };
 
 class FileMenager {

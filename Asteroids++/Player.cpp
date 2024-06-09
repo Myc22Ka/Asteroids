@@ -7,23 +7,7 @@
 #include "DeathScreen.h"
 
 Effect Player::dash({ 0.0f, false });
-PlayerStats Player::playerStats{ 
-    FileMenager::playerData.bullet_shoot_delay,
-    FileMenager::playerData.turn_speed,
-    vector<PlayerHealthUI>(),
-    1,
-    FileMenager::playerData.bullet_shoot_delay,
-    1.0f,
-    FileMenager::playerData.bullet_size,
-    50.0f,
-    FileMenager::playerData.bullet_speed,
-    0.0,
-    NORMAL,
-    { 10.0f, false },
-    { 10.0f, false },
-    { 10.0f, false },
-    { 10.0f, false }
-};
+PlayerStats Player::playerStats{};
 
 Player::Player() :
     Entity(
@@ -249,7 +233,7 @@ void Player::collisionDetection()
 void Player::destroy() {
     if (invincibilityFrames.getEffectDuration() > 0) return;
 
-    invincibilityFrames.startEffect(5.0f);
+    invincibilityFrames.startEffect(FileMenager::timingsData.default_invincibility_frames_time);
     playerStats.lifes.back().removeHealth();
     playerStats.lifes.back().setSpriteState(16);
     SoundData::play(Sounds::DESTROY);
@@ -312,23 +296,26 @@ void Player::setHealth() {
 
 void Player::setPlayerStats()
 {
-    playerStats.shootOffset = FileMenager::playerData.bullet_shoot_delay;
-    playerStats.bulletAmount = 1;
-    playerStats.bulletDamage = 50;
-    playerStats.bulletSize = FileMenager::playerData.bullet_size;
-    playerStats.bulletSpeed = FileMenager::playerData.bullet_speed;
+    auto pd = FileMenager::playerData;
+    auto td = FileMenager::timingsData;
+
+    playerStats.shootOffset = pd.bullet_shoot_delay;
+    playerStats.bulletAmount = pd.player_bullet_amount;
+    playerStats.bulletDamage = pd.player_bullet_damage;
+    playerStats.bulletSize = pd.bullet_size;
+    playerStats.bulletSpeed = pd.bullet_speed;
     
     setHealth();
 
-    playerStats.speed = FileMenager::playerData.speed;
-    playerStats.turnSpeed = FileMenager::playerData.turn_speed;
-    playerStats.shield = { 4.0f, false, new Bar(radius, 2.0f, Color::Blue, Color::Black, playerStats.shield.getEffectDuration(), Vector2f(-100.0f, -100.0f), Sprites::PICKUP_SHIELD)};
-    playerStats.drunkMode = { 6.0f, false, new Bar(radius, 2.0f, Color::Color(242, 142, 28, 255), Color::Black, playerStats.drunkMode.getEffectDuration(), Vector2f(-100.0f, -100.0f), Sprites::PICKUP_DRUNKMODE) };
-    playerStats.scoreTimes2 = { 10.0f, false, new Bar(radius, 2.0f, Color::Color(144, 238, 144, 255), Color::Black, playerStats.scoreTimes2.getEffectDuration(), Vector2f(-100.0f, -100.0f), Sprites::PICKUP_TIMES_2) };
-    playerStats.scoreTimes5 = { 10.0f, false, new Bar(radius, 2.0f, Color::Color(93, 213, 93, 255), Color::Black, playerStats.scoreTimes5.getEffectDuration(), Vector2f(-100.0f, -100.0f), Sprites::PICKUP_TIMES_5) };
-    playerStats.critChance = 0.01;
+    playerStats.speed = pd.speed;
+    playerStats.turnSpeed = pd.turn_speed;
+    playerStats.shield = { td.default_shield_time, false, new Bar(radius, 2.0f, Color::Blue, Color::Black, playerStats.shield.getEffectDuration(), Vector2f(-100.0f, -100.0f), Sprites::PICKUP_SHIELD)};
+    playerStats.drunkMode = { td.default_drunkMode_time, false, new Bar(radius, 2.0f, Color(242, 142, 28, 255), Color::Black, playerStats.drunkMode.getEffectDuration(), Vector2f(-100.0f, -100.0f), Sprites::PICKUP_DRUNKMODE) };
+    playerStats.scoreTimes2 = { td.default_scoreTimes2_time, false, new Bar(radius, 2.0f, Color(144, 238, 144, 255), Color::Black, playerStats.scoreTimes2.getEffectDuration(), Vector2f(-100.0f, -100.0f), Sprites::PICKUP_TIMES_2) };
+    playerStats.scoreTimes5 = { td.default_scoreTimes5_time, false, new Bar(radius, 2.0f, Color(93, 213, 93, 255), Color::Black, playerStats.scoreTimes5.getEffectDuration(), Vector2f(-100.0f, -100.0f), Sprites::PICKUP_TIMES_5) };
+    playerStats.critChance = pd.player_crit_chance;
 
-    playerStats.bulletType = NORMAL;
+    playerStats.bulletType = static_cast<BulletType>(pd.player_bullet_type);
 }
 
 void Player::resetBulletEffect() {
