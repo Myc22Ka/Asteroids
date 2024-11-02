@@ -36,6 +36,11 @@ void MenuLoader::run(const float& deltaTime, RenderWindow& window)
 	if (!launch.isEffectActive()) {
 		loaderSprite.currentSpriteLifeTime -= deltaTime;
 
+		color.a = static_cast<Uint8>(255.0f);
+
+		setBackgroundColor(color);
+		loaderSprite.sprite.setColor(color);
+
 		if (loaderSprite.spriteState == loaderSprite.frames.size() - 1)
 			launch.startEffect(FileMenager::screenData.launch_time);
 
@@ -58,7 +63,8 @@ void MenuLoader::run(const float& deltaTime, RenderWindow& window)
 		if (!launch.isEffectActive() && loaderSprite.spriteState == loaderSprite.frames.size() - 1) Game::setGameState(MENU);
 	}
 
-	window.draw(loaderSprite.sprite, Transform().translate(Vector2f(WindowBox::getVideoMode().width >> 1, WindowBox::getVideoMode().height >> 1)));
+	if (loaderSprite.spriteSize > 0)
+		window.draw(loaderSprite.sprite, Transform().translate(Vector2f(WindowBox::getVideoMode().width >> 1, WindowBox::getVideoMode().height >> 1)));
 
 	for (auto& [circle, velocity] : loaderParticles) {
 		velocity.x += sin(circle.getPosition().y / 0.5f);

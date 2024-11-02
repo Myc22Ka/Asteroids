@@ -303,14 +303,6 @@
     "currentSpriteLifeTime": 0,
     "defaultSpriteLifeTime": 0.2
   },
-  "wind": {
-    "hitboxSize": 64,
-    "spriteSize": 64,
-    "rotation": 0,
-    "spriteState": 0,
-    "currentSpriteLifeTime": 0,
-    "defaultSpriteLifeTime": 0.03
-  },
   "loader": {
     "hitboxSize": 500,
     "spriteSize": 500,
